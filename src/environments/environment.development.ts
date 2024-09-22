@@ -1,4 +1,5 @@
 export const environment = {
+    apiUrl: 'http://localhost:3000',
     firebaseConfig: {
         apiKey: "AIzaSyCsig3cyAcD1U3n1xWhmgMi9uwzSgti2O4",
         authDomain: "forumegb-web.firebaseapp.com",

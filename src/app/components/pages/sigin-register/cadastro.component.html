@@ -1,0 +1,16 @@
+<div class="row justify-content-center">
+    <div class="col-sm-6">
+        <h4>Faça parte dessa comunidade apaixonada por música eletrônica cristã, 100% free :)</h4>
+        <mat-card appearance="outlined" [formGroup]="form"> 
+            <mat-card-header>
+              <mat-card-title> Cadastro / Login</mat-card-title>
+              <mat-card-subtitle>*Por motivo de segurança, utilize sua conta google para prosseguir.</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="d-flex flex-column justify-content-center">
+              <mat-checkbox formControlName="check" class="w-100 text-center mt-3">Li e estou de acordo com os <a color="accent" href="http://" mat-button>Termos de Uso</a> </mat-checkbox>
+                <button (click)="signInGoogleProvider()" [disabled]="form.invalid || !ctrlCheck.value" class="w-100 my-5" mat-flat-button>PROSSEGUIR COM EMAIL DO GOOGLE</button>
+            </mat-card-content>
+          </mat-card>
+
+    </div>
+</div>
