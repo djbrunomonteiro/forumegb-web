@@ -1,1 +1,23 @@
-<p>posts works!</p>
+@if(loading){
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}@else {
+    <section class="row">
+        @for (item of postStore.currentState(); track $index) {
+            <div class="col-12 border">
+                <p>{{item.id}} {{item.title}}</p>
+                <ul>
+                    @for (child of item.children; track $index) {
+                        <li>{{child.id}}  - {{child.title}}</li>
+                        @for (node of child.children; track $index) {
+                            <ul>
+                                <li>{{node.id}}  - {{node.title}}</li>
+                            </ul>
+
+                        }
+                    }
+                    
+                </ul>
+            </div>
+        }
+    </section>
+}
