@@ -11,4 +11,13 @@ export const routes: Routes = [
         path: 'login-cadastro',
         component: CadastroComponent
     },
+    {
+        path: 'posts',
+        children: [
+            {
+                path: ':slug',
+                loadComponent: () => import('./components/pages/post/post.component').then(c => c.PostComponent)
+            }
+        ]
+    },
 ];

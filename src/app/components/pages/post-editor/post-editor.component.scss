@@ -1,0 +1,27 @@
+.box{
+    display: flex;
+    border: 1px solid #ffff;
+    margin: 10px 0px;
+    .side{
+        width: 60px;
+        padding: 5px;
+
+        .btns-box{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .down{
+                display: flex;
+                align-items: center;
+                padding: 0px;
+            }
+        }
+
+    }
+    .body{
+        width: 100%;
+        padding: 10px;
+    }
+
+}

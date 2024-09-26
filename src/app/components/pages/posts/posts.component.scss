@@ -1,0 +1,45 @@
+.post-box{
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 0px;
+    .btn-box{
+        width: 100px;
+        .up{
+            padding: 0px;
+            width: 50px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            border-color: var(--tertiary);
+        }
+
+    }
+    .title-box{
+        display: block;
+        width: 100%;
+        .title{
+            font-size: 22px;
+            text-decoration: none;
+            color: var(--primary-contrast);
+        }
+
+        .sub{
+            font-size: 12px;
+            color: var(--medium)
+        }
+    }
+    
+    
+}
+
+.col-custom{
+    border-bottom: 1px solid var(--tertiary);
+    padding: 20px;
+}
+
+.col-custom:hover{
+    background-color: rgba(226, 226, 226, 0.021);
+}

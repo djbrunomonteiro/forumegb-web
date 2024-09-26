@@ -11,7 +11,7 @@ export class MetadataStoreService {
   setLoading(type = 'post', value = true){
     switch(type) {
       case 'post': 
-      this.#listenPost.set(value)
+      this.#listenPost.update(() => value)
       return
     }
 
