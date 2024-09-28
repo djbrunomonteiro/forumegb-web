@@ -14,6 +14,8 @@ import { AuthService } from '../../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { IUser } from '../../../interfaces/user';
+import { UserService } from '../../../services/user.service';
+import { UserStoreService } from '../../../store/user-store.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -32,6 +34,8 @@ import { IUser } from '../../../interfaces/user';
 export class CadastroComponent implements OnInit {
   #formBuilder = inject(FormBuilder);
   #authService = inject(AuthService);
+  #userStoreService = inject(UserStoreService);
+  #userService = inject(UserService);
   #router = inject(Router);
 
   form = this.#formBuilder.group({
@@ -48,13 +52,11 @@ export class CadastroComponent implements OnInit {
     const resultProvider = await this.#authService.signInWithPopup();
     const user = resultProvider.user
     const {email, photoURL, displayName, metadata} = user
-    const {error, results} = await firstValueFrom(this.#authService.isNewUser(email)) ;
+    const {error, results} = await firstValueFrom(this.#userService.isNewUser(email)) ;
     if(error){return}
-    console.log(results);
-    
     if(results?.length){
       console.log('ja esta cadastrado');
-      
+      this.#userStoreService.setState(results[0]);
       this.#router.navigate(['']);
       return
     }
@@ -62,11 +64,14 @@ export class CadastroComponent implements OnInit {
     if(!email){return}
     const newUser: IUser = {  email, photoURL, displayName, metadata: JSON.stringify(metadata), }
     this.saveInApi(newUser);
+
   }
 
-  async saveInApi(user: any){
-    const {error, results} = await firstValueFrom(this.#authService.saveOne(user));
+  async saveInApi(user: IUser){
+    const {error} = await firstValueFrom(this.#userStoreService.saveOne(user));
     if(error){return}
     this.#router.navigate(['']);
   }
+  
+
 }

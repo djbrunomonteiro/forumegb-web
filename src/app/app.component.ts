@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { UserStoreService } from './store/user-store.service';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,10 +18,13 @@ import { FooterComponent } from './components/layout/footer/footer.component';
 })
 export class AppComponent implements OnInit {
 
-  title = 'forumegb-web';
+  auth = inject(AuthService)
 
-  ngOnInit(): void {
-    
+  title = 'forumegb-web';
+  
+
+  ngOnInit(){
+    this.auth.checkAuth();
   }
 
   

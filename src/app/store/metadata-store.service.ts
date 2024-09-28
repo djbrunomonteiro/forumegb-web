@@ -6,7 +6,7 @@ import { computed, Injectable, signal } from '@angular/core';
 export class MetadataStoreService {
 
   #listenPost = signal(false);
-  loadingPost = computed(() => this.#listenPost() )
+  loadingPost = computed(() => this.#listenPost())
 
   setLoading(type = 'post', value = true){
     switch(type) {

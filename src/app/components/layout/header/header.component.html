@@ -4,7 +4,11 @@
         <span>Forúm EBG - a arca da música eletrônica cristã</span>
     </div>
     <nav class="d-flex align-items-center">
-        <a mat-button routerLink="/login-cadastro" href="javascript:void(0)">Login | Cadastrar</a>
+        @if(userStore.currentState(); as user){
+            <span>{{user.displayName}}</span>
+        }@else{
+            <a mat-button routerLink="/login-cadastro" href="javascript:void(0)">Login | Cadastrar</a>
+        }
     </nav>
   </mat-toolbar>
 </header>

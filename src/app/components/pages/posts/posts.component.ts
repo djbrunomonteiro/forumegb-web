@@ -43,11 +43,6 @@ export class PostsComponent implements OnInit {
   ngOnInit(): void {
     this.initStates();
 
-    
-    
-    
-
-    
   }
 
   async initStates(){

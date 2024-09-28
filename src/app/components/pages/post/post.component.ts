@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,5 +15,11 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './post.component.scss'
 })
 export class PostComponent {
+
+  constructor(){
+    effect(() => {
+
+    })
+  }
 
 }

@@ -1,6 +1,6 @@
 import { IPost } from './../interfaces/posts';
 import { computed, inject, Injectable, signal, Signal } from '@angular/core';
-import { catchError, mergeMap, of } from 'rxjs';
+import { catchError, mergeMap, of, tap } from 'rxjs';
 import { PostService } from '../services/post.service';
 import { MetadataStoreService } from './metadata-store.service';
 
@@ -19,18 +19,13 @@ export class PostsStoreService {
   getAllAPI(start = 1, limit = 50){
     this.#metadataStoreService.setLoading('post', true)
     return this.#postServices.getAll(start, limit).pipe(
-      mergeMap(res => {
-        this.#metadataStoreService.setLoading('post', false)
-        const {results} = res
-        if(results){
-          this.setMany(results);
-        }
+      tap(res => {
+        this.#metadataStoreService.setLoading('post', false);
+        console.log(res);
         
-        return of(res)
-      }),
-      catchError(err => {
-        console.log(err);
-        return of({})
+        const {results} = res
+        if(!results){return }
+        this.setMany(results);
       })
     )
   }
