@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -9,6 +9,11 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { tokenInterceptor } from './interceptors/token.interceptor';
+import { QuillConfig } from './customs/quill.config';
+
+// const quillConfig = QuillConfig();
+// quillConfig.register();
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +29,7 @@ export const appConfig: ApplicationConfig = {
       initializeApp(environment.firebaseConfig)
     ),
     provideAuth(() => getAuth()),
+    // provideQuillConfig({ modules: quillConfig.Modules }),
+
   ],
 };

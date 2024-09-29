@@ -4,6 +4,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { UserStoreService } from '../../../store/user-store.service';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatChipsModule} from '@angular/material/chips';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -11,7 +13,9 @@ import { UserStoreService } from '../../../store/user-store.service';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink
+    RouterLink,
+    MatMenuModule,
+    MatChipsModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

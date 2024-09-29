@@ -5,10 +5,37 @@
     </div>
     <nav class="d-flex align-items-center">
         @if(userStore.currentState(); as user){
-            <span>{{user.displayName}}</span>
+              <mat-chip routerLink="posts/publicar" class="mx-3">
+                + NOVO POST
+              </mat-chip>
+
+            <mat-chip [matMenuTriggerFor]="menu">
+                <img
+                  matChipAvatar
+                  [src]="user.photoURL"
+                  [alt]="'Photo perfil ' + user.displayName"
+                />
+                <mat-icon style="padding-top: 2px;">menu</mat-icon>
+              </mat-chip>
         }@else{
             <a mat-button routerLink="/login-cadastro" href="javascript:void(0)">Login | Cadastrar</a>
         }
     </nav>
   </mat-toolbar>
 </header>
+
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>dialpad</mat-icon>
+      <span>Redial</span>
+    </button>
+    <button mat-menu-item disabled>
+      <mat-icon>voicemail</mat-icon>
+      <span>Check voice mail</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Disable alerts</span>
+    </button>
+  </mat-menu>

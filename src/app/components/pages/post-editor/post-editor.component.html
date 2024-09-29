@@ -1,26 +1,30 @@
-<section class="box">
-    <div class="side">
-        <div class="btns-box">
-            <mat-chip class="up">
-                <mat-icon aria-hidden="false" aria-label="up" fontIcon="keyboard_arrow_up">
-                </mat-icon>
-            </mat-chip>
-            <span class="count">{{5}}</span>
-            <mat-chip class="down">
-                <mat-icon aria-hidden="false" aria-label="down" fontIcon="keyboard_arrow_down">
-                </mat-icon>
-            </mat-chip>
+<form [formGroup]="form">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h4>Publicar novo conteúdo</h4>
+            <mat-form-field appearance="outline">
+                <mat-label>Titulo</mat-label>
+                <input formControlName="title" matInput placeholder="Placeholder">
+                <mat-hint>*Requerido min. de 10 caracteres</mat-hint>
+            </mat-form-field>
+            <quill-editor
+            [theme]="'snow'"
+            class="w-100 my-3"
+            formControlName="body"
+            [styles]="{ height: '300px', background: '#010907'}"
+            [maxLength]="15" />
 
+            <mat-form-field appearance="outline" class="my-3">
+                <mat-label>PREVIEW</mat-label>
+                <input formControlName="title" matInput placeholder="Placeholder">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>LINK PARA DOWNLOAD</mat-label>
+                <input formControlName="title" matInput placeholder="Placeholder">
+            </mat-form-field>
         </div>
-        <div class="line">
-            
 
-        </div>
 
     </div>
-    <div class="body">
-        <h2>{{post.id}} - {{post.title}}</h2>
 
-    </div>
-
-</section>
+</form>

@@ -7,3 +7,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
     color: var(--primary-contrast);
 }
 
+.ql-editor {
+    color: #333; /* Cor do texto */
+    font-family: Arial, sans-serif; /* Fonte do texto */
+    font-size: 16px;
+  }
+  
+  .ql-toolbar {
+    // background-color: #022128; /* Cor de fundo da barra de ferramentas */
+    border-color: #55d7b0; /* Cor da borda da barra de ferramentas */
+  }
+  
+  .ql-toolbar .ql-picker.ql-header .ql-picker-options {
+    background-color: #333; /* Fundo preto do dropdown */
+    color: white; /* Texto branco */
+    border: 1px solid #555; /* Borda para diferenciar o dropdown */
+  }
+  
+  .ql-toolbar .ql-picker.ql-header .ql-picker-item {
+    color: white; /* Texto branco das opções */
+  }
+  
+  .ql-toolbar .ql-picker.ql-header .ql-picker-item:hover,
+  .ql-toolbar .ql-picker.ql-header .ql-picker-item.ql-selected {
+    background-color: #333; /* Fundo mais escuro ao passar o mouse ou selecionar */
+  }
