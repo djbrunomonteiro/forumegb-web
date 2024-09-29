@@ -1,0 +1,44 @@
+<ul>
+    <li>
+        <section class="box">
+            <div class="side">
+                <div class="btn-box">
+                    <button  mat-icon-button>
+                        <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="keyboard_arrow_up">
+                        </mat-icon>
+                        
+                    </button>
+                    <span class="count">15</span>
+                    <button mat-icon-button>
+                        <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="down" fontIcon="keyboard_arrow_down">
+                        </mat-icon>
+                        
+                    </button>
+                </div>
+                <div class="line"></div>
+            </div>
+            <div class="post-box">
+                <div class="w-100">
+                    <span class="author">por {{post.owner_username | titlecase}}</span>
+                </div>
+                <div class="description" [innerHTML]="post.body">
+                </div>
+                <button class="btn-send" mat-stroked-button>Responder</button>
+
+                @if (post.children && post.children.length) {
+                    @for (child of post.children; track $index) {
+                        <app-post-child [post]="child" />
+                    }
+                }
+
+            </div>
+            
+        </section>
+        
+        <!-- <div class="editor">
+        </div> -->
+
+
+    </li>
+
+</ul>

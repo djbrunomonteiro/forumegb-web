@@ -21,5 +21,14 @@ export class PostService {
       delay(3000)
     );
   }
+
+  getOne(slug: string){
+    return this.#http.get(`${this.#baseUrl}/posts/search?slug=${slug}`)
+    .pipe(
+      map(this.#utils.successExtract),
+      catchError(this.#utils.errorExtract),
+      delay(3000)
+    );
+  }
   
 }

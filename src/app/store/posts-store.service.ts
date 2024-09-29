@@ -1,6 +1,6 @@
 import { IPost } from './../interfaces/posts';
 import { computed, inject, Injectable, signal, Signal } from '@angular/core';
-import { catchError, mergeMap, of, tap } from 'rxjs';
+import { catchError, firstValueFrom, mergeMap, of, tap } from 'rxjs';
 import { PostService } from '../services/post.service';
 import { MetadataStoreService } from './metadata-store.service';
 
@@ -14,8 +14,8 @@ export class PostsStoreService {
   #posts = signal<IPost[]>([]);
 
   currentState = computed(() => this.#posts());
-
-
+  currentPost = signal<IPost | undefined>(undefined);
+ 
   getAllAPI(start = 1, limit = 50){
     this.#metadataStoreService.setLoading('post', true)
     return this.#postServices.getAll(start, limit).pipe(
@@ -37,6 +37,28 @@ export class PostsStoreService {
       newState = Array.from(new Map(newState.map(item => [item['id'], item])).values()); //remove duplicados
       return newState
     })
+  }
+
+  getOneApi(slug: string){
+    this.#metadataStoreService.setLoading('post', true);
+    return this.#postServices.getOne(slug).pipe(
+      tap(res => {
+        this.#metadataStoreService.setLoading('post', false);
+        const {results} = res
+        if(!results){return }
+        this.setMany([results]);
+        this.currentPost.set(results);
+      })
+    )
+
+  }
+
+
+  async setCurrentPost(slug: string | undefined){
+    if(!slug){return}
+    const post = this.currentState().filter(post => post.slug === slug)[0] ?? undefined;
+    this.currentPost.set(post);
+    await firstValueFrom(this.getOneApi(slug));
   }
 
 

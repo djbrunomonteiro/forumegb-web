@@ -1,8 +1,9 @@
 ul{
     list-style-type: none; /* Remove bullets */
-    padding-left: 0;
+    padding-left: 1;
+    margin-left: 0;
     li{
-        margin-left: 5;
+        margin-left: 2;
     }
 }
 .box{
@@ -39,7 +40,7 @@ ul{
 
     .post-box{
         width: 100%;
-        padding: 10px;
+        padding: 10px 10px 0px 10px;
 
         .preview{
             width: 100%;
@@ -47,10 +48,17 @@ ul{
             border: 1px solid red;
         }
 
+        .author{
+            font-size: 12px;
+            color: var(--tertiary);
+        }
+        .author:hover{
+            cursor: pointer;
+        }
+
         .description{
             width: 100%;
-            margin-top: 20px;
-            min-height: 25dvh;
+            min-height: 100px;
         }
 
 
@@ -58,6 +66,9 @@ ul{
 
 }
 
+.btn-send{
+    border-radius: 10px;
+}
 .editor{
     width: 100%;
     min-height: 100px;
@@ -68,8 +79,4 @@ ul{
     justify-content: center;
     padding-left: 30px;
     border-radius: 15px;
-}
-
-.btn-send{
-    border-radius: 10px;
 }

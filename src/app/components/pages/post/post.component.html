@@ -1,44 +1,50 @@
-<section class="box">
-  <div class="side">
-    <div class="btn-box">
-      <button class="up" mat-stroked-button>
-        <mat-icon
-          class="m-0 p-0"
-          aria-hidden="false"
-          aria-label="up"
-          fontIcon="keyboard_arrow_up"
-        >
-        </mat-icon>
-        <span>15</span>
-      </button>
-    </div>
-    <div class="line"></div>
-  </div>
-  <div class="post-box">
-    <div class="header-container">
-      <p class="p-0 m-0">por Bruno monteiro</p>
-      <h2>TESTEEE</h2>
-    </div>
-    <div class="preview"></div>
+@if(postStore.currentPost(); as post){
 
-    <div class="description">
-      <p>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. It has survived not only five
-        centuries, but also the leap into electronic typesetting, remaining
-        essentially unchanged. It was popularised in the 1960s with the release
-        of Letraset sheets containing Lorem Ipsum passages, and more recently
-        with desktop publishing software like Aldus PageMaker including versions
-        of Lorem Ipsum.
-      </p>
-    </div>
+  <ul>
+    <li>
+      <section class="box">
+        <div class="side">
+          <div class="btn-box">
+            <button  mat-icon-button>
+                <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="keyboard_arrow_up">
+                </mat-icon>
+                
+            </button>
+            <span class="count">15</span>
+            <button mat-icon-button>
+                <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="down" fontIcon="keyboard_arrow_down">
+                </mat-icon>
+                
+            </button>
+        </div>
+        <div class="line"></div>
+        </div>
+        
+        <div class="post-box">
+          <div class="header-container">
+            <p class="p-0 m-0">por Bruno monteiro</p>
+            <h2>{{post.title}}</h2>
+          </div>
+          <div class="preview"></div>
+      
+          <div class="description" [innerHTML]="post.body">
+          </div>
+    
+        </div>
+      
+      </section>
+      <div class="editor">
+          <button class="btn-send" mat-stroked-button>Responder</button>
+      </div>
 
+      @if (post.children && post.children.length) {
+        @for (child of post.children; track $index) {
+          <app-post-child [post]="child" />
+    
+        }
+      }
+    </li>
+  </ul>
+  
 
-  </div>
-
-</section>
-<div class="editor">
-    <button mat-stroked-button>Responder</button>
-</div>
+}
