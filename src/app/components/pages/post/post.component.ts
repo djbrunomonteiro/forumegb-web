@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PostsStoreService } from '../../../store/posts-store.service';
 import { IPost } from '../../../interfaces/posts';
 import { PostChildComponent } from '../post-child/post-child.component';
+import { UserStoreService } from '../../../store/user-store.service';
 
 @Component({
   selector: 'app-post',
@@ -22,21 +23,18 @@ import { PostChildComponent } from '../post-child/post-child.component';
 })
 export class PostComponent implements OnInit {
 
-  #activatedRoute = inject(ActivatedRoute)
+  #activatedRoute = inject(ActivatedRoute);
+  userStore = inject(UserStoreService);
   postStore = inject(PostsStoreService);
 
   constructor(){
-    effect(() => {
-      console.log(this.postStore.currentPost());
-      
-    })
   }
   ngOnInit(): void {
     this.setCurrentPost();
   }
 
-  setCurrentPost(){
+  async setCurrentPost(){
     const slug = this.#activatedRoute.snapshot.paramMap.get('slug') ?? undefined;
-    this.postStore.setCurrentPost(slug)
+    await this.postStore.setCurrentPost(slug)
   }
 }

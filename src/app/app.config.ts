@@ -9,6 +9,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { tokenInterceptor } from './interceptors/token.interceptor';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { QuillConfig } from './customs/quill.config';
 
 // const quillConfig = QuillConfig();
@@ -29,6 +30,9 @@ export const appConfig: ApplicationConfig = {
       initializeApp(environment.firebaseConfig)
     ),
     provideAuth(() => getAuth()),
+    importProvidersFrom([
+      MatSnackBarModule
+    ])
     // provideQuillConfig({ modules: quillConfig.Modules }),
 
   ],

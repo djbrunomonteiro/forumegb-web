@@ -50,7 +50,30 @@ export class PostsStoreService {
         this.currentPost.set(results);
       })
     )
+  }
 
+  setOneApi(post: IPost | Partial<IPost>){
+    this.#metadataStoreService.setLoading('post', true);
+    return this.#postServices.createOne(post).pipe(
+      tap(res => {
+        this.#metadataStoreService.setLoading('post', false);
+        const {results} = res
+        if(!results){return }
+        this.setMany([results]);
+      })
+    )
+  }
+
+  editOneApi(post: Partial<IPost>){
+    this.#metadataStoreService.setLoading('post', true);
+    return this.#postServices.editOne(post).pipe(
+      tap(res => {
+        this.#metadataStoreService.setLoading('post', false);
+        const {results} = res
+        if(!results){return }
+        this.setMany([results]);
+      })
+    )
   }
 
 

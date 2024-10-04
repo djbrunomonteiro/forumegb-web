@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { catchError, delay, map } from 'rxjs';
 import { IResponse } from '../interfaces/response';
 import { UtilService } from './util.service';
+import { IPost } from '../interfaces/posts';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,6 @@ export class PostService {
     .pipe(
       map(this.#utils.successExtract),
       catchError(this.#utils.errorExtract),
-      delay(3000)
     );
   }
 
@@ -27,7 +27,22 @@ export class PostService {
     .pipe(
       map(this.#utils.successExtract),
       catchError(this.#utils.errorExtract),
-      delay(3000)
+    );
+  }
+
+  createOne(post: IPost | Partial<IPost>){
+    return this.#http.post(`${this.#baseUrl}/posts`, post)
+    .pipe(
+      map(this.#utils.successExtract),
+      catchError(this.#utils.errorExtract),
+    );
+  }
+
+  editOne(post: Partial<IPost>){
+    return this.#http.patch(`${this.#baseUrl}/posts/${post.id}`, post)
+    .pipe(
+      map(this.#utils.successExtract),
+      catchError(this.#utils.errorExtract),
     );
   }
   

@@ -32,3 +32,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
   .ql-toolbar .ql-picker.ql-header .ql-picker-item.ql-selected {
     background-color: #333; /* Fundo mais escuro ao passar o mouse ou selecionar */
   }
+
+  .default-snackbar{
+    background: var(--tertiary-contrast) !important;
+    .mat-mdc-snackbar-surface{
+      background: var(--tertiary-contrast) !important;
+      .mat-mdc-simple-snack-bar{
+        background: var(--tertiary-contrast) !important;
+
+      }
+    }
+  }
+

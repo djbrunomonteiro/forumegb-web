@@ -62,12 +62,12 @@ export class CadastroComponent implements OnInit {
     }
 
     if(!email){return}
-    const newUser: IUser = {  email, photoURL, displayName, metadata: JSON.stringify(metadata), }
+    const newUser: Partial<IUser> = {  email, photoURL, displayName, metadata: JSON.stringify(metadata), }
     this.saveInApi(newUser);
 
   }
 
-  async saveInApi(user: IUser){
+  async saveInApi(user: IUser | Partial<IUser>){
     const {error} = await firstValueFrom(this.#userStoreService.saveOne(user));
     if(error){return}
     this.#router.navigate(['']);

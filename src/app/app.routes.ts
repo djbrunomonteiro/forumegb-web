@@ -19,6 +19,9 @@ export const routes: Routes = [
                 loadComponent: () => import('./components/pages/post-editor/post-editor.component').then(c => c.PostEditorComponent)
             },
             {
+                path: 'publicar/:slug',
+                loadComponent: () => import('./components/pages/post-editor/post-editor.component').then(c => c.PostEditorComponent)            },
+            {
                 path: ':slug',
                 loadComponent: () => import('./components/pages/post/post.component').then(c => c.PostComponent)
             }

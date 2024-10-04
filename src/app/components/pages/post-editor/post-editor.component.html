@@ -1,10 +1,10 @@
 <form [formGroup]="form">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center m-0">
         <div class="col-md-10">
             <h4>Publicar novo conteúdo</h4>
             <mat-form-field appearance="outline">
                 <mat-label>Titulo</mat-label>
-                <input formControlName="title" matInput placeholder="Placeholder">
+                <input formControlName="title" matInput placeholder="ex: remix de ...">
                 <mat-hint>*Requerido min. de 10 caracteres</mat-hint>
             </mat-form-field>
             <quill-editor
@@ -15,13 +15,21 @@
             [maxLength]="15" />
 
             <mat-form-field appearance="outline" class="my-3">
-                <mat-label>PREVIEW</mat-label>
-                <input formControlName="title" matInput placeholder="Placeholder">
+                <mat-label>Preview </mat-label>
+                <input formControlName="music_preview" matInput>
             </mat-form-field>
             <mat-form-field appearance="outline">
-                <mat-label>LINK PARA DOWNLOAD</mat-label>
-                <input formControlName="title" matInput placeholder="Placeholder">
+                <mat-label>Link para download e/ou divulgação</mat-label>
+                <input formControlName="source_url" matInput>
             </mat-form-field>
+
+            <div class="d-flex justify-content-end">
+                <button routerLink="/" mat-button>Cancelar</button>
+                <button (click)="save()" class="btn-save" mat-flat-button >Publicar</button>
+
+            </div>
+
+            
         </div>
 
 

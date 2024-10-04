@@ -30,6 +30,7 @@ export class AuthService {
         this.#userStore.setState(undefined)
         return
       }
+      this.#userStore.setState({...this.#auth.currentUser} as any)
       const {results} = await firstValueFrom(this.#userStore.getOne(email));
       console.log(results);
       

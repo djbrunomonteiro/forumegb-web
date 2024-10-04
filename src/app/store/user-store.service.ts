@@ -31,7 +31,7 @@ export class UserStoreService {
     this.#user.set(user)
   }
 
-  saveOne(user: IUser){
+  saveOne(user: IUser | Partial<IUser>){
     return this.#userService.saveOne(user).pipe(
       tap((res) => {
         const {error, results} = res;

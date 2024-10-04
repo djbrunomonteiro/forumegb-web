@@ -32,7 +32,6 @@ export class UserService {
     .pipe(
       map(this.#utils.successExtract),
       catchError(this.#utils.errorExtract),
-      delay(3000)
     );
   }
 }
