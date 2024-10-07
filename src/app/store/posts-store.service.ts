@@ -52,14 +52,21 @@ export class PostsStoreService {
     )
   }
 
-  setOneApi(post: IPost | Partial<IPost>){
+  setOneApi(post: IPost | Partial<IPost>, postFather?: IPost){
     this.#metadataStoreService.setLoading('post', true);
     return this.#postServices.createOne(post).pipe(
       tap(res => {
         this.#metadataStoreService.setLoading('post', false);
         const {results} = res
         if(!results){return }
-        this.setMany([results]);
+        let newPost = results
+        if(postFather){
+          let newChildren = postFather.children ?? [];
+          newChildren.push(newPost)
+          newPost = {...postFather, children: newChildren}
+        }
+
+        this.setMany([newPost]);
       })
     )
   }

@@ -23,7 +23,31 @@
                 </div>
                 <div class="description" [innerHTML]="post.body">
                 </div>
-                <button class="btn-send" mat-stroked-button>Responder</button>
+
+                @if(inEdition()){
+                    <div class="edition">
+                      <form [formGroup]="form" (ngSubmit)="save()">
+                        @if(metadataStore.loadingPost()){
+                          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        }@else {
+                          <quill-editor
+                          [theme]="'snow'"
+                          formControlName="body"
+                          [styles]="{ height: '300px', background: '#010907'}"/>
+                          <div class="w-100 d-flex justify-content-end">
+                            <button (click)="inEdition.set(false)" mat-button>Cancelar</button>
+                            <button type="submit" class="btn-save" mat-flat-button [disabled]="form.invalid" >Publicar</button>
+                          </div>
+                        }
+                      </form>
+                    </div>
+          
+                  }@else {
+                    <div class="editor">
+                      <button (click)="inEdition.set(true)" class="btn-send" mat-stroked-button>Responder</button>
+                  </div>
+                  }
+
 
                 @if (post.children && post.children.length) {
                     @for (child of post.children; track $index) {
@@ -35,9 +59,6 @@
             
         </section>
         
-        <!-- <div class="editor">
-        </div> -->
-
 
     </li>
 

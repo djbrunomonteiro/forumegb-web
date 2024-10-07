@@ -13,6 +13,7 @@ import { UtilService } from '../../../services/util.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserStoreService } from '../../../store/user-store.service';
 import { IResponse } from '../../../interfaces/response';
+import { MetadataStoreService } from '../../../store/metadata-store.service';
 
 @Component({
   selector: 'app-post-editor',
@@ -39,7 +40,8 @@ export class PostEditorComponent implements OnInit {
   #userStore = inject(UserStoreService);
   #activatedRoute = inject(ActivatedRoute)
   #utils = inject(UtilService);
-  #router = inject(Router)
+  #router = inject(Router);
+  metadataStore = inject(MetadataStoreService)
 
   form = this.#formBuilder.group({
     id: [''],

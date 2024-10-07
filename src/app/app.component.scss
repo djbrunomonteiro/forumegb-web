@@ -2,7 +2,8 @@
 
 .default{
     min-height: 100dvh;
-    width: 100dvw;
+    // width: 100dvw;
+    margin: 0px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

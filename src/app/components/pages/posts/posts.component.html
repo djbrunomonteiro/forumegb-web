@@ -2,9 +2,9 @@
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }@else {
     <h5>Publicações</h5>
-    <section class="row">
+    <section class="row m-0">
         @for (post of postStore.currentState(); track $index) {
-            <div class="col-12 col-custom" >
+            <div class="col-12 col-custom m-0" >
                 <div class="post-box">
                     <div class="btn-box">
                         <button class="up" mat-stroked-button>

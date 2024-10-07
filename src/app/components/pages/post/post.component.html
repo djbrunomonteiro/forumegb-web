@@ -1,5 +1,11 @@
 @if(postStore.currentPost(); as post){
 
+  <button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
+    <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
+    </mat-icon>
+    Voltar
+  </button>
+
   <ul>
     <li>
       <section class="box">
@@ -33,17 +39,37 @@
         </div>
       
       </section>
-      <div class="editor">
-          <button class="btn-send" mat-stroked-button>Responder</button>
-          @if(userStore.currentState()?.id === post.owner_id){
-            <button [routerLink]="['/posts/publicar/'+post.slug]" class="btn-send" mat-stroked-button>Editar</button>
-          }
-      </div>
+
+        @if(inEdition()){
+          <div class="edition">
+            <form [formGroup]="form" (ngSubmit)="save()">
+              @if(metadataStore.loadingPost()){
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              }@else {
+                <quill-editor
+                [theme]="'snow'"
+                formControlName="body"
+                [styles]="{ height: '300px', background: '#010907'}"/>
+                <div class="w-100 d-flex justify-content-end">
+                  <button (click)="inEdition.set(false)" mat-button>Cancelar</button>
+                  <button type="submit" class="btn-save" mat-flat-button [disabled]="form.invalid" >Publicar</button>
+                </div>
+              }
+            </form>
+          </div>
+
+        }@else {
+          <div class="editor">
+            <button (click)="inEdition.set(true)" class="btn-send" mat-stroked-button>Responder</button>
+            @if(userStore.currentState()?.id === post.owner_id){
+              <button [routerLink]="['/posts/publicar/'+post.slug]" class="btn-send" mat-stroked-button>Editar</button>
+            }
+        </div>
+        }
 
       @if (post.children && post.children.length) {
         @for (child of post.children; track $index) {
           <app-post-child [post]="child" />
-    
         }
       }
     </li>
