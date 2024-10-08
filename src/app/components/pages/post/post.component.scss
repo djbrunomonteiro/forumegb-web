@@ -72,15 +72,15 @@ ul{
 
 .editor{
     width: 100%;
-    min-height: 100px;
-    border: 1px solid var(--medium);
+    margin: 5px;
+    padding: 2px 0px 5px 0px;
+    // min-height: 100px;
+    border-bottom: 1px solid var(--medium);
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-left: 30px;
-    padding-right: 30px;
-    border-radius: 15px;
+    // border-radius: 15px;
 }
 
 .btn-send{

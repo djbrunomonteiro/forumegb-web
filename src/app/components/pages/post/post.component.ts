@@ -74,7 +74,7 @@ export class PostComponent implements OnInit {
     const user = this.userStore.currentState();
     if(this.form.invalid || !postFather || !user){return}
     const newPost = {...this.form.value, parent_id: postFather.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
-    const {error, message} = await firstValueFrom(this.postStore.setOneApi(newPost, postFather));
+    const {error, message} = await firstValueFrom(this.postStore.setOneApi(newPost, postFather.id));
     this.#utils.showMsg(message)
     if(error){
       return

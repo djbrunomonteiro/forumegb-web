@@ -62,11 +62,12 @@ export class PostChildComponent {
 
 
   async save(){
-    const postFather = this.post;
+    const fatherPost = this.postStore.currentPost();
+    const parentPost = this.post;
     const user = this.userStore.currentState();
-    if(this.form.invalid || !postFather || !user){return}
-    const newPost = {...this.form.value, parent_id: postFather.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
-    const {error, message} = await firstValueFrom(this.postStore.setOneApi(newPost, postFather));
+    if(this.form.invalid || !parentPost || !user){return}
+    const newPost = {...this.form.value, parent_id: parentPost.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
+    const {error, message} = await firstValueFrom(this.postStore.setOneApi(newPost, fatherPost?.id));
     this.#utils.showMsg(message)
     if(error){
       return

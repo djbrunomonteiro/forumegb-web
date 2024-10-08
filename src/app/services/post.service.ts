@@ -30,8 +30,8 @@ export class PostService {
     );
   }
 
-  createOne(post: IPost | Partial<IPost>){
-    return this.#http.post(`${this.#baseUrl}/posts`, post)
+  createOne(post: IPost | Partial<IPost>, postFatherId?: number){
+    return this.#http.post(`${this.#baseUrl}/posts?father=${postFatherId}`, post)
     .pipe(
       map(this.#utils.successExtract),
       catchError(this.#utils.errorExtract),
