@@ -14,7 +14,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserStoreService } from '../../../store/user-store.service';
 import { IResponse } from '../../../interfaces/response';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
-
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { PreviewEditorComponent } from '../../shared/preview-editor/preview-editor.component';
 @Component({
   selector: 'app-post-editor',
   standalone: true,
@@ -27,7 +28,9 @@ import { MetadataStoreService } from '../../../store/metadata-store.service';
     MatInputModule,
     QuillEditorComponent,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    MatDialogModule
+
   ],
   templateUrl: './post-editor.component.html',
   styleUrl: './post-editor.component.scss'
@@ -41,6 +44,7 @@ export class PostEditorComponent implements OnInit {
   #activatedRoute = inject(ActivatedRoute)
   #utils = inject(UtilService);
   #router = inject(Router);
+  #dialog = inject(MatDialog);
   metadataStore = inject(MetadataStoreService)
 
   form = this.#formBuilder.group({
@@ -127,6 +131,13 @@ export class PostEditorComponent implements OnInit {
     .trim() // Remove espaços no início e no fim
     .replace(/\s+/g, "-");  
 
+  }
+
+  openPreviewEditor(){
+    const dialogRef = this.#dialog.open(PreviewEditorComponent, {minWidth: '50dvw', minHeight: '70dvh'});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
 

@@ -14,10 +14,8 @@
             [styles]="{ height: '300px', background: '#010907'}"
             [maxLength]="15" />
 
-            <mat-form-field appearance="outline" class="my-3">
-                <mat-label>Preview </mat-label>
-                <input formControlName="music_preview" matInput>
-            </mat-form-field>
+            <p>É musica? adicione um preview de 30seg. <button (click)="openPreviewEditor()" mat-flat-button>adicionar preview</button></p>
+
             <mat-form-field appearance="outline">
                 <mat-label>Link para download e/ou divulgação</mat-label>
                 <input formControlName="source_url" matInput>

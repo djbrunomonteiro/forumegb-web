@@ -24,11 +24,14 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.5",
+    "@ngx-dropzone/cdk": "^18.1.1",
+    "@ngx-dropzone/material": "^18.1.1",
     "bootstrap": "^5.3.3",
     "express": "^4.18.2",
     "ngx-quill": "^26.0.8",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "wavesurfer.js": "^7.8.6",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
