@@ -39,7 +39,8 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button mat-dialog-close>CANCELAR</button>
+  <button (click)="save()" [disabled]="!loadedLocale()" mat-button class="btn-save" [ngClass]="{'btn-save-disabled': !loadedLocale()}" >SALVAR</button>
 </mat-dialog-actions>
 
 

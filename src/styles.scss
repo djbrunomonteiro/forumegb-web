@@ -48,3 +48,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
     margin: 0px;
   }
 
+  .btn-save{
+    background-color: var(--success) !important;
+  }
+  .btn-save-disabled{
+    background-color: var(--medium) !important;
+  }

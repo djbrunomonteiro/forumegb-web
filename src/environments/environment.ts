@@ -1,12 +1,12 @@
 export const environment = {
     apiUrl: 'http://localhost:3000',
     firebaseConfig: {
-        apiKey: "AIzaSyCsig3cyAcD1U3n1xWhmgMi9uwzSgti2O4",
-        authDomain: "forumegb-web.firebaseapp.com",
-        projectId: "forumegb-web",
-        storageBucket: "forumegb-web.appspot.com",
-        messagingSenderId: "14899623411",
-        appId: "1:14899623411:web:2b7b60861853a4bf808e86",
-        measurementId: "G-VXN0XNS0KB"
-    }
+        apiKey: "AIzaSyB7uEHLiDnAxxbz-7W7EA7xS0ega1bYaFA",
+        authDomain: "forumegb-prod.firebaseapp.com",
+        projectId: "forumegb-prod",
+        storageBucket: "forumegb-prod.appspot.com",
+        messagingSenderId: "543314255772",
+        appId: "1:543314255772:web:fd22d633fe0a979141f259",
+        measurementId: "G-6MJVMVEFG2"
+    },
 };
