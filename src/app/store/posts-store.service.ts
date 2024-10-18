@@ -1,3 +1,4 @@
+import { UtilService } from './../services/util.service';
 import { IPost } from './../interfaces/posts';
 import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { catchError, firstValueFrom, mergeMap, of, tap } from 'rxjs';
@@ -11,23 +12,36 @@ export class PostsStoreService {
 
   #postServices = inject(PostService);
   #metadataStoreService = inject(MetadataStoreService);
+  #utils = inject(UtilService);
   #posts = signal<IPost[]>([]);
 
   currentState = computed(() => this.#posts());
   currentPost = signal<IPost | undefined>(undefined);
  
   getAllAPI(start = 1, limit = 50){
-    this.#metadataStoreService.setLoading('post', true)
-    return this.#postServices.getAll(start, limit).pipe(
-      tap(res => {
-        this.#metadataStoreService.setLoading('post', false);
-        console.log(res);
-        
-        const {results} = res
-        if(!results){return }
-        this.setMany(results);
+    return this.#postServices.getRecordsTotal().pipe(
+      mergeMap((res ) => {
+        const countPostsParent = this.#posts().filter(elem => elem.parent_id === null).length;
+        const {error, results} = res;
+        if(!error && countPostsParent !== 0 && countPostsParent  === results.recordsTotal){
+          return of({error: false, results: this.#utils.sortArrayByKey(this.#posts(), 'id', 'desc') }) 
+        }
+
+        this.#metadataStoreService.setLoading('post', true)
+        return this.#postServices.getAll(start, limit).pipe(
+          tap(res => {
+            this.#metadataStoreService.setLoading('post', false);
+            const {results} = res
+            if(!results){return }
+            
+            this.setMany(this.#utils.sortArrayByKey(results, 'id', 'desc'));
+          })
+        )
+
       })
+
     )
+
   }
 
   setMany(newPosts: IPost[]){

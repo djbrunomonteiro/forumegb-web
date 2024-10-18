@@ -22,6 +22,14 @@ export class PostService {
     );
   }
 
+  getRecordsTotal(){
+    return this.#http.get(`${this.#baseUrl}/posts/total`)
+    .pipe(
+      map(this.#utils.successExtract),
+      catchError(this.#utils.errorExtract),
+    );
+  }
+
   getOne(slug: string){
     return this.#http.get(`${this.#baseUrl}/posts/search?slug=${slug}`)
     .pipe(

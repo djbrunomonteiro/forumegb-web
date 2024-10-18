@@ -25,4 +25,19 @@ export class UtilService {
   showMsg(msg: string = '', action= 'X', config: MatSnackBarConfig = {duration: 4000, panelClass: 'default-snackbar'}){
     this.#snackBar.open(msg, action, config)
   }
+
+  sortArrayByKey<T>(array: T[], key: keyof T, order: 'asc' | 'desc' = 'asc'): T[] {
+    return array.sort((a, b) => {
+      const valueA = a[key];
+      const valueB = b[key];
+  
+      if (valueA < valueB) {
+        return order === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return order === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
 }
