@@ -30,7 +30,7 @@
                 <ul>
                     <li>Arquivo no formato MP3</li>
                     <li>Tamanho máximo de 50mb</li>
-                    <li>Duração de 30 segundos</li>
+                    <li>Duração de 60 segundos</li>
                     <li>Não feche a tela até finalizar</li>
                 </ul>
             </ul>
@@ -39,8 +39,13 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>CANCELAR</button>
-  <button (click)="save()" [disabled]="!loadedLocale()" mat-button class="btn-save" [ngClass]="{'btn-save-disabled': !loadedLocale()}" >SALVAR</button>
+    @if(loading()){
+        <p class="text-center">Aguarde estamos salvando! Não feche até finalizar o upload!</p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }@else{
+        <button mat-button mat-dialog-close>CANCELAR</button>
+        <button (click)="save()" [disabled]="!loadedLocale()" mat-button class="btn-save" [ngClass]="{'btn-save-disabled': !loadedLocale()}" >SALVAR</button>
+    }
 </mat-dialog-actions>
 
 

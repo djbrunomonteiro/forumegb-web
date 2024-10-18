@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class UploadService {
 
   #http = inject(HttpClient);
   #baseUrl = environment.apiUrl;
+  #utils = inject(UtilService);
 
   constructor() { }
 
@@ -18,6 +20,15 @@ export class UploadService {
     formData.append('file', file, file.name);
     formData.append('start', String(start));
     formData.append('end', String(end));
-    return this.#http.post(`${this.#baseUrl}/preview`, formData);
+    return this.#http.post(`${this.#baseUrl}/preview`, formData)
+    .pipe(
+      map(this.#utils.successExtract),
+      catchError(this.#utils.errorExtract),
+    );
+  }
+
+  getPreview(id: string){
+    return this.#http.get(`${this.#baseUrl}/preview?id=${id}`, { responseType: 'blob' })
+
   }
 }

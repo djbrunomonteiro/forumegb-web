@@ -2,7 +2,7 @@ import { Component, effect, inject, Input, OnInit } from '@angular/core';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
 import { IPost } from '../../../interfaces/posts';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { QuillEditorComponent } from 'ngx-quill';
@@ -61,6 +61,8 @@ export class PostEditorComponent implements OnInit {
     status: [''],
     parent_id: [null],
   });
+
+  ctrlMusicPreview = this.form.get('music_preview') as FormControl;
 
   constructor(){
     effect(() => {
@@ -134,9 +136,11 @@ export class PostEditorComponent implements OnInit {
   }
 
   openPreviewEditor(){
-    const dialogRef = this.#dialog.open(PreviewEditorComponent, {minWidth: '50dvw', minHeight: '70dvh'});
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+    const dialogRef = this.#dialog.open(PreviewEditorComponent, {disableClose: true,  minWidth: '50dvw', minHeight: '70dvh'});
+    dialogRef.afterClosed().subscribe(results => {
+      if(!results){return}
+      const {music_preview} = results;
+      this.ctrlMusicPreview.setValue(music_preview ?? '')
     });
   }
 

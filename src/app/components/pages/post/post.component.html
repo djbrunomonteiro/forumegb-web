@@ -31,8 +31,20 @@
             <p class="p-0 m-0">por Bruno monteiro</p>
             <h2>{{post.title}}</h2>
           </div>
-          <div class="preview"></div>
-      
+
+          <div id="waveform" class="w-100 container-preview" [ngClass]="{'preview-none': !post?.music_preview}"></div>
+          @if(loadedLocale() && wavesurfer){
+            <button  (click)="wavesurfer.playPause()" mat-mini-fab aria-label="player button" class="playPause" style="background: #383351">
+                <mat-icon>
+                    @if(wavesurfer.isPlaying()){
+                        stop_circle
+                    }@else{
+                        play_circle
+                    }
+                </mat-icon>
+              </button>
+        }
+
           <div class="description" [innerHTML]="post.body">
           </div>
     

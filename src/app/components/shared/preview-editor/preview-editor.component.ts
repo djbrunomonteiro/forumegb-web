@@ -15,7 +15,7 @@ import {
   FileInputValue,
 } from '@ngx-dropzone/cdk';
 import { DropzoneMaterialModule } from '@ngx-dropzone/material';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js';
@@ -25,6 +25,8 @@ import { UploadService } from '../../../services/upload.service';
 import { firstValueFrom } from 'rxjs';
 import { WaveFile } from 'wavefile';
 import * as lamejs from 'lamejs'; 
+import { UtilService } from '../../../services/util.service';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-preview-editor',
@@ -39,6 +41,7 @@ import * as lamejs from 'lamejs';
     FormsModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatProgressBarModule
   ],
   templateUrl: './preview-editor.component.html',
   styleUrl: './preview-editor.component.scss',
@@ -47,10 +50,13 @@ export class PreviewEditorComponent implements OnInit, AfterViewInit {
   @ViewChild('waveform', { static: false }) waveform!: ElementRef;
   
   #uploadService = inject(UploadService);
+  #dialogRef = inject(MatDialogRef<PreviewEditorComponent>);
+  #utils = inject(UtilService);
 
   wavesurfer!: WaveSurfer;
   regions = RegionsPlugin.create();
   loadedLocale = signal(false);
+  loading = signal(false);
 
   validators = [FileInputValidators.accept('.mp3,audio/mp3')];
   ctrlFile = new FormControl<FileInputValue>(null, this.validators);
@@ -89,8 +95,6 @@ export class PreviewEditorComponent implements OnInit, AfterViewInit {
 
     const reader = new FileReader();
     reader.onload = async () => {
-
-      
       // Certifica-se de que estamos convertendo o resultado em Blob corretamente
       const arrayBuffer = reader.result as ArrayBuffer;
       const blob = new Blob([arrayBuffer], { type: file.type }); // Converter para Blob
@@ -105,13 +109,6 @@ export class PreviewEditorComponent implements OnInit, AfterViewInit {
     };
 
     reader.readAsArrayBuffer(file);
-  }
-
-  async getAudioOrigem(file: File) {
-    const audioContext = new AudioContext();
-    const arrayBuffer = await file.arrayBuffer();
-    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    this.originalAudioBuffer = audioBuffer; // Armazena o AudioBuffer original
   }
 
   createDragRegion() {
@@ -143,12 +140,16 @@ export class PreviewEditorComponent implements OnInit, AfterViewInit {
     // Verificar se o wavesurfer está disponível
     if (!this.wavesurfer) return;
     const {start, end} = this.regionSelect;
+    this.loading.set(true)
+    const {error, results, message} = await firstValueFrom(this.#uploadService.savePreview(this.originalAudioBuffer, start, end))
+    this.loading.set(false);
+    this.#utils.showMsg(message);
+    if(error){
+      return
+    }
 
-    const resUpload = await firstValueFrom(this.#uploadService.savePreview(this.originalAudioBuffer, start, end))
+    this.#dialogRef.close(results)
  
-    console.log(resUpload);
-    
-
 
   }
   

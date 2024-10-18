@@ -78,10 +78,11 @@ export class PostsStoreService {
   }
 
 
-  async setCurrentPost(slug: string | undefined){
+  async setCurrentPost(slug: string | undefined, ignoreLoad = false){
     if(!slug){return}
-    const post = this.currentState().filter(post => post.slug === slug)[0] ?? undefined;
+    const post = this.currentState().filter(post => post.id && post.slug === slug)[0] ?? undefined;
     this.currentPost.set(post);
+    if(ignoreLoad){return}
     await firstValueFrom(this.getOneApi(slug));
   }
 
