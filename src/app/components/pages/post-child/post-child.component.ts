@@ -1,4 +1,4 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, inject, Input, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -23,7 +23,6 @@ import { firstValueFrom } from 'rxjs';
     MatIconModule,
     MatButtonModule,
     RouterModule,
-    PostChildComponent,
     QuillEditorComponent,
     FormsModule,
     ReactiveFormsModule,
@@ -32,7 +31,8 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './post-child.component.html',
   styleUrl: './post-child.component.scss'
 })
-export class PostChildComponent {
+export class PostChildComponent implements OnChanges {
+
   @Input({required: true}) post!: IPost;
 
   #formBuilder = inject(FormBuilder);
@@ -60,6 +60,14 @@ export class PostChildComponent {
   inEdition = signal(false);
   loading = signal(false);
 
+  count = signal(0);
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.post = this.#utils.paramsJsonParse(this.post) as IPost;
+    const likes = this.post.likes ?? [];
+    this.setCountLikes(likes)
+  }
+
 
   async save(){
     const fatherPost = this.postStore.currentPost();
@@ -75,5 +83,20 @@ export class PostChildComponent {
     this.inEdition.set(false);
     this.form.patchValue({body:''});
   }
+
+  async saveLike(idPost: number | undefined){
+    const idUser = this.userStore.currentState()?.id;
+    if(idUser&& idPost){
+      const {error, results} = await firstValueFrom(this.postStore.setLike(+idUser, +idPost));
+      if(error){return}
+      const likes = results?.likes as any[];
+      this.setCountLikes(likes)
+    }
+  }
+
+  async setCountLikes(likes: any[]){
+    this.count.set(likes.length)
+  }
+
 
 }

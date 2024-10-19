@@ -1,4 +1,4 @@
-import { afterNextRender, AfterViewChecked, Component, ElementRef, Inject, inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
+import { afterNextRender, AfterViewChecked, Component, ElementRef, Inject, inject, OnInit, PLATFORM_ID, signal, effect } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -67,6 +67,14 @@ export class PostComponent implements OnInit, AfterViewChecked {
   loading = signal(false);
   loadedLocale = signal(false);
 
+  count = signal(0);
+
+  constructor(){
+    effect(() => {
+
+    })
+  }
+
 
   ngOnInit(): void {
     this.setCurrentPost();
@@ -77,16 +85,32 @@ export class PostComponent implements OnInit, AfterViewChecked {
     // this.loadPreviewLocale(music_preview);
   }
 
+  async saveLike(idPost: number | undefined){
+    const idUser = this.userStore.currentState()?.id;
+    if(idUser&& idPost){
+      const {error, results} = await firstValueFrom(this.postStore.setLike(+idUser, +idPost));
+      if(error){return}
+      const likes = results?.likes as any[];
+      this.setCountLikes(likes)
+    }
+  }
+
 
   async setCurrentPost(){
     const slug = this.#activatedRoute.snapshot.paramMap.get('slug') ?? undefined;
     await this.postStore.setCurrentPost(slug);
-    const music_preview = this.postStore.currentPost()?.music_preview;
-    this.loadPreviewLocale(music_preview)
+    const likes = this.postStore.currentPost()?.likes ?? [];
+    this.setCountLikes(likes);
+    this.loadPreviewLocale();
 
   }
 
-  async loadPreviewLocale(music_preview: string | undefined) {
+  async setCountLikes(likes: any[]){
+    this.count.set(likes.length)
+  }
+
+  async loadPreviewLocale() {
+    const music_preview = this.postStore.currentPost()?.music_preview;
     if(!music_preview || !isPlatformBrowser(this.#platformId)){return}
     const existLocale = localStorage.getItem(music_preview);
     let blob: Blob;

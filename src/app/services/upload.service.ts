@@ -22,8 +22,8 @@ export class UploadService {
     formData.append('end', String(end));
     return this.#http.post(`${this.#baseUrl}/preview`, formData)
     .pipe(
-      map(this.#utils.successExtract),
-      catchError(this.#utils.errorExtract),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
   }
 

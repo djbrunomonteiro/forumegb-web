@@ -12,7 +12,8 @@ export class UtilService {
   constructor() { }
 
   successExtract(res: any){
-    const response: IResponse = {error: false, results: res?.results ?? undefined, message: res?.message}
+    const results = this.paramsJsonParse(res.results);
+    const response: IResponse = {error: false, results, message: res?.message}
     return response;
     ;
   }
@@ -40,4 +41,40 @@ export class UtilService {
       return 0;
     });
   }
+
+  paramsJsonParse(itemRef: any[] | object): any[] | object {
+    let result;
+    if (!itemRef) {
+      return itemRef;
+    }
+    if (Array.isArray(itemRef)) {
+      result = itemRef.map((elem) => this.checkParamIsJson(elem));
+    } else if (typeof itemRef === 'object') {
+      result = this.checkParamIsJson(itemRef);
+    } else {
+      return itemRef;
+    }
+
+    return result;
+  }
+
+  checkParamIsJson(item: any) {
+    for (const key in item) {
+      if (this.validJsonStr(item[key])) {
+        item[key] = JSON.parse(item[key]);
+      }
+    }
+    return item;
+  }
+
+  validJsonStr(str: any) {
+    if (str === null || str === 'null') return false;
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
 }

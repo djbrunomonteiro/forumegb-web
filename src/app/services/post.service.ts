@@ -17,40 +17,48 @@ export class PostService {
   getAll(start = 1, limit = 50){
     return this.#http.get(`${this.#baseUrl}/posts?start=${start}&limit=${limit}`)
     .pipe(
-      map(this.#utils.successExtract),
-      catchError(this.#utils.errorExtract),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
   }
 
   getRecordsTotal(){
     return this.#http.get(`${this.#baseUrl}/posts/total`)
     .pipe(
-      map(this.#utils.successExtract),
-      catchError(this.#utils.errorExtract),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
   }
 
   getOne(slug: string){
     return this.#http.get(`${this.#baseUrl}/posts/search?slug=${slug}`)
     .pipe(
-      map(this.#utils.successExtract),
-      catchError(this.#utils.errorExtract),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
   }
 
   createOne(post: IPost | Partial<IPost>, postFatherId?: number){
     return this.#http.post(`${this.#baseUrl}/posts?father=${postFatherId}`, post)
     .pipe(
-      map(this.#utils.successExtract),
-      catchError(this.#utils.errorExtract),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
   }
 
   editOne(post: Partial<IPost>){
     return this.#http.patch(`${this.#baseUrl}/posts/${post.id}`, post)
     .pipe(
-      map(this.#utils.successExtract),
-      catchError(this.#utils.errorExtract),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
+    );
+  }
+
+  saveLike(idUser: number, idPost: number){
+    return this.#http.post(`${this.#baseUrl}/posts/like`, {idUser, idPost})
+    .pipe(
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
   }
   

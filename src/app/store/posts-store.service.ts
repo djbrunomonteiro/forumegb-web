@@ -1,3 +1,4 @@
+import { IUser } from './../interfaces/user';
 import { UtilService } from './../services/util.service';
 import { IPost } from './../interfaces/posts';
 import { computed, inject, Injectable, signal, Signal } from '@angular/core';
@@ -32,6 +33,8 @@ export class PostsStoreService {
           tap(res => {
             this.#metadataStoreService.setLoading('post', false);
             const {results} = res
+            console.log(results);
+            
             if(!results){return }
             
             this.setMany(this.#utils.sortArrayByKey(results, 'id', 'desc'));
@@ -98,6 +101,10 @@ export class PostsStoreService {
     this.currentPost.set(post);
     if(ignoreLoad){return}
     await firstValueFrom(this.getOneApi(slug));
+  }
+
+  setLike(idUser: number, idPost: number){
+    return this.#postServices.saveLike(idUser, idPost)
   }
 
 

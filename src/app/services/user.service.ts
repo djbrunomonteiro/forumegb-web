@@ -30,8 +30,8 @@ export class UserService {
   getOne(email: string){
     return this.#http.get(`${this.#baseUrl}/users/search?email=${email}`)
     .pipe(
-      map(this.#utils.successExtract),
-      catchError(this.#utils.errorExtract),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
   }
 }

@@ -11,6 +11,7 @@ export interface IPost {
     metadata?: string;
     status?: string;
     parent_id?: number | null;
+    likes?: any;
     children?: IPost[];
     created_at?: string;
     updated_at?: string;
