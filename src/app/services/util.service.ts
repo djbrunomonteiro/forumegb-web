@@ -2,12 +2,33 @@ import { inject, Injectable } from '@angular/core';
 import { IResponse } from '../interfaces/response';
 import { of } from 'rxjs';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { ETypeStage } from '../enums/enums';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
-  #snackBar = inject(MatSnackBar)
+  #snackBar = inject(MatSnackBar);
+
+  stageOpts = [
+    {
+      value: ETypeStage.MAINSTAGE,
+      title: 'Main Stage',
+      description: 'Acesso exclusivo para membros que apoiam financeiramente o projeto, ideal para compartilhar músicas, sets e conteúdos de destaque.'
+    },
+
+    {
+      value: ETypeStage.FLOORSTAGE,
+      title: 'Floor Stage',
+      description: 'Visível para todos, este espaço é ideal para compartilhar músicas, sets, tirar dúvidas e interagir.'
+    },
+
+    {
+      value: ETypeStage.BACKSTAGE,
+      title: 'Back Stage',
+      description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores e melhorias do fórum EGBHub.'
+    },
+  ]
 
   constructor() { }
 
@@ -75,6 +96,20 @@ export class UtilService {
       return false;
     }
     return true;
+  }
+
+  sortByLikes(arr: any[]) {
+    // Mapeia os objetos para incluir a contagem de likes
+    const withLikesCount = arr.map(obj => ({
+      ...obj,
+      likesCount: obj.likes.length
+    }));
+
+    // Ordena os objetos com base no número de likes
+    const sorted = withLikesCount.sort((a, b) => b.likesCount - a.likesCount);
+  
+    // Remove a propriedade likesCount antes de retornar
+    return sorted.map(({ likesCount, ...rest }) => rest);
   }
 
 }

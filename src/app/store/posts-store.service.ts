@@ -5,6 +5,7 @@ import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import { catchError, firstValueFrom, mergeMap, of, tap } from 'rxjs';
 import { PostService } from '../services/post.service';
 import { MetadataStoreService } from './metadata-store.service';
+import { ETypeStage } from '../enums/enums';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,9 @@ export class PostsStoreService {
   #posts = signal<IPost[]>([]);
 
   currentState = computed(() => this.#posts());
+  mainStageState = computed(() => this.#posts().filter(elem => elem.parent_id === null && elem.type_stage === ETypeStage.MAINSTAGE));
+  floorStageState = computed(() => this.#posts().filter(elem => elem.parent_id === null && elem.type_stage === ETypeStage.FLOORSTAGE));
+  backStageState = computed(() => this.#posts().filter(elem => elem.parent_id === null && elem.type_stage === ETypeStage.BACKSTAGE));
   currentPost = signal<IPost | undefined>(undefined);
  
   getAllAPI(start = 1, limit = 50){

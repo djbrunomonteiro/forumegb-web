@@ -16,6 +16,10 @@ import { IResponse } from '../../../interfaces/response';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { PreviewEditorComponent } from '../../shared/preview-editor/preview-editor.component';
+import { ETypeStage } from '../../../enums/enums';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 @Component({
   selector: 'app-post-editor',
   standalone: true,
@@ -29,7 +33,10 @@ import { PreviewEditorComponent } from '../../shared/preview-editor/preview-edit
     QuillEditorComponent,
     MatButtonModule,
     RouterModule,
-    MatDialogModule
+    MatDialogModule,
+    MatRadioModule,
+    MatTooltipModule,
+    MatProgressBarModule
 
   ],
   templateUrl: './post-editor.component.html',
@@ -57,12 +64,31 @@ export class PostEditorComponent implements OnInit {
     slug: [''],
     owner_id: [0],
     owner_username: [''],
+    type_stage: [ETypeStage.FLOORSTAGE],
     metadata: [''],
     status: [''],
     parent_id: [null],
   });
 
   ctrlMusicPreview = this.form.get('music_preview') as FormControl;
+
+  stageOpts = [
+    {
+      value: ETypeStage.FLOORSTAGE,
+      title: 'Floor Stage',
+      description: 'Visível para todos, este espaço é ideal para compartilhar músicas, sets, tirar dúvidas e interagir.'
+    },
+    {
+      value: ETypeStage.MAINSTAGE,
+      title: 'Main Stage',
+      description: 'Acesso exclusivo para membros que apoiam financeiramente o projeto, ideal para compartilhar músicas, sets e conteúdos de destaque.'
+    },
+    {
+      value: ETypeStage.BACKSTAGE,
+      title: 'Back Stage',
+      description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores e melhorias do fórum EGBHub.'
+    },
+  ]
 
   constructor(){
     effect(() => {

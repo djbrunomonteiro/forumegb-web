@@ -1,25 +1,124 @@
 @if(metadata.loadingPost()){
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }@else {
-    <h5>Publicações</h5>
-    <section class="row m-0">
-        @for (post of postStore.currentState(); track $index) {
-            <div class="col-12 col-custom m-0" >
-                <div class="post-box">
-                    <div class="btn-box">
-                        <button class="up" mat-stroked-button>
-                            <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="keyboard_arrow_up">
-                            </mat-icon>
-                            <span>15</span>
-                          </button>
-                    </div>
-                    <div class="title-box">
-                        <a class="title" [routerLink]="['posts', post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
-                        <p class="sub">{{post.owner_username}} . 1 dia atrás . 4 comentários . vinil </p>
-                    </div>
+
+    @for(stage of utils.stageOpts; track $index){
+        <mat-card appearance="outlined" class="my-3">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title style="font-size: 16px;">{{stage.title}}</mat-card-title>
+                <mat-card-subtitle style="font-size: 14px;">{{stage.description}}</mat-card-subtitle>
+            </mat-card-header>
     
+            <mat-card-content>
+                <ol>
+
+                    @switch(stage.value){
+                        @case(ETypeStage.MAINSTAGE){
+                            <div class="d-flex justify-content-center">
+                                <mat-radio-group value="recentes" (change)="setOrderStage(ETypeStage.MAINSTAGE, $event?.value)">
+                                    <mat-radio-button value="recentes">Recentes</mat-radio-button>
+                                    <mat-radio-button value="relevantes">Relevantes</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            @for (post of mainStage(); track $index) {
+                                <li>
+                                    <div class="box">
+                                        <div class="title-box">
+                                            <a class="title" [routerLink]="['posts', post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                                            <p class="sub">{{post.owner_username}} . 1 dia atrás </p>
+                                        </div>
+                                        <div class="chips">
+                                            <div class="custom-chip">
+                                                +9
+                                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
+                                            </div>
+                                            <div class="custom-chip">
+                                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="link"></mat-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                        @case(ETypeStage.FLOORSTAGE){
+                            <div class="d-flex justify-content-center">
+                                <mat-radio-group value="recentes" (change)="setOrderStage(ETypeStage.FLOORSTAGE, $event?.value)">
+                                    <mat-radio-button value="recentes">Recentes</mat-radio-button>
+                                    <mat-radio-button value="relevantes">Relevantes</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            @for (post of floorStage(); track $index) {
+                                <li>
+                                    <div class="box">
+                                        <div class="title-box">
+                                            <a class="title" [routerLink]="['posts', post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                                            <p class="sub">{{post.owner_username}} . 1 dia atrás </p>
+                                        </div>
+                                        <div class="chips">
+                                            <div class="custom-chip">
+                                                +9
+                                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
+                                            </div>
+                                            <div class="custom-chip">
+                                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="link"></mat-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                        }
+                        @default{
+                            <div class="d-flex justify-content-center">
+                                <mat-radio-group value="recentes" >
+                                    <mat-radio-button value="recentes">Recentes</mat-radio-button>
+                                    <mat-radio-button value="relevante">Relevantes</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            @for (post of backStage(); track $index) {
+                                <li>
+                                    <div class="box">
+                                        <div class="title-box">
+                                            <a class="title" [routerLink]="['posts', post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                                            <p class="sub">{{post.owner_username}} . 1 dia atrás </p>
+                                        </div>
+                                        <div class="chips">
+                                            <div class="custom-chip">
+                                                +9
+                                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
+                                            </div>
+                                            <div class="custom-chip">
+                                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="link"></mat-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    }
+
+
+
+                </ol>
+                <!-- <mat-paginator [length]="200" [pageSizeOptions]="[10, 50, 100]" aria-label="Select page">
+                </mat-paginator> -->
+
+                <div class="d-flex">
+                    <button mat-stroked-button class="w-100">Ver Todos os Posts</button>
                 </div>
-            </div>
-        }
-    </section>
+
+                
+                <section class="row m-0">
+
+                </section>
+            </mat-card-content>
+        </mat-card>
+    }
+
+
+
+
+
 }
