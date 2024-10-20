@@ -1,1 +1,5 @@
-<app-posts />
+@for(stage of utils.stageOpts; track $index){
+    <app-stage [type]="stage.value" [isHome]="true" />
+
+}
+<!-- <app-posts-list-home /> -->

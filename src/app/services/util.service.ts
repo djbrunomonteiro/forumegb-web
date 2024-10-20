@@ -48,7 +48,10 @@ export class UtilService {
     this.#snackBar.open(msg, action, config)
   }
 
-  sortArrayByKey<T>(array: T[], key: keyof T, order: 'asc' | 'desc' = 'asc'): T[] {
+  sortArrayByKey<T>(array: T[] = [], key: keyof T, order: 'asc' | 'desc' = 'asc'): T[] {
+    console.log(array);
+    
+    if(!array ||  typeof(array) !== 'object'){return []}
     return array.sort((a, b) => {
       const valueA = a[key];
       const valueB = b[key];

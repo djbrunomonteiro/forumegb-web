@@ -1,0 +1,47 @@
+@if(metadata.loadingPost()){
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+<mat-card appearance="outlined" class="my-3">
+    <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title style="font-size: 16px;">{{stageOpt.title}}</mat-card-title>
+        <mat-card-subtitle style="font-size: 14px;">{{stageOpt.description}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+        <ol>
+            <div class="d-flex justify-content-center">
+                <mat-radio-group value="recentes" (change)="setOrderStage($event.value)">
+                    <mat-radio-button value="recentes">Recentes</mat-radio-button>
+                    <mat-radio-button value="relevantes">Relevantes</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            @for (post of postsStage(); track $index) {
+                <li>
+                    <div class="box">
+                        <div class="title-box">
+                            <a class="title" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                            <p class="sub">{{post.owner_username}} . {{post.created_at | syncDate}} </p>
+                        </div>
+                        <div class="chips">
+                            <div class="custom-chip">
+                                {{post | countComent}}
+                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
+                            </div>
+                            <!-- <div class="custom-chip">
+                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="link"></mat-icon>
+                            </div> -->
+                        </div>
+                    </div>
+                </li>
+            }
+
+        </ol>
+
+        @if(isHome){
+            <div class="d-flex">
+                <button [routerLink]="'/posts/type/'+stageOpt.value" mat-stroked-button class="w-100">Ver Todos os Posts</button>
+            </div>
+        }
+    </mat-card-content>
+</mat-card>

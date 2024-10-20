@@ -22,9 +22,13 @@ export const routes: Routes = [
                 path: 'publicar/:slug',
                 loadComponent: () => import('./components/pages/post-editor/post-editor.component').then(c => c.PostEditorComponent)            },
             {
-                path: ':slug',
+                path: 'type/:type/:slug',
                 loadComponent: () => import('./components/pages/post/post.component').then(c => c.PostComponent)
-            }
+            },
+            {
+                path: 'type/:type',
+                loadComponent: () => import('./components/pages/stage/stage.component').then(c => c.StageComponent)
+            },
         ]
     },
 ];

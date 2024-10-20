@@ -1,3 +1,4 @@
+import { ETypeStage } from './../enums/enums';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
@@ -14,8 +15,9 @@ export class PostService {
   #utils = inject(UtilService);
   #baseUrl = environment.apiUrl;
 
-  getAll(start = 1, limit = 50){
-    return this.#http.get(`${this.#baseUrl}/posts?start=${start}&limit=${limit}`)
+  getAll(type: string = '', start = 1, limit = 50, order = 'recentes'){
+    const params = type ? `type=${type}&start=${start}&limit=${limit}&order=${order}` : `start=${start}&limit=${limit}&order=${order}`
+    return this.#http.get(`${this.#baseUrl}/posts?${params}`)
     .pipe(
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),

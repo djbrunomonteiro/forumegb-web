@@ -145,20 +145,22 @@ export class PostEditorComponent implements OnInit {
       return
     }
 
-    this.#router.navigate([`/posts/${slug}`])
+    this.#router.navigate([`/posts/type/${post.type_stage}/${slug}`])
     console.log(post);
    
   }
 
-  createSlug(title: string){
-    return title
-    .toLowerCase() // Converte para minúsculas
-    .normalize("NFD") // Normaliza caracteres especiais
-    .replace(/[\u0300-\u036f]/g, "") // Remove acentos
-    .replace(/[^a-z0-9\s-]/g, "") // Remove caracteres não alfanuméricos
-    .trim() // Remove espaços no início e no fim
-    .replace(/\s+/g, "-");  
+  createSlug(title: string) {
+    const slug = title
+        .toLowerCase() // Converte para minúsculas
+        .normalize("NFD") // Normaliza caracteres especiais
+        .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+        .replace(/[^a-z0-9\s-]/g, "") // Remove caracteres não alfanuméricos
+        .trim() // Remove espaços no início e no fim
+        .replace(/\s+/g, "-"); // Substitui espaços por '-'
 
+    // Retorna o slug com a data formatada corretamente
+    return `${slug}-${Date.now()}`;
   }
 
   openPreviewEditor(){

@@ -84,7 +84,7 @@ export class PostChildComponent implements OnChanges {
     this.form.patchValue({body:''});
   }
 
-  async saveLike(idPost: number | undefined){
+  async saveLike(idPost: number | undefined | null){
     const idUser = this.userStore.currentState()?.id;
     if(idUser&& idPost){
       const {error, results} = await firstValueFrom(this.postStore.setLike(+idUser, +idPost));

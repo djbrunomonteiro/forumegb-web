@@ -1,6 +1,6 @@
 @if(postStore.currentPost(); as post){
 
-  <button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
+  <button [routerLink]="['../']" class="btn-send mt-2" mat-stroked-button>
     <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
     </mat-icon>
     Voltar
@@ -24,7 +24,7 @@
         
         <div class="post-box">
           <div class="header-container">
-            <p class="p-0 m-0">por Bruno monteiro</p>
+            <p class="sub">Por {{post.owner_username | titlecase}} . {{post.created_at | syncDate}} </p>
             <h2>{{post.title}}</h2>
           </div>
 

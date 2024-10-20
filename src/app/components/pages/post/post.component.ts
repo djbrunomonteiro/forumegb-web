@@ -17,6 +17,7 @@ import WaveSurfer from 'wavesurfer.js';
 import { CommonModule } from '@angular/common';
 import { UploadService } from '../../../services/upload.service';
 import { isPlatformBrowser } from '@angular/common';
+import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 @Component({
   selector: 'app-post',
   standalone: true,
@@ -30,7 +31,8 @@ import { isPlatformBrowser } from '@angular/common';
     QuillEditorComponent,
     FormsModule,
     ReactiveFormsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    SyncDatePipe
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'

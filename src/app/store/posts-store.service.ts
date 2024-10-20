@@ -23,7 +23,7 @@ export class PostsStoreService {
   backStageState = computed(() => this.#posts().filter(elem => elem.parent_id === null && elem.type_stage === ETypeStage.BACKSTAGE));
   currentPost = signal<IPost | undefined>(undefined);
  
-  getAllAPI(start = 1, limit = 50){
+  getAllAPI(type = '' ,start = 1, limit = 50, order = 'recentes',){
     return this.#postServices.getRecordsTotal().pipe(
       mergeMap((res ) => {
         const countPostsParent = this.#posts().filter(elem => elem.parent_id === null).length;
@@ -33,15 +33,12 @@ export class PostsStoreService {
         }
 
         this.#metadataStoreService.setLoading('post', true)
-        return this.#postServices.getAll(start, limit).pipe(
+        return this.#postServices.getAll(type, start, limit, order).pipe(
           tap(res => {
             this.#metadataStoreService.setLoading('post', false);
             const {results} = res
-            console.log(results);
-            
             if(!results){return }
-            
-            this.setMany(this.#utils.sortArrayByKey(results, 'id', 'desc'));
+            this.setMany(results);
           })
         )
 
