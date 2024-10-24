@@ -1,3 +1,5 @@
+import { IUser } from "./user";
+
 export interface IPost {
     id?: number;
     title?: string;
@@ -14,6 +16,7 @@ export interface IPost {
     type_stage?: string | null | undefined;
     likes?: any;
     children?: IPost[];
+    user?: Partial<IUser>
     created_at?: string;
     updated_at?: string;
 

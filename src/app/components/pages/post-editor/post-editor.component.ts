@@ -107,8 +107,6 @@ export class PostEditorComponent implements OnInit {
     if(!slug){return}
     await firstValueFrom(this.#postStore.getOneApi(slug));
     const currentPost = this.#postStore.currentPost() as any;
-    console.log("current post", currentPost);
-    
     if(!currentPost){return}
     this.form.patchValue({...currentPost})
 
@@ -137,17 +135,12 @@ export class PostEditorComponent implements OnInit {
     }
 
     const {error, results, message} = await firstValueFrom(request$);
-
-    console.log(error, results, message);
-    
     this.#utils.showMsg(message)
     if(error){
       return
     }
 
     this.#router.navigate([`/posts/type/${post.type_stage}/${slug}`])
-    console.log(post);
-   
   }
 
   createSlug(title: string) {

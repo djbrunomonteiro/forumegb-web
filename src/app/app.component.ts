@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
 
   auth = inject(AuthService)
 
-  title = 'forumegb-web';
+  title = 'egbhub-web';
   
 
   ngOnInit(){

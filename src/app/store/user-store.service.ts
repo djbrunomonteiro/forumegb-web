@@ -20,8 +20,6 @@ export class UserStoreService {
   getOne(email: string){
     return this.#userService.getOne(email).pipe(
       tap(res => {
-        console.log(res);
-        
         const {results} = res
         if(!results){return }
         this.setState(results);

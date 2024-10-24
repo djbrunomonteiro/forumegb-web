@@ -73,7 +73,7 @@ export class PostComponent implements OnInit, AfterViewChecked {
 
   constructor(){
     effect(() => {
-
+      console.log(this.postStore.currentPost());
     })
   }
 
@@ -112,20 +112,21 @@ export class PostComponent implements OnInit, AfterViewChecked {
   }
 
   async loadPreviewLocale() {
+
+    
     const music_preview = this.postStore.currentPost()?.music_preview;
     if(!music_preview || !isPlatformBrowser(this.#platformId)){return}
     const existLocale = localStorage.getItem(music_preview);
-    let blob: Blob;
-    if(!existLocale){
-      const res = await firstValueFrom(this.#upload.getPreview(music_preview)) as any
-      if(!res || res?.error){return}
-      blob = res;
-      const base64 =await this.blobToBase64(blob)
-      localStorage.setItem(music_preview, base64);
-    }else{
-      blob = await this.base64ToBlob(existLocale)
+    const blob = await firstValueFrom(this.#upload.getPreview(music_preview)) as any
+    // if(!existLocale){
+    //   if(!res || res?.error){return}
+    //   blob = res;
+    //   const base64 =await this.blobToBase64(blob)
+    //   localStorage.setItem(music_preview, base64);
+    // }else{
+    //   blob = await this.base64ToBlob(existLocale)
       
-    }
+    // }
     const waveform = this.#el.nativeElement.querySelector('#waveform');
     if(!waveform){return}
  

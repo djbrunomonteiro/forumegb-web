@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { QuillEditorComponent } from 'ngx-quill';
 import { firstValueFrom } from 'rxjs';
+import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 
 @Component({
   selector: 'app-post-child',
@@ -26,7 +27,8 @@ import { firstValueFrom } from 'rxjs';
     QuillEditorComponent,
     FormsModule,
     ReactiveFormsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    SyncDatePipe
   ],
   templateUrl: './post-child.component.html',
   styleUrl: './post-child.component.scss'

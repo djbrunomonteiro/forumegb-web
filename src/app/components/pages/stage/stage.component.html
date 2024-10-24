@@ -1,11 +1,79 @@
 @if(metadata.loadingPost()){
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
+
+@if(!isHome){
+    <button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
+        <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
+        </mat-icon>
+        Voltar
+      </button>
+
+}
+
+
+
+<section class="card-container">
+    <div class="header">
+        <div class="thumbnail">
+            <img [src]="imgUrl" alt="thumbnail-section">
+            <span class="badge" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span>
+        </div>
+    
+        <div class="title-container">
+            <h2>{{stageOpt.title}}</h2>
+            <p>{{stageOpt.description}}</p>
+        </div>
+
+    </div>
+
+    <div class="list">
+        <ol>
+            @for (post of postsStage(); track $index) {
+                <li>
+                    <div class="item">
+                        <div class="avatar">
+                            @if(post?.user?.photoURL; as photo){
+                              <img [src]="photo" alt="photo url">
+                
+                            }@else{
+                              <mat-icon>
+                                account_circle
+                              </mat-icon>
+                            }
+                          </div>
+                        <a class="title" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                        <div class="coment">
+                            {{post | countComent}}
+                            <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
+                        </div>
+
+                    </div>
+
+                </li>
+            }@empty{
+                <p class="text-center">*Sem post nesse Stage</p>
+            }
+        </ol>
+
+    </div>
+    @if(isHome){
+        <div class="d-flex justify-content-center w-100">
+            <button [routerLink]="'/posts/type/'+stageOpt.value" mat-stroked-button>Ver Todos os Posts</button>
+        </div>
+    }
+
+</section>
+
+<!-- 
+
 <mat-card appearance="outlined" class="my-3">
     <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title style="font-size: 16px;">{{stageOpt.title}}</mat-card-title>
-        <mat-card-subtitle style="font-size: 14px;">{{stageOpt.description}}</mat-card-subtitle>
+  
+        <mat-card-title>{{stageOpt.title}} <span class="badge" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span></mat-card-title>
+        <mat-card-subtitle>{{stageOpt.description}}</mat-card-subtitle>
+
+
     </mat-card-header>
 
     <mat-card-content>
@@ -18,6 +86,16 @@
             </div>
             @for (post of postsStage(); track $index) {
                 <li>
+                    <div class="header">
+                        <div class="avatar">
+
+                        </div>
+                        <a class="title" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                        <div class="coment">
+                            {{post | countComent}}
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
+                        </div>
+                    </div>
                     <div class="box">
                         <div class="title-box">
                             <a class="title" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
@@ -28,9 +106,6 @@
                                 {{post | countComent}}
                                 <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
                             </div>
-                            <!-- <div class="custom-chip">
-                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="link"></mat-icon>
-                            </div> -->
                         </div>
                     </div>
                 </li>
@@ -44,4 +119,4 @@
             </div>
         }
     </mat-card-content>
-</mat-card>
+</mat-card> -->

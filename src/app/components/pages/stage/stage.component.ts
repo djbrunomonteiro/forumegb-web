@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { MatIconModule } from '@angular/material/icon';
-import { AsyncPipe, DatePipe, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, NgStyle, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -34,7 +34,8 @@ import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
     MatRadioModule,
     CountComentPipe,
     DatePipe,
-    SyncDatePipe
+    SyncDatePipe,
+    NgStyle
   ],
   templateUrl: './stage.component.html',
   styleUrl: './stage.component.scss'
@@ -55,16 +56,19 @@ export class StageComponent implements OnInit {
 
   stageOpt = {
     value: '',
+    access: '',
     title: '',
-    description: ''
+    description: '',
+    color: ''
   };
+
+  imgUrl = '';
 
   ngOnInit(): void {
     this.type = this.isHome ? this.type : this.activatedRoute.snapshot.paramMap.get('type') ?? ETypeStage.FLOORSTAGE;
     if(!this.type){return}
     this.stageOpt = this.utils.stageOpts.filter(elem => elem.value === this.type)[0];
     this.getPosts(this.stageOpt.value)
-    console.log(this.stageOpt);
 
   }
 
@@ -88,14 +92,17 @@ export class StageComponent implements OnInit {
       case ETypeStage.MAINSTAGE:
         currentsPosts = this.postStore.mainStageState();
         postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
+        this.imgUrl = 'main.jpg'
         break;
       case ETypeStage.FLOORSTAGE:
         currentsPosts = this.postStore.floorStageState();
         postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
+        this.imgUrl = 'floor.jpg'
         break;
       default:
         currentsPosts = this.postStore.backStageState();
         postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
+        this.imgUrl = 'back.jpg'
         break;
     }
 

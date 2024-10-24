@@ -14,19 +14,25 @@ export class UtilService {
     {
       value: ETypeStage.MAINSTAGE,
       title: 'Main Stage',
-      description: 'Acesso exclusivo para membros que apoiam financeiramente o projeto, ideal para compartilhar músicas, sets e conteúdos de destaque.'
+      access: 'PRIVADO',
+      description: 'Acesso exclusivo para membros. Contém músicas exclusivas, lançamentos e muito + !',
+      color: 'red',
     },
 
     {
       value: ETypeStage.FLOORSTAGE,
+      access: 'PÚBLICO',
       title: 'Floor Stage',
-      description: 'Visível para todos, este espaço é ideal para compartilhar músicas, sets, tirar dúvidas e interagir.'
+      description: 'Visível para todos, Contém músicas, sets, seção de dúvidas e muito +.',
+      color: '#064c6d',
     },
 
     {
       value: ETypeStage.BACKSTAGE,
+      access: 'PÚBLICO',
       title: 'Back Stage',
-      description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores e melhorias do fórum EGBHub.'
+      description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores.',
+      color: '#263028',
     },
   ]
 
@@ -49,8 +55,6 @@ export class UtilService {
   }
 
   sortArrayByKey<T>(array: T[] = [], key: keyof T, order: 'asc' | 'desc' = 'asc'): T[] {
-    console.log(array);
-    
     if(!array ||  typeof(array) !== 'object'){return []}
     return array.sort((a, b) => {
       const valueA = a[key];

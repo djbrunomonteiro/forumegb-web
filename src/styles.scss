@@ -54,3 +54,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
   .btn-save-disabled{
     background-color: var(--medium) !important;
   }
+
+
+  .ql-editor .ql-blank::before {
+    color: #55d7b0;  /* Cor do placeholder */
+    font-style: italic;  /* Placeholder em itálico */
+    font-size: 16px;  /* Tamanho da fonte do placeholder */
+  }
+
+  .ql-tooltip{
+    input[type="text"] {
+      background-color: #e0f7fa; /* Cor de fundo do campo de entrada */
+      color: #acacac; /* Cor do texto */
+      border: 1px solid #55d7b0; /* Borda personalizada */
+      padding: 5px;
+      border-radius: 4px;
+    }
+  }
+

@@ -1,5 +1,5 @@
 {
-  "name": "forumegb-web",
+  "name": "egbhub-web",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:forumegb-web": "node dist/forumegb-web/server/server.mjs"
+    "serve:ssr:egbhub-web": "node dist/egbhub-web/server/server.mjs"
   },
   "private": true,
   "dependencies": {
