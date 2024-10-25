@@ -31,4 +31,13 @@ export const routes: Routes = [
             },
         ]
     },
+    {
+        path: 'perfil',
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./components/pages/perfil/perfil.component').then(c => c.PerfilComponent)
+            },
+        ]
+    },
 ];

@@ -1,0 +1,33 @@
+mat-form-field{
+    // width: 100%;
+}
+
+.box-body{
+    margin-top: 10px;
+    background-color: rgba(37, 34, 34, 0.527);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.avatar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    height: 100%;
+    img{
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+    }
+    .mat-icon{
+        width: 100px;
+        height: 100px;
+        font-size: 90px;
+        color: rgb(119, 119, 119);
+    }
+}
+
+.avatar:hover{
+    cursor: pointer;
+}

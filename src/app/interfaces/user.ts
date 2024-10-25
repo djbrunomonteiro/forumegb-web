@@ -8,4 +8,6 @@ export interface IUser{
     metadata?: string | null | undefined; 
     created_at?: string;
     updated_at?: string;
+    end_uf?: string;
+    end_city?: string;
 }

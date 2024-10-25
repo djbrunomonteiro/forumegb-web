@@ -1,0 +1,40 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+    <div class="row">
+        <div class="col-md-3 box-body">
+            <div class="avatar">
+                @if(ctrlPhotoUrl.value; as photo){
+                <img [src]="photo" alt="photo url">
+                }@else{
+                <mat-icon>
+                    account_circle
+                </mat-icon>
+                }
+            </div>
+            
+        </div>
+        <div class="col-md-9">
+            <div class="box-body" >
+                <h4>Dados do seu perfil</h4>
+                <mat-form-field appearance="outline" class="my-3 w-50" >
+                    <mat-label>Como gostaria de ser chamado(Nome)</mat-label>
+                    <input formControlName="displayName" matInput>
+                    <mat-hint>*Requerido min. de 5 caracteres</mat-hint>
+                </mat-form-field>
+                <br>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Estado(UF)</mat-label>
+                    <mat-select formControlName="end_uf">
+                        @for (item of ufsBR; track $index) {
+                        <mat-option [value]="item.uf">{{item.nome}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="w-100 d-flex justify-content-end my-2">
+            <button routerLInk="'/'" mat-button>Cancelar</button>
+            <button type="submit" class="btn-save" mat-flat-button [disabled]="form.invalid" >Salvar</button>
+        </div>
+    </div>
+</form>
