@@ -11,17 +11,15 @@
 
 }
 
-
-
 <section class="card-container">
     <div class="header">
         <div class="thumbnail">
-            <img [src]="stageOpt?.img" alt="thumbnail-section">
-            <span class="badge" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span>
+            <img [src]="stageOpt.img" class="link" alt="thumbnail-section" [routerLink]="'/posts/type/'+stageOpt.value">
+            <span class="badge" [routerLink]="'/posts/type/'+stageOpt.value" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span>
         </div>
     
         <div class="title-container">
-            <h2>{{stageOpt.title}}</h2>
+            <h2 [routerLink]="'/posts/type/'+stageOpt.value" class="link">{{stageOpt.title}}</h2>
             <p>{{stageOpt.description}}</p>
         </div>
 
@@ -32,7 +30,7 @@
             @for (post of postsStage(); track $index) {
                 <li>
                     <div class="item">
-                        <div class="avatar">
+                        <div class="avatar link">
                             @if(post?.user?.photoURL; as photo){
                               <img [src]="photo" alt="photo url">
                 
@@ -42,7 +40,15 @@
                               </mat-icon>
                             }
                           </div>
-                        <a class="title" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                          <div>
+                              <a class="title link" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+                              <div class="w-100 d-flex justify-content-start">
+                                @for(tag of post?.tags; track $index){
+                                  <span class="tag">{{tag}}</span>
+                                }
+                              </div>
+                          </div>
+
                         <div class="coment">
                             {{post | countComent}}
                             <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
