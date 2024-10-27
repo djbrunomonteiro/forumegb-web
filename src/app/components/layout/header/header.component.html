@@ -10,11 +10,15 @@
               </mat-chip>
 
             <mat-chip [matMenuTriggerFor]="menu">
+              @if(user.photoURL){
                 <img
                   matChipAvatar
                   [src]="user.photoURL"
                   [alt]="'Photo perfil ' + user.displayName"
                 />
+              }@else{
+                <mat-icon>person</mat-icon>
+              }
                 <mat-icon style="padding-top: 2px;">menu</mat-icon>
               </mat-chip>
         }@else{
@@ -30,4 +34,10 @@
       <mat-icon>person</mat-icon>
       <span>Perfil</span>
     </button>
+    <button (click)="logout()" mat-menu-item>
+      <mat-icon>logout</mat-icon>
+      <span>Sair</span>
+    </button>
   </mat-menu>
+
+ 

@@ -41,7 +41,10 @@
                             }
                           </div>
                           <div>
-                              <a class="title link" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
+  
+                              <a class="title link" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">
+                                {{post.title | titlecase}}
+                            </a>
                               <div class="w-100 d-flex justify-content-start">
                                 @for(tag of post?.tags; track $index){
                                   <span class="tag">{{tag}}</span>

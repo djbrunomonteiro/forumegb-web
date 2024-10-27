@@ -1,11 +1,10 @@
 import { UserService } from './../services/user.service';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { mergeMap, of, catchError, take, tap, Observable, retry } from 'rxjs';
-import { IPost } from '../interfaces/posts';
-import { PostService } from '../services/post.service';
+import { tap, Observable } from 'rxjs';
 import { MetadataStoreService } from './metadata-store.service';
 import { IUser } from '../interfaces/user';
 import { IResponse } from '../interfaces/response';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +56,7 @@ export class UserStoreService {
     }),
   )
   }
+
+
 
 }

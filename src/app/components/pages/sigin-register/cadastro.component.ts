@@ -16,6 +16,9 @@ import { Router } from '@angular/router';
 import { IUser } from '../../../interfaces/user';
 import { UserService } from '../../../services/user.service';
 import { UserStoreService } from '../../../store/user-store.service';
+import { UtilService } from '../../../services/util.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InfoNewUserComponent } from '../../shared/info-new-user/info-new-user.component';
 
 @Component({
   selector: 'app-cadastro',
@@ -27,6 +30,7 @@ import { UserStoreService } from '../../../store/user-store.service';
     MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
+    InfoNewUserComponent
   ],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.scss',
@@ -36,7 +40,9 @@ export class CadastroComponent implements OnInit {
   #authService = inject(AuthService);
   #userStoreService = inject(UserStoreService);
   #userService = inject(UserService);
+  #utils = inject(UtilService);
   #router = inject(Router);
+  #dialog = inject(MatDialog);
 
   form = this.#formBuilder.group({
     check: [false, Validators.required],
@@ -51,27 +57,32 @@ export class CadastroComponent implements OnInit {
   async signInGoogleProvider(){
     const resultProvider = await this.#authService.signInWithPopup();
     const user = resultProvider.user
+    console.log(user);
+    
     const {email, photoURL, displayName, metadata} = user
     const {error, results} = await firstValueFrom(this.#userService.isNewUser(email)) ;
     if(error){return}
     if(results?.length){
-      console.log('ja esta cadastrado');
       this.#userStoreService.setState(results[0]);
       this.#router.navigate(['']);
       return
     }
 
     if(!email){return}
-    const newUser: Partial<IUser> = {  email, photoURL, displayName, metadata: JSON.stringify(metadata), }
+    const photoBase64 = photoURL ? await this.#utils.getImageAsBase642(photoURL) : ''
+    const newUser: Partial<IUser> = {  email, photoURL: photoBase64, displayName, metadata: JSON.stringify(metadata), }
     this.saveInApi(newUser);
 
   }
 
   async saveInApi(user: IUser | Partial<IUser>){
-    const {error} = await firstValueFrom(this.#userStoreService.saveOne(user));
+    const {error, results} = await firstValueFrom(this.#userStoreService.saveOne(user));
     if(error){return}
-    this.#router.navigate(['']);
+    this.#router.navigate(['/perfil']);
+    this.openDialog();
   }
-  
 
+  openDialog() {
+    this.#dialog.open(InfoNewUserComponent, {minWidth: '400px'});
+  }
 }

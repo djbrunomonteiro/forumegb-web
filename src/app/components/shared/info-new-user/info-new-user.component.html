@@ -1,0 +1,24 @@
+@if(userStore.currentState(); as user){
+<h2 mat-dialog-title>🎉 Bem-vindo(a) {{user?.displayName}} ao EGB HUB! 🎶</h2>
+<mat-dialog-content class="mat-typography">
+
+    <p>O EGB HUB é mais do que um fórum; é um ponto de encontro para
+        apaixonados pela música gospel eletrônica. Aqui você pode explorar, aprender, colaborar e, claro,
+        compartilhar o seu amor pela música.</p>
+    <p>🔊 Explore e Compartilhe Sons – Quer você seja produtor, DJ ou fã, há espaço para todos! Mostre suas
+        criações, compartilhe playlists e descubra novos sons gospel eletrônicos que vão inspirar você.</p>
+        <p><b>Dicas para começar:</b></p>
+        <ul>
+            <li>Edite seu perfil – adicione o seu nome e seu estado!</li>
+            <li>Apresente-se – crie um post e conte um pouco sobre você!</li>
+            <li>Respeite a comunidade – Apoiamos um ambiente de respeito e colaboração.</li>
+            <li>Divirta-se! – Mais que tudo, queremos que você se sinta em casa.</li>
+        </ul>
+        <p><em>Estamos felizes em ter você conosco. Qualquer dúvida, mande um email <a [href]="'mailto:'+email">{{email}}</a></em></p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button [routerLink]="['/']" mat-button mat-dialog-close>Ir para POSTs</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Editar Perfil</button>
+  </mat-dialog-actions>
+}

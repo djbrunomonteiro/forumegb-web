@@ -1,14 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { IResponse } from '../interfaces/response';
-import { of } from 'rxjs';
+import { map, mergeMap, of } from 'rxjs';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ETypeStage } from '../enums/enums';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
   #snackBar = inject(MatSnackBar);
+  #http = inject(HttpClient) ;
 
   stageOpts = [
     {
@@ -162,6 +164,55 @@ export class UtilService {
   
     // Cria o Blob a partir dos dados binários e do mime type especificado
     return new Blob([byteArray], { type: 'audio/mp3' });
+  }
+
+  getImageAsBase642(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      // Cria um elemento de imagem
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // Isso ajuda a contornar problemas de CORS em alguns casos
+  
+      // Define a URL da imagem
+      img.src = url;
+  
+      // Quando a imagem é carregada, converte-a para base64 usando canvas
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          const dataURL = canvas.toDataURL('image/png');
+          resolve(dataURL);
+        } else {
+          reject('Erro ao obter o contexto do canvas.');
+        }
+      };
+  
+      // Em caso de erro de carregamento, rejeita a Promise
+      img.onerror = () => reject('Erro ao carregar a imagem.');
+    });
+  }
+
+  getImageAsBase64(url:  any){
+    if(!url){return of('')}
+    return this.#http.get(url, { responseType: 'blob' }).pipe(
+      mergeMap((blob) => {
+        const reader = new FileReader();
+        let base64data = '';
+        reader.onloadend = () => {
+          base64data = reader?.result ? reader?.result as string : ''
+        };
+
+        reader.onerror = () => {
+          base64data = '';
+        };
+        reader.readAsDataURL(blob);
+        return base64data as string
+
+      })
+    )
   }
 
 }

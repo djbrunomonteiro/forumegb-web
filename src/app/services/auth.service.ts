@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, GoogleAuthProvider, signInWithPopup,  } from '@angular/fire/auth';
+import { Auth, GoogleAuthProvider, signInWithPopup,  signOut } from '@angular/fire/auth';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { UserStoreService } from '../store/user-store.service';
@@ -13,14 +13,17 @@ export class AuthService {
   #googleAuthProvider = new GoogleAuthProvider();
   #userStore = inject(UserStoreService);
 
-  #baseUrl = environment.apiUrl;
-  
+
   async signInWithPopup(){
      return signInWithPopup(this.#auth, this.#googleAuthProvider)
   }
 
   async getToken(){
     return (await this.#auth.currentUser?.getIdTokenResult())?.token
+  }
+
+  async logout(){
+    return await signOut(this.#auth);
   }
 
   checkAuth(){
