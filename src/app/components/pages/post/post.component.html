@@ -6,15 +6,16 @@
       </mat-icon>
       Voltar
     </button>
-    <button [routerLink]="['/posts/publicar/'+post.slug]" mat-icon-button aria-label="edit-post" matTooltip="Editar post" class="btn-edit">
-      <mat-icon>edit_note</mat-icon>
-    </button>
+    @if(user && user.id === post.owner_id){
+      <button [routerLink]="['/posts/publicar/'+post.slug]" mat-icon-button aria-label="edit-post" matTooltip="Editar post" class="btn-edit">
+        <mat-icon>edit_note</mat-icon>
+      </button>
+    }
 
   </div>
 
 
   <div class="header">
-
     <h2>{{post.title}}</h2>
   </div>
   

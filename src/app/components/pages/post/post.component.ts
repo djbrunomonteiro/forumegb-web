@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PreviewComponent } from '../../shared/preview/preview.component';
+import { IUser } from '../../../interfaces/user';
 @Component({
   selector: 'app-post',
   standalone: true,
@@ -66,11 +67,12 @@ export class PostComponent implements OnInit, AfterViewChecked {
   loading = signal(false);
 
   count = signal(0);
-  musicPreview = signal('')
+  musicPreview = signal('');
+  user: IUser | undefined = undefined
 
   constructor(){
     effect(() => {
-      console.log(this.postStore.currentPost());
+      this.user = this.userStore.currentState()
     })
   }
 

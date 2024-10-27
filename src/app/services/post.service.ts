@@ -63,5 +63,13 @@ export class PostService {
       catchError((err) => this.#utils.errorExtract(err)),
     );
   }
+
+  isAuthor(slug: string, owner_id: number){
+    return this.#http.get(`${this.#baseUrl}/posts/${slug}/author/${owner_id}`)
+    .pipe(
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
+    );
+  }
   
 }
