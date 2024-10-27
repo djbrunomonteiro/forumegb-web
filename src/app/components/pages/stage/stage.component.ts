@@ -1,3 +1,4 @@
+import { UserStoreService } from './../../../store/user-store.service';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,15 +8,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { UtilService } from '../../../services/util.service';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import { PostsStoreService } from '../../../store/posts-store.service';
-import { ETypeStage } from '../../../enums/enums';
+import { EPermission, ETypeStage } from '../../../enums/enums';
 import { firstValueFrom } from 'rxjs';
 import { CountComentPipe } from '../../../pipes/count-coment.pipe';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
+import { MatDialog } from '@angular/material/dialog';
+import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 
 
 @Component({
@@ -35,7 +38,8 @@ import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
     CountComentPipe,
     DatePipe,
     SyncDatePipe,
-    NgStyle
+    NgStyle,
+    AdBannerComponent
   ],
   templateUrl: './stage.component.html',
   styleUrl: './stage.component.scss'
@@ -45,10 +49,14 @@ export class StageComponent implements OnInit {
   @Input() type: string = '';
   @Input() isHome = false;
 
+  #dialog = inject(MatDialog)
   activatedRoute = inject(ActivatedRoute);
   postStore = inject(PostsStoreService);
+  userStore = inject(UserStoreService);
+  router = inject(Router);
   metadata = inject(MetadataStoreService);
   utils = inject(UtilService);
+  
 
   postsStage = signal<IPost[]>([]);
   limit = 30;
@@ -112,8 +120,37 @@ export class StageComponent implements OnInit {
     }
 
     this.postsStage.set(postsOrders)
+  }
 
- 
+  openPost(post:IPost | undefined){
+    if(!post){return}
+    
+    const user = this.userStore.currentState();
+    if(!user){
+      this.router.navigate(['/login-cadastro'], {state: {slug: post.slug}})
+      return
+    }
+
+    const {slug, type_stage} = post;
+    if(type_stage === ETypeStage.MAINSTAGE && user.permission !== EPermission.BASIC_DJ){
+      this.router.navigate([`/posts/type/${type_stage}/${slug}`])
+      return
+    }
+
+    if(type_stage !== ETypeStage.MAINSTAGE){
+      this.router.navigate([`/posts/type/${type_stage}/${slug}`])
+      return
+    }
+
+    this.openADBanner()
+
+  }
+
+  openADBanner(){
+    const dialogRef = this.#dialog.open(AdBannerComponent, {minWidth: '50dvw'});
+    dialogRef.afterClosed().subscribe(results => {
+      if(!results){return}
+    });
   }
 
 }

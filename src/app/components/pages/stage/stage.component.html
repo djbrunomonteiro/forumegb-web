@@ -29,7 +29,7 @@
         <ol>
             @for (post of postsStage(); track $index) {
                 <li>
-                    <div class="item">
+                    <div (click)="openPost(post)" class="item link">
                         <div class="avatar link">
                             @if(post?.user?.photoURL; as photo){
                               <img [src]="photo" alt="photo url">
@@ -42,7 +42,7 @@
                           </div>
                           <div>
   
-                              <a class="title link" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">
+                              <a class="title link"  rel="noopener noreferrer">
                                 {{post.title | titlecase}}
                             </a>
                               <div class="w-100 d-flex justify-content-start">
