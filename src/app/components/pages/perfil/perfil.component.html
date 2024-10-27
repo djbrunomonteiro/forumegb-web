@@ -1,40 +1,94 @@
-<form (ngSubmit)="save()" [formGroup]="form">
+@if(this.userStore.currentState()){
+  <form (ngSubmit)="save()" [formGroup]="form">
     <div class="row">
-        <div class="col-md-3 box-body">
-            <div class="avatar">
-                @if(ctrlPhotoUrl.value; as photo){
-                <img [src]="photo" alt="photo url">
-                }@else{
-                <mat-icon>
-                    account_circle
-                </mat-icon>
-                }
-            </div>
-            
+      <div class="col-md-3 box-body">
+        <div class="avatar">
+          @if(isEditImg()){
+            @if(isPlatformBrowser(this.platformId)){
+              <div class="d-flex flex-column">
+                <image-cropper 
+                  class="w-100"
+                  [imageChangedEvent]="imageChangedEvent"
+                  [maintainAspectRatio]="true"
+                  [aspectRatio]="1 / 1"
+                  format="jpeg"
+                  [resizeToWidth]="300"
+                  [resizeToHeight]="300"
+                  [output]="'base64'"
+                  [imageQuality]="80"
+                  (imageCropped)="imageCropped($event)"
+                ></image-cropper>
+                <button (click)="cancelImg()" class="w-100 my-2" type="button" mat-button>Cancelar</button>
+                <button (click)="saveImg()" class="w-100" type="button" mat-stroked-button color="primary">Salvar</button>
+              </div>
+  
+  
+              <!-- <img [src]="croppedImage" /> -->
+  
+            }
+          }@else{
+            @if(ctrlPhotoUrl.value; as photo){
+              <img [src]="photo" alt="photo url" (click)="file.click()">
+              }@else{
+              <mat-icon (click)="file.click()">
+                  account_circle
+              </mat-icon>
+      }
+          }
+  
+  
+          <input #file type="file" (change)="fileChangeEvent($event)" style="display: none;" accept="image/*"/>
         </div>
-        <div class="col-md-9">
-            <div class="box-body" >
-                <h4>Dados do seu perfil</h4>
-                <mat-form-field appearance="outline" class="my-3 w-50" >
-                    <mat-label>Como gostaria de ser chamado(Nome)</mat-label>
-                    <input formControlName="displayName" matInput>
-                    <mat-hint>*Requerido min. de 5 caracteres</mat-hint>
-                </mat-form-field>
-                <br>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>Estado(UF)</mat-label>
-                    <mat-select formControlName="end_uf">
-                        @for (item of ufsBR; track $index) {
-                        <mat-option [value]="item.uf">{{item.nome}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
-            </div>
+      </div>
+      <div class="col-md-9">
+        <div class="box-body">
+          <h4>Dados do seu perfil</h4>
+          <mat-form-field appearance="outline" class="my-3 w-50">
+            <mat-label>Como gostaria de ser chamado(Nome)</mat-label>
+            <input formControlName="displayName" matInput />
+            <mat-hint>*Requerido min. de 5 caracteres</mat-hint>
+          </mat-form-field>
+          <br />
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Estado(UF)</mat-label>
+            <mat-select formControlName="end_uf">
+              @for (item of ufsBR; track $index) {
+              <mat-option [value]="item.uf">{{ item.nome }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         </div>
+      </div>
+  
+      @if(metadataStore.loadingUser()){
+          <p class="text-center">Aguarde estamos processando. Não feche até finalizar!</p>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }@else{
         <div class="w-100 d-flex justify-content-end my-2">
-            <button routerLInk="'/'" mat-button>Cancelar</button>
-            <button type="submit" class="btn-save" mat-flat-button [disabled]="form.invalid" >Salvar</button>
+          <button routerLInk="'/'" type="button" mat-button>Cancelar</button>
+          <button
+            type="submit"
+            class="btn-save"
+            mat-flat-button
+            [disabled]="form.invalid"
+          >
+            Salvar
+          </button>
         </div>
+      }
+  
+  
     </div>
-</form>
+  </form>
+}@else{
+
+  @if(metadataStore.errorUser().error){
+    <p class="text-center">{{metadataStore.errorUser().message}}</p>
+  }@else{
+    <p class="text-center">Aguarde carregando...</p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+}
+

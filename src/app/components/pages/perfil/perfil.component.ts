@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, PLATFORM_ID, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,6 +8,13 @@ import { UserStoreService } from '../../../store/user-store.service';
 import { IUser } from '../../../interfaces/user';
 import {MatSelectModule} from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { isPlatformBrowser } from '@angular/common';
+import { MetadataStoreService } from '../../../store/metadata-store.service';
+import { firstValueFrom } from 'rxjs';
+import { UtilService } from '../../../services/util.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import dayjs from 'dayjs'
 
 @Component({
   selector: 'app-perfil',
@@ -15,19 +22,26 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule, 
+    MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     RouterModule,
     MatSelectModule,
     MatIconModule,
+    ImageCropperComponent,
+    MatProgressBarModule
   ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
 })
 export class PerfilComponent {
   #formBuilder = inject(FormBuilder);
-  #userStore = inject(UserStoreService);
+  userStore = inject(UserStoreService);
+  #utils = inject(UtilService);
+  metadataStore = inject(MetadataStoreService);
+  platformId = inject(PLATFORM_ID);
+  isPlatformBrowser = isPlatformBrowser
+
 
   form = this.#formBuilder.group({
     id:[0],
@@ -72,16 +86,17 @@ export class PerfilComponent {
     { uf: 'SE', nome: 'Sergipe' },
     { uf: 'TO', nome: 'Tocantins' }
   ];
-  
+
+  imageChangedEvent: Event | null = null;
+  croppedImage: any  = '';
+  isEditImg = signal(false);
+
 
   constructor(){
     effect(() => {
-      if(this.#userStore.currentState()){
-        this.setForm(this.#userStore.currentState())
+      if(this.userStore.currentState()){
+        this.setForm(this.userStore.currentState())
       }
-      
-      
-      
     })
   }
 
@@ -100,8 +115,37 @@ export class PerfilComponent {
 
   }
 
-  save(){
-    console.log(this.form.value);
-    
+  async save(){
+    if(this.isEditImg()){
+      this.saveImg();
+    }
+
+    let metadata = this.form.value.metadata as any;
+    metadata = {...metadata, updated_at: dayjs().toISOString()}
+    const user = {...this.form.value, metadata: JSON.stringify(metadata)} as Partial<IUser>;
+    const {message} = await firstValueFrom(this.userStore.saveOne(user));
+    this.#utils.showMsg(message);
   }
+
+  cancelImg(){
+    this.isEditImg.set(false);
+    this.croppedImage = '';
+  }
+
+  saveImg(){
+    this.ctrlPhotoUrl.setValue(this.croppedImage);
+    this.cancelImg();
+  }
+
+  fileChangeEvent(event: Event): void {
+    console.log(event);
+    if(!event){return}
+    this.isEditImg.set(true);
+    this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    if(!event){return}
+    this.croppedImage = event.base64;
+  }
+
 }

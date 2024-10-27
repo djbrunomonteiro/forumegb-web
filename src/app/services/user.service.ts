@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, catchError, delay } from 'rxjs';
+import { map, catchError, delay, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { UtilService } from './util.service';
 import { IResponse } from '../interfaces/response';
@@ -27,9 +27,17 @@ export class UserService {
 
   }
 
+  updateOne(user: any){
+    return this.#http.patch(`${this.#baseUrl}/users/${user.id}`, user).pipe(
+      map((res) => res as IResponse)
+    );
+
+  }
+
   getOne(email: string){
     return this.#http.get(`${this.#baseUrl}/users/search?email=${email}`)
     .pipe(
+      retry(3), // Tenta a requisição novamente até três vezes em caso de erro
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );

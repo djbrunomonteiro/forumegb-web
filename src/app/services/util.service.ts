@@ -46,7 +46,8 @@ export class UtilService {
   }
 
   errorExtract(res: any){
-    const response: IResponse = {error: true, results: res?.results ?? undefined, message: res?.message}
+    const message = String(res?.message).includes('failure') ? 'Desculpe, o servidor não está acessível no momento ou sua conexão falhou.' : res?.message
+    const response: IResponse = {error: true, results: res?.results ?? undefined, message}
     return of(response);
   }
 
