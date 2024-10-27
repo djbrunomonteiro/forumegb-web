@@ -119,7 +119,7 @@ export class PreviewEditorComponent implements OnInit, AfterViewInit {
         start, 
         end,
         content: '< Mova >',
-        color: '#38335149',
+        color: '#86010149',
         resize: false,
       });
     });
@@ -148,7 +148,9 @@ export class PreviewEditorComponent implements OnInit, AfterViewInit {
       return
     }
 
-    this.#dialogRef.close(results)
+    this.#dialogRef.close(results);
+    this.wavesurfer.stop();
+    this.wavesurfer.destroy();
  
 
   }

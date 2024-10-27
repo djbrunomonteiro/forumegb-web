@@ -11,7 +11,7 @@
 
 
 
-            <div  #waveform class="w-100 container-preview"></div>
+            <div  #waveform class="w-100 container-preview" [ngStyle]="{'display': loadedLocale() ? 'block' : 'none' }"></div>
 
             @if(loadedLocale() && wavesurfer){
                 <button  (click)="wavesurfer.playPause()" mat-mini-fab aria-label="player button" class="playPause" style="background: #383351">
