@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
 import { IPost } from '../../../interfaces/posts';
@@ -20,6 +20,12 @@ import { ETypeStage } from '../../../enums/enums';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { NgClass } from '@angular/common';
+import { PreviewComponent } from '../../shared/preview/preview.component';
+
 @Component({
   selector: 'app-post-editor',
   standalone: true,
@@ -36,8 +42,12 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatDialogModule,
     MatRadioModule,
     MatTooltipModule,
-    MatProgressBarModule
-
+    MatProgressBarModule,
+    MatExpansionModule,
+    MatDividerModule,
+    MatCheckboxModule,
+    NgClass,
+    PreviewComponent
   ],
   templateUrl: './post-editor.component.html',
   styleUrl: './post-editor.component.scss'
@@ -57,7 +67,7 @@ export class PostEditorComponent implements OnInit {
   form = this.#formBuilder.group({
     id: [''],
     title: ['', [Validators.required, Validators.minLength(5)]],
-    body: ['', [Validators.required, Validators.minLength(15)]],
+    body: ['', [Validators.required]],
     music_preview: [''],
     source_url: [''],
     thumbnail: [''],
@@ -68,9 +78,11 @@ export class PostEditorComponent implements OnInit {
     metadata: [''],
     status: [''],
     parent_id: [null],
+    tags:[[]]
   });
-
+  ctrlTags = this.form.get('tags') as FormControl;
   ctrlMusicPreview = this.form.get('music_preview') as FormControl;
+  musicPreview = signal('');
 
   stageOpts = [
 
@@ -109,7 +121,13 @@ export class PostEditorComponent implements OnInit {
     await firstValueFrom(this.#postStore.getOneApi(slug));
     const currentPost = this.#postStore.currentPost() as any;
     if(!currentPost){return}
-    this.form.patchValue({...currentPost})
+    this.form.patchValue({...currentPost});
+    this.musicPreview.set(this.ctrlMusicPreview.value);
+  }
+
+  checkTags(tag: string){
+    const tags = this.ctrlTags.value as string[]
+    return tags.includes(tag)
 
   }
 
@@ -127,7 +145,8 @@ export class PostEditorComponent implements OnInit {
   async save(){
     if(!this.form.value.title){return}
     const slug = this.createSlug(this.form.value.title)
-    const post = {...this.form.value, slug} as Partial<IPost>;
+    const tags = JSON.stringify(this.ctrlTags.value)
+    const post = {...this.form.value, slug, tags} as Partial<IPost>;
     let request$: Observable<IResponse>;
     if(post.id){
       request$ = this.#postStore.editOneApi(post);
@@ -142,6 +161,18 @@ export class PostEditorComponent implements OnInit {
     }
 
     this.#router.navigate([`/posts/type/${post.type_stage}/${slug}`])
+  }
+
+  addTag(tag: any){
+    const tags = this.ctrlTags.value as any[];
+    if(!tags.length){
+      tags.push(tag)
+    }else{
+      let index = tags.findIndex(elem => elem === tag);
+      (index === -1) ? tags.push(tag) : tags.splice(index, 1)
+    }
+
+    this.ctrlTags.setValue(tags);
   }
 
   createSlug(title: string) {
@@ -162,7 +193,8 @@ export class PostEditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(results => {
       if(!results){return}
       const {music_preview} = results;
-      this.ctrlMusicPreview.setValue(music_preview ?? '')
+      this.ctrlMusicPreview.setValue(music_preview ?? '');
+      this.musicPreview.set(this.ctrlMusicPreview.value);
     });
   }
 

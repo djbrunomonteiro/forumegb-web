@@ -72,3 +72,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
     }
   }
 
+  .tag{
+    font-size: 10px;
+    color: var(--medium);
+    margin-right: 5px;
+  }
+
+  .link:hover{
+    cursor: pointer;
+    opacity: 0.8;
+
+  }
+

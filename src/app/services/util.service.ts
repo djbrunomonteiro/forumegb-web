@@ -37,7 +37,22 @@ export class UtilService {
       description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores.',
       color: '#263028',
     },
-  ]
+  ];
+
+  tagsPosts = [
+    "Remixes e Mashups",
+    "Faixas Originais",
+    "Mixagens e Sets",
+    "Produção Musical",
+    "Dúvidas",
+    "Equipamentos",
+    "Eventos, Festivais e Shows",
+    "Gêneros Musicais",
+    "Softwares e Programas",
+    "Sugestão e Melhorias",
+    "Vendas e Aluguel",
+    "Outros"
+];
 
   constructor() { }
 
@@ -121,6 +136,32 @@ export class UtilService {
   
     // Remove a propriedade likesCount antes de retornar
     return sorted.map(({ likesCount, ...rest }) => rest);
+  }
+
+  blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);  // Lê o Blob e converte em Base64
+    });
+  }
+
+  base64ToBlob(base64: string): Blob {
+    // Remove o prefixo 'data:[<mimeType>];base64,' da string base64
+    const byteCharacters = atob(base64.split(',')[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+    
+    // Converte cada caractere em seu valor correspondente em byte
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+  
+    // Converte os bytes em uma unidade de armazenamento do tipo Uint8Array
+    const byteArray = new Uint8Array(byteNumbers);
+  
+    // Cria o Blob a partir dos dados binários e do mime type especificado
+    return new Blob([byteArray], { type: 'audio/mp3' });
   }
 
 }

@@ -2,6 +2,17 @@ mat-form-field{
     width: 100%;
 }
 
+.side{
+    background-color: rgba(37, 34, 34, 0.527);
+    border-radius: 10px;
+    padding: 10px;
+    label{
+        color: var(--medium);
+        font-style: italic;
+        margin-bottom: 5px;
+    }
+}
+
 .radio-img-opt{
     img{
         width: 40px;
@@ -9,5 +20,9 @@ mat-form-field{
         object-fit: cover;
         margin-right: 5px;
     }
+}
+
+.btn-disabled{
+    background-color: var(--medium);
 }
 

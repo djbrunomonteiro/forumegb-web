@@ -1,30 +1,24 @@
 @if(postStore.currentPost(); as post){
 
-  <button [routerLink]="['../']" class="btn-send mt-2" mat-stroked-button>
-    <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
-    </mat-icon>
-    Voltar
-  </button>
+  <div class="d-flex justify-content-between align-items-center">
+    <button [routerLink]="['../']" class="btn-send mt-2" mat-stroked-button>
+      <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
+      </mat-icon>
+      Voltar
+    </button>
+    <button [routerLink]="['/posts/publicar/'+post.slug]" mat-icon-button aria-label="edit-post" matTooltip="Editar post" class="btn-edit">
+      <mat-icon>edit_note</mat-icon>
+    </button>
+
+  </div>
+
 
   <div class="header">
+
     <h2>{{post.title}}</h2>
   </div>
-
-  <div class="preview">
-    <div id="waveform" class="w-100 wave" [ngClass]="{'preview-none': !post?.music_preview}"></div>
   
-  </div>
-  @if(loadedLocale() && wavesurfer){
-    <button  (click)="wavesurfer.playPause()" mat-mini-fab aria-label="player button" class="playPause" style="background: #383351">
-        <mat-icon>
-            @if(wavesurfer.isPlaying()){
-                stop_circle
-            }@else{
-                play_circle
-            }
-        </mat-icon>
-      </button>
-}
+  <app-preview [musicPreview]="musicPreview" />
 
   <div class="box-body">
     <div class="row">
@@ -44,10 +38,17 @@
         </div>
       </div>
       <div class="col-md-9">
+        <div class="w-100 d-flex justify-content-end">
+          @for(tag of post?.tags; track $index){
+            <span class="tag">{{tag}}</span>
+          }
+        </div>
         <div class="description" [innerHTML]="post.body"></div>
         <div class="w-100 d-flex justify-content-center">
           <span class="date">postado em {{post.created_at | syncDate}}</span>
         </div>
+
+
       </div>
     </div>
 

@@ -1,50 +1,76 @@
 <form [formGroup]="form">
     <div class="row justify-content-center m-0">
         <div class="col-md-10">
-            <h4>Publicar novo conteúdo</h4>
-            <mat-form-field appearance="outline">
-                <mat-label>Titulo</mat-label>
-                <input formControlName="title" matInput placeholder="ex: remix de ...">
-                <mat-hint>*Requerido min. de 10 caracteres</mat-hint>
-            </mat-form-field>
 
-            <div class="d-flex flex-column my-3">
-                <label>Publicar na seção: </label>
-                <mat-radio-group formControlName="type_stage">
-                    @for(item of utils.stageOpts; track $index){
-                        <mat-radio-button [value]="item.value" [matTooltip]="item.description">
-                            <div class="radio-img-opt">
-                                <img [src]="item.img" alt="opt-img">
-                                <span>{{item.title}} ({{item.access}})</span>
-                                <span></span>
-                            </div>
-                            
-                        </mat-radio-button>
-                    }
-                </mat-radio-group>
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Publicar novo conteúdo</h4>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Titulo</mat-label>
+                        <input formControlName="title" matInput placeholder="ex: remix de ...">
+                        <mat-hint>*Requerido min. de 5 caracteres</mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="my-3">
+                        <mat-label>Link para download e/ou divulgação</mat-label>
+                        <input formControlName="source_url" matInput>
+                    </mat-form-field>
+        
+                    <quill-editor
+                    [theme]="'snow'"
+                    class="w-100"
+                    formControlName="body"
+                    [styles]="{ height: '300px', background: '#010907'}"
+                    />
+                </div>
+                <div class="col-md-4 side">
+                    <div class="d-flex flex-column my-3">
+                        <label>Publicar na seção: </label>
+                        <mat-radio-group formControlName="type_stage">
+                            @for(item of utils.stageOpts; track $index){
+                                <mat-radio-button [value]="item.value" [matTooltip]="item.description">
+                                    <div class="radio-img-opt">
+                                        <img [src]="item.img" alt="opt-img">
+                                        <span>{{item.title}} ({{item.access}})</span>
+                                        <span></span>
+                                    </div>
+                                    
+                                </mat-radio-button>
+                            }
+                        </mat-radio-group>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="d-flex flex-column my-3">
+                        <label>Adicionar preview: </label>
+                        <app-preview [musicPreview]="musicPreview"/>
+                        <button (click)="openPreviewEditor()" mat-stroked-button class="my-2">Fazer upload </button>
+                    </div>
+
+                    <mat-accordion>
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title> Adicionar Tags</mat-panel-title>
+                          </mat-expansion-panel-header>
+                          <section class="w-100">
+                            @for(tag of utils.tagsPosts; track $index){
+                                <mat-checkbox (change)="addTag(tag)" [checked]="checkTags(tag)" class="w-100" >{{tag}}</mat-checkbox>
+                            }
+                          </section>
+                        </mat-expansion-panel>
+                      </mat-accordion>
+                    
+
+                   
+                </div>
             </div>
-            
-            <quill-editor
-            [theme]="'snow'"
-            class="w-100 my-3"
-            formControlName="body"
-            [styles]="{ height: '300px', background: '#010907'}"
-            [maxLength]="15" />
-
-            <p>É musica? adicione um preview de 30seg. <button (click)="openPreviewEditor()" mat-flat-button>adicionar preview</button></p>
-
-            <mat-form-field appearance="outline">
-                <mat-label>Link para download e/ou divulgação</mat-label>
-                <input formControlName="source_url" matInput>
-            </mat-form-field>
 
             @if(this.metadataStore.loadingPost()){
                 <p class="text-center">Aguarde estamos processando. Não feche até finalizar!</p>
                 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             }@else{
-                <div class="d-flex justify-content-end">
-                    <button routerLink="/" mat-button>Cancelar</button>
-                    <button (click)="save()" class="btn-save" mat-flat-button >Publicar</button>
+                <div class="d-flex flex-column">
+                    <button (click)="save()" [disabled]="form.invalid" [ngClass]="{'btn-save': !form.invalid, 'btn-disabled': form.invalid}" class="w-100 my-3" mat-flat-button >Publicar</button>
+                    <button routerLink="/" mat-button class="w-100">Cancelar</button>
                 </div>
             }
 

@@ -16,7 +16,8 @@ export interface IPost {
     type_stage?: string | null | undefined;
     likes?: any;
     children?: IPost[];
-    user?: Partial<IUser>
+    user?: Partial<IUser>,
+    tags?: any,
     created_at?: string;
     updated_at?: string;
 
