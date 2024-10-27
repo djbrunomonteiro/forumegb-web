@@ -1,0 +1,22 @@
+@if(userStore.currentState(); as user){
+    <h2 mat-dialog-title>🎶 <b>{{user.displayName | titlecase}}</b>, Seja membro Main Stage da EGB HUB! 🎶</h2>
+    <mat-dialog-content class="mat-typography">
+        <p>Se você compreendeu o propósito do fórum e está disposto a ajudar a mantê-lo, esta é a sua chance de contribuir! </p>
+        <p>Ao se tornar um membro MAIN STAGE, você terá acesso: </p>
+        <ul>
+            <li>Remixes e Faixas originais extendidas em primeira mão;</li>
+            <li>Trocas de experiências, dicas e recomendações;</li>
+            <li>Funcionalidades exclusivas;</li>
+            <li>Suporte prioritário e muito mais</li>
+        </ul>
+
+        <div class="preco">
+            <p>Faça sua primeira contribuição</p>
+            <h4> 3 meses por R$15,00</h4>
+            <button class="my-3" mat-stroked-button [mat-dialog-close]="true" cdkFocusInitial>Eu quero contribuir</button>
+        </div>
+
+
+    </mat-dialog-content>
+
+    }

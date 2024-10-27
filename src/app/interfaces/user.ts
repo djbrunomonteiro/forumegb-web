@@ -11,3 +11,4 @@ export interface IUser{
     end_uf?: string;
     end_city?: string;
 }
+

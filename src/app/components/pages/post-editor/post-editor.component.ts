@@ -1,3 +1,4 @@
+import { EPermission } from './../../../enums/enums';
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
@@ -25,6 +26,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { NgClass } from '@angular/common';
 import { PreviewComponent } from '../../shared/preview/preview.component';
+import { IUser } from '../../../interfaces/user';
+import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 
 @Component({
   selector: 'app-post-editor',
@@ -47,7 +50,8 @@ import { PreviewComponent } from '../../shared/preview/preview.component';
     MatDividerModule,
     MatCheckboxModule,
     NgClass,
-    PreviewComponent
+    PreviewComponent,
+    AdBannerComponent
   ],
   templateUrl: './post-editor.component.html',
   styleUrl: './post-editor.component.scss'
@@ -58,11 +62,11 @@ export class PostEditorComponent implements OnInit {
   #formBuilder = inject(FormBuilder);
   #postStore = inject(PostsStoreService);
   #userStore = inject(UserStoreService);
-  #activatedRoute = inject(ActivatedRoute)
-  utils = inject(UtilService);
+  #activatedRoute = inject(ActivatedRoute);
   #router = inject(Router);
   #dialog = inject(MatDialog);
-  metadataStore = inject(MetadataStoreService)
+  utils = inject(UtilService);
+  metadataStore = inject(MetadataStoreService);
 
   form = this.#formBuilder.group({
     id: [''],
@@ -84,29 +88,15 @@ export class PostEditorComponent implements OnInit {
   ctrlMusicPreview = this.form.get('music_preview') as FormControl;
   musicPreview = signal('');
 
-  stageOpts = [
-
-    {
-      value: ETypeStage.MAINSTAGE,
-      title: 'Main Stage',
-      description: 'Acesso exclusivo para membros que apoiam financeiramente o projeto, ideal para compartilhar músicas, sets e conteúdos de destaque.'
-    },
-    {
-      value: ETypeStage.FLOORSTAGE,
-      title: 'Floor Stage',
-      description: 'Visível para todos, este espaço é ideal para compartilhar músicas, sets, tirar dúvidas e interagir.'
-    },
-    {
-      value: ETypeStage.BACKSTAGE,
-      title: 'Back Stage',
-      description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores e melhorias do fórum EGBHub.'
-    },
-  ]
+  user: IUser | undefined;
+  EPermission = EPermission;
 
   constructor(){
     effect(() => {
-      this.populeUserInForm();
-      
+      if(this.#userStore.currentState()){
+        this.user = this.#userStore.currentState();
+        this.populeUserInForm(this.user);
+      }
     })
   }
 
@@ -131,8 +121,7 @@ export class PostEditorComponent implements OnInit {
 
   }
 
-  populeUserInForm(){
-    const user = this.#userStore.currentState();
+  populeUserInForm(user: IUser | undefined){
     if(!user){return}
     this.form.patchValue({
       owner_id: +user.id,
@@ -195,6 +184,22 @@ export class PostEditorComponent implements OnInit {
       const {music_preview} = results;
       this.ctrlMusicPreview.setValue(music_preview ?? '');
       this.musicPreview.set(this.ctrlMusicPreview.value);
+    });
+  }
+
+  disabledOptsStage(stage: any){
+    if(this.user?.permission === this.EPermission.BASIC_DJ && stage === ETypeStage.MAINSTAGE){
+      return true
+    }
+
+    return false
+
+  }
+
+  openADBanner(){
+    const dialogRef = this.#dialog.open(AdBannerComponent, {minWidth: '50dvw'});
+    dialogRef.afterClosed().subscribe(results => {
+      if(!results){return}
     });
   }
 

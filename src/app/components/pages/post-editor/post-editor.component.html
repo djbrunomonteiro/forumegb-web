@@ -25,10 +25,15 @@
                 </div>
                 <div class="col-md-4 side">
                     <div class="d-flex flex-column my-3">
+                        
+                        @if(user && user.permission === EPermission.BASIC_DJ){
+                            <button (click)="openADBanner()" mat-button class="btn-action my-2">Seja membro MAIN STAGE ! saiba + </button>
+                        }
+                        
                         <label>Publicar na seção: </label>
                         <mat-radio-group formControlName="type_stage">
                             @for(item of utils.stageOpts; track $index){
-                                <mat-radio-button [value]="item.value" [matTooltip]="item.description">
+                                <mat-radio-button [value]="item.value" [matTooltip]="item.description" [disabled]="disabledOptsStage(item.value)">
                                     <div class="radio-img-opt">
                                         <img [src]="item.img" alt="opt-img">
                                         <span>{{item.title}} ({{item.access}})</span>
@@ -38,6 +43,9 @@
                                 </mat-radio-button>
                             }
                         </mat-radio-group>
+
+
+
                     </div>
                     <mat-divider></mat-divider>
                     <div class="d-flex flex-column my-3">
