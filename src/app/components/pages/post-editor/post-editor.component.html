@@ -8,11 +8,18 @@
                 <mat-hint>*Requerido min. de 10 caracteres</mat-hint>
             </mat-form-field>
 
-            <div>
+            <div class="d-flex flex-column my-3">
                 <label>Publicar na seção: </label>
                 <mat-radio-group formControlName="type_stage">
-                    @for(item of stageOpts; track $index){
-                        <mat-radio-button [value]="item.value" [matTooltip]="item.description">{{item.title}}</mat-radio-button>
+                    @for(item of utils.stageOpts; track $index){
+                        <mat-radio-button [value]="item.value" [matTooltip]="item.description">
+                            <div class="radio-img-opt">
+                                <img [src]="item.img" alt="opt-img">
+                                <span>{{item.title}} ({{item.access}})</span>
+                                <span></span>
+                            </div>
+                            
+                        </mat-radio-button>
                     }
                 </mat-radio-group>
             </div>

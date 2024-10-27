@@ -58,6 +58,7 @@ export class StageComponent implements OnInit {
     value: '',
     access: '',
     title: '',
+    img: '',
     description: '',
     color: ''
   };

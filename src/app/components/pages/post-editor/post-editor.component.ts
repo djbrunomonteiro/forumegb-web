@@ -49,7 +49,7 @@ export class PostEditorComponent implements OnInit {
   #postStore = inject(PostsStoreService);
   #userStore = inject(UserStoreService);
   #activatedRoute = inject(ActivatedRoute)
-  #utils = inject(UtilService);
+  utils = inject(UtilService);
   #router = inject(Router);
   #dialog = inject(MatDialog);
   metadataStore = inject(MetadataStoreService)
@@ -73,15 +73,16 @@ export class PostEditorComponent implements OnInit {
   ctrlMusicPreview = this.form.get('music_preview') as FormControl;
 
   stageOpts = [
-    {
-      value: ETypeStage.FLOORSTAGE,
-      title: 'Floor Stage',
-      description: 'Visível para todos, este espaço é ideal para compartilhar músicas, sets, tirar dúvidas e interagir.'
-    },
+
     {
       value: ETypeStage.MAINSTAGE,
       title: 'Main Stage',
       description: 'Acesso exclusivo para membros que apoiam financeiramente o projeto, ideal para compartilhar músicas, sets e conteúdos de destaque.'
+    },
+    {
+      value: ETypeStage.FLOORSTAGE,
+      title: 'Floor Stage',
+      description: 'Visível para todos, este espaço é ideal para compartilhar músicas, sets, tirar dúvidas e interagir.'
     },
     {
       value: ETypeStage.BACKSTAGE,
@@ -135,7 +136,7 @@ export class PostEditorComponent implements OnInit {
     }
 
     const {error, results, message} = await firstValueFrom(request$);
-    this.#utils.showMsg(message)
+    this.utils.showMsg(message)
     if(error){
       return
     }

@@ -14,6 +14,7 @@ export class UtilService {
     {
       value: ETypeStage.MAINSTAGE,
       title: 'Main Stage',
+      img: 'main.jpg',
       access: 'PRIVADO',
       description: 'Acesso exclusivo para membros. Contém músicas exclusivas, lançamentos e muito + !',
       color: 'red',
@@ -23,6 +24,7 @@ export class UtilService {
       value: ETypeStage.FLOORSTAGE,
       access: 'PÚBLICO',
       title: 'Floor Stage',
+      img: 'floor.jpg',
       description: 'Visível para todos, Contém músicas, sets, seção de dúvidas e muito +.',
       color: '#064c6d',
     },
@@ -31,6 +33,7 @@ export class UtilService {
       value: ETypeStage.BACKSTAGE,
       access: 'PÚBLICO',
       title: 'Back Stage',
+      img: 'back.jpg',
       description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores.',
       color: '#263028',
     },
