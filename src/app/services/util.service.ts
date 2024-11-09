@@ -1,16 +1,18 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { IResponse } from '../interfaces/response';
-import { map, mergeMap, of } from 'rxjs';
+import { filter, map, mergeMap, of } from 'rxjs';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ETypeStage } from '../enums/enums';
 import { HttpClient } from '@angular/common/http';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
   #snackBar = inject(MatSnackBar);
-  #http = inject(HttpClient) ;
+  #router = inject(Router);
+  #http = inject(HttpClient);
 
   stageOpts = [
     {
@@ -56,7 +58,20 @@ export class UtilService {
     "Outros"
 ];
 
-  constructor() { }
+  currentNavState = signal<any>(undefined)
+
+
+  listenCurrentNavState(){
+    this.#router.events
+    .pipe(filter((event: any) => event instanceof NavigationEnd))
+    .subscribe((event: NavigationEnd) => {
+      const navigation = this.#router.getCurrentNavigation();
+      const url = navigation?.extras?.state?.['url'] ?? '';
+      this.currentNavState.set({url})
+    });
+  }
+
+  
 
   successExtract(res: any){
     const results = this.paramsJsonParse(res.results);
