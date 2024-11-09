@@ -127,7 +127,10 @@ export class StageComponent implements OnInit {
     
     const user = this.userStore.currentState();
     if(!user){
-      this.router.navigate(['/login-cadastro'], {state: {slug: post.slug}})
+      const url = `posts/type/${post.type_stage}/${post.slug}`;
+      console.log(url);
+      
+      this.router.navigate(['/login-cadastro'], {state: {url}})
       return
     }
 

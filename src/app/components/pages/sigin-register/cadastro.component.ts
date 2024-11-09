@@ -11,8 +11,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { firstValueFrom } from 'rxjs';
-import { Router } from '@angular/router';
+import { filter, firstValueFrom } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { IUser } from '../../../interfaces/user';
 import { UserService } from '../../../services/user.service';
 import { UserStoreService } from '../../../store/user-store.service';
@@ -42,6 +42,7 @@ export class CadastroComponent implements OnInit {
   #userService = inject(UserService);
   #utils = inject(UtilService);
   #router = inject(Router);
+  #activatedRouter = inject(ActivatedRoute);
   #dialog = inject(MatDialog);
 
   form = this.#formBuilder.group({
@@ -52,19 +53,23 @@ export class CadastroComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+    
   }
 
   async signInGoogleProvider(){
     const resultProvider = await this.#authService.signInWithPopup();
     const user = resultProvider.user
-    console.log(user);
-    
     const {email, photoURL, displayName, metadata} = user
     const {error, results} = await firstValueFrom(this.#userService.isNewUser(email)) ;
+
+    console.log(results);
+    
     if(error){return}
     if(results?.length){
       this.#userStoreService.setState(results[0]);
-      this.#router.navigate(['']);
+      const url = this.#utils.currentNavState()?.url ?? ''
+      this.#router.navigate([url]);
       return
     }
 

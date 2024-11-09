@@ -81,6 +81,14 @@
   
     </div>
   </form>
+
+  <div class="row">
+    <div class="col-12">
+      <button (click)="checkout(EPlantypes.TRIMESTRAL)" type="button" mat-button>TRIMESTRAL</button>
+      <button (click)="checkout(EPlantypes.SEMESTRAL)" type="button" mat-button>SEMESTRAL</button>
+      <button (click)="checkout(EPlantypes.ANUAL)" type="button" mat-button>ANUAL</button>
+    </div>
+  </div>
 }@else{
 
   @if(metadataStore.errorUser().error){

@@ -10,6 +10,12 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="mat-typography">
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
   <app-root></app-root>
 </body>
+  <script>
+    const mp = new MercadoPago("APP_USR-e3b15ff5-4cce-46ae-af07-cda0fb1f556a");
+    window.mercadoPagoInstance = mp;
+  </script>
+
 </html>

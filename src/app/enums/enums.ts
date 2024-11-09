@@ -15,3 +15,16 @@ export enum EPermission {
     FLOORSTAGE = 'FLOORSTAGE',
     BACKSTAGE = 'BACKSTAGE',
   }
+
+  export enum EPlanTypes {
+    TRIMESTRAL  = 'TRIMESTRAL',
+    SEMESTRAL = 'SEMESTRAL',
+    ANUAL = 'ANUAL',
+  }
+  
+  export enum EPlanStatus {
+    Pending  = 'Pending',
+    Approved = 'Approved',
+    Rejected = 'Rejected',
+    Cancelled = 'Cancelled',
+  }

@@ -15,6 +15,9 @@ import { firstValueFrom } from 'rxjs';
 import { UtilService } from '../../../services/util.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import dayjs from 'dayjs'
+import { PaymentService } from '../../../services/payment.service';
+import { EPlanTypes } from '../../../enums/enums';
+
 
 @Component({
   selector: 'app-perfil',
@@ -29,7 +32,7 @@ import dayjs from 'dayjs'
     MatSelectModule,
     MatIconModule,
     ImageCropperComponent,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
@@ -38,6 +41,7 @@ export class PerfilComponent {
   #formBuilder = inject(FormBuilder);
   userStore = inject(UserStoreService);
   #utils = inject(UtilService);
+  #paymentService = inject(PaymentService);
   metadataStore = inject(MetadataStoreService);
   platformId = inject(PLATFORM_ID);
   isPlatformBrowser = isPlatformBrowser
@@ -91,6 +95,8 @@ export class PerfilComponent {
   croppedImage: any  = '';
   isEditImg = signal(false);
 
+  EPlantypes = EPlanTypes;
+
 
   constructor(){
     effect(() => {
@@ -98,6 +104,7 @@ export class PerfilComponent {
         this.setForm(this.userStore.currentState())
       }
     })
+
   }
 
   setForm(user: IUser | undefined){
@@ -146,6 +153,21 @@ export class PerfilComponent {
   imageCropped(event: ImageCroppedEvent) {
     if(!event){return}
     this.croppedImage = event.base64;
+  }
+
+
+  async checkout(plan_type: string = EPlanTypes.TRIMESTRAL){
+    const {id, email} = this.form.value
+    const form = {plan_type, user_id: id, user_email: email };
+
+    const {error, results, message } = await firstValueFrom(this.#paymentService.getPref(form));
+    console.log(error, results, message);
+    if(error){return}
+
+    const preference_id = results?.preference_id;
+    this.#paymentService.initCheckout(preference_id)
+    
+
   }
 
 }
