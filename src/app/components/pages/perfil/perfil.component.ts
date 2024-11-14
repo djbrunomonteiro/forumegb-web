@@ -9,7 +9,7 @@ import { IUser } from '../../../interfaces/user';
 import {MatSelectModule} from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
-import { isPlatformBrowser } from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, NgClass } from '@angular/common';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import { firstValueFrom } from 'rxjs';
 import { UtilService } from '../../../services/util.service';
@@ -17,7 +17,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import dayjs from 'dayjs'
 import { PaymentService } from '../../../services/payment.service';
 import { EPlanTypes } from '../../../enums/enums';
-
+import {MatCardModule} from '@angular/material/card';
+import { CheckRecentPlanEligibilityPipe } from '../../../pipes/check-recent-plan-eligibility.pipe';
 
 @Component({
   selector: 'app-perfil',
@@ -33,6 +34,11 @@ import { EPlanTypes } from '../../../enums/enums';
     MatIconModule,
     ImageCropperComponent,
     MatProgressBarModule,
+    DatePipe,
+    CurrencyPipe,
+    MatCardModule,
+    CheckRecentPlanEligibilityPipe,
+    NgClass
   ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
@@ -44,7 +50,9 @@ export class PerfilComponent {
   #paymentService = inject(PaymentService);
   metadataStore = inject(MetadataStoreService);
   platformId = inject(PLATFORM_ID);
-  isPlatformBrowser = isPlatformBrowser
+  isPlatformBrowser = isPlatformBrowser;
+
+
 
 
   form = this.#formBuilder.group({
@@ -97,13 +105,57 @@ export class PerfilComponent {
 
   EPlantypes = EPlanTypes;
 
+  pricesPlans = [
+    {
+      title: `ACESSO ${EPlanTypes.TRIMESTRAL}`,
+      type: EPlanTypes.TRIMESTRAL,
+      amount: 30,
+      desconto: 1,
+      img: 'main.jpg',
+      description: 'Acesso exclusivo durante o periodo de 3 meses!',
+      color: 'red',
+    },
+    {
+      title: `ACESSO ${EPlanTypes.SEMESTRAL}`,
+      type: EPlanTypes.SEMESTRAL,
+      amount: 60,
+      desconto: 1,
+      img: 'main.jpg',
+      description: 'Acesso exclusivo durante o periodo de 6 meses!',
+      color: 'red',
+    },
+    {
+      title: `ACESSO ${EPlanTypes.ANUAL}`,
+      type: EPlanTypes.ANUAL,
+      amount: 120,
+      desconto: 1,
+      img: 'main.jpg',
+      description: 'Acesso exclusivo durante o periodo de 1 ano!',
+      color: 'red',
+    },
+
+  ];
+
 
   constructor(){
     effect(() => {
       if(this.userStore.currentState()){
-        this.setForm(this.userStore.currentState())
+        this.setForm(this.userStore.currentState());
+        this.setAmountFistPlan();
+
       }
     })
+
+  }
+
+  setAmountFistPlan(){
+    const user = this.userStore.currentState();
+    if(!user){return}
+    const notPlan = user.plan?.hasOwnProperty('plan_type');
+    if(!user.plan?.hasOwnProperty('plan_type') || user.plan?.plan_type === ''){
+      this.pricesPlans[0].desconto = 0.5
+      return
+    };
 
   }
 

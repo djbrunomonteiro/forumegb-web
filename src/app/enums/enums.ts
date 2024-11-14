@@ -14,6 +14,7 @@ export enum EPermission {
     MAINSTAGE  = 'MAINSTAGE',
     FLOORSTAGE = 'FLOORSTAGE',
     BACKSTAGE = 'BACKSTAGE',
+    EPlanTypes = "EPlanTypes",
   }
 
   export enum EPlanTypes {

@@ -1,4 +1,4 @@
-@if(this.userStore.currentState()){
+@if(this.userStore.currentState(); as user){
   <form (ngSubmit)="save()" [formGroup]="form">
     <div class="row">
       <div class="col-md-3 box-body">
@@ -82,11 +82,82 @@
     </div>
   </form>
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-12">
       <button (click)="checkout(EPlantypes.TRIMESTRAL)" type="button" mat-button>TRIMESTRAL</button>
       <button (click)="checkout(EPlantypes.SEMESTRAL)" type="button" mat-button>SEMESTRAL</button>
       <button (click)="checkout(EPlantypes.ANUAL)" type="button" mat-button>ANUAL</button>
+    </div>
+  </div> -->
+
+  <div class="row my-3 box-body">
+    <div class="col-12">
+
+      @if(user?.plan?.valid){
+        <h5>Você tem acesso ao MAIN STAGE</h5>
+        <p>Plano atual: {{user?.plan?.plan_type}} ({{user?.plan?.plan_start | date: 'dd/MM/YY HH:mm'}} até {{user?.plan?.plan_end | date: 'dd/MM/YY HH:mm'}})</p>
+      }@else{
+        <h5>Você ainda não tem acesso ao MAIN STAGE :(</h5>
+        <p>Ajude adiquirindo um dos planos a seguir e tenha seu acesso liberado. </p>
+      }
+
+
+
+      <div class="row">
+
+        @for(plan of pricesPlans; track $index){
+          <div class="col-md-4">
+            <mat-card [ngClass]="{'current-plan': user?.plan?.plan_type === plan.type}">
+              <mat-card-header>
+                <mat-card-title-group>
+                  <mat-card-title>{{plan.title}}</mat-card-title>
+                  <mat-card-subtitle >
+                    @if(!user?.plan?.is_first && !user?.plan?.is_first && $index === 0){
+                      <em style="font-size: 12px;">No seu primeiro plano</em>
+                      <p class="first-plan">De <b>{{plan.amount | currency: 'BRL' : 'symbol'}}</b>  por</p>
+                    }
+                    <p class="amount">{{(plan.amount * plan.desconto) | currency: 'BRL' : 'symbol'}}</p>
+
+                    
+                  </mat-card-subtitle>
+                  <!-- <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" > -->
+                </mat-card-title-group>
+              </mat-card-header>
+              <mat-card-content>
+                <p class="description">{{plan.description}}</p>
+              </mat-card-content>
+
+              @if(user | checkRecentPlanEligibility){
+                <mat-card-actions>
+                  <button (click)="checkout(plan.type)" mat-flat-button color="accent" class="w-100 my-3" >Selecionar esse plano</button>
+                </mat-card-actions>
+              }
+
+            </mat-card>
+
+            
+          </div>
+        }
+
+
+      </div>
+    </div>
+  </div>
+  @if(!(user | checkRecentPlanEligibility)){
+    <div class="row box-body">
+      <div class="col-12 text-center ">
+        <p  class="m-3" style="color: rgb(250, 138, 138);">Você só pode renovar ou adquirir um novo plano após 30 dias da sua última contratação.</p>
+
+      </div>
+    </div>
+  }
+
+
+  <div class="row box-body">
+    <div class="col-12 text-center ">
+      <p><em>*O pagamento  é realizado no modelo pré-pago. Todas as transações são processadas com segurança pela plataforma Mercado Pago.</em></p>
+      <p><em>Saiba mais sobre o motivo da contribuição acessando nossos</em> <a mat-button href="https://www.google.com/" target="_blank">Termos de Serviço.</a> </p>
+      
     </div>
   </div>
 }@else{

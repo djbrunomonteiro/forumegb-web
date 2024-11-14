@@ -2,6 +2,15 @@ mat-form-field{
     // width: 100%;
 }
 
+mat-card{
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px 0px;
+    
+}
+
 .box-body{
     margin-top: 10px;
     background-color: rgba(37, 34, 34, 0.527);
@@ -30,4 +39,29 @@ mat-form-field{
 
 .avatar:hover{
     cursor: pointer;
+}
+
+.current-plan{
+    border: 1px solid rgb(112, 248, 95);
+}
+
+.first-plan{
+    padding: 0px;
+    b{
+        text-decoration-line: line-through;
+        color: red;
+    }
+}
+
+.amount{
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 20px 0px;
+}
+
+.description{
+    font-size: 14px;
+    font-weight: 300;
+    color: rgb(206, 206, 206);
+
 }

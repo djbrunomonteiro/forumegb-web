@@ -43,6 +43,8 @@ export class UtilService {
     },
   ];
 
+
+
   tagsPosts = [
     "Remixes e Mashups",
     "Faixas Originais",

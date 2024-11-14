@@ -10,5 +10,6 @@ export interface IUser{
     updated_at?: string;
     end_uf?: string;
     end_city?: string;
+    plan?: any
 }
 
