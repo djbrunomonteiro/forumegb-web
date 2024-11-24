@@ -1,5 +1,79 @@
-@for(stage of utils.stageOpts; track $index){
-    <app-stage [type]="stage.value" [isHome]="true" />
+@if(metadataStore.loadingPost()){
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}@else{
+    @for(stage of utils.stageOpts; track $index){
+        <section class="card-container">
+            <div class="header">
+                <div class="thumbnail">
+                    <img [src]="stage.img" class="link" alt="thumbnail-section" [routerLink]="'/posts/type/'+stage.value">
+                    <span class="badge" [routerLink]="'/posts/type/'+stage.value" [ngStyle]="{'background-color': stage.color}">{{stage.access}}</span>
+                </div>
+            
+                <div class="title-container">
+                    <h2 [routerLink]="'/posts/type/'+stage.value" class="link">{{stage.title}}</h2>
+                    <p>{{stage.description}}</p>
+                </div>
+        
+            </div>
+
+            @for(resume of this.postStore.homeState(); track $index){
+                @if(resume.type_stage === stage.value){
+                    <div class="list">
+                        <ol>
+                            @for (post of resume?.posts; track $index) {
+                                <li>
+                                    <div (click)="openPost(post)" class="item link">
+                                        <div class="avatar link">
+                                            @if(post?.user?.photoURL; as photo){
+                                              <img [src]="photo" alt="photo url">
+                                
+                                            }@else{
+                                              <mat-icon>
+                                                account_circle
+                                              </mat-icon>
+                                            }
+                                          </div>
+                                          <div>
+                  
+                                              <a class="title link"  rel="noopener noreferrer">
+                                                {{post.title | titlecase}}
+                                            </a>
+                                            @if(post?.tags !== '[]'){
+                                                <div class="w-100 d-flex justify-content-start">
+                                                  @for(tag of post?.tags; track $index){
+                                                    <span class="tag">{{tag}}</span>
+                                                    
+                                                  }
+                                                </div>
+
+                                            }
+                                          </div>
+                
+                                        <div class="coment">
+                                            {{post | countComent}}
+                                            <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
+                                        </div>
+                
+                                    </div>
+                
+                                </li>
+                            }@empty{
+                                <p class="text-center">*Sem post nesse Stage</p>
+                            }
+                        </ol>
+                
+                    </div>
+                }
+
+            }
+        
+
+            <div class="d-flex justify-content-center w-100">
+                <button [routerLink]="'/posts/type/'+stage.value" mat-stroked-button>Ver Todos os Posts</button>
+            </div>
+
+        </section>
+    
+    }
 
 }
-<!-- <app-posts-list-home /> -->

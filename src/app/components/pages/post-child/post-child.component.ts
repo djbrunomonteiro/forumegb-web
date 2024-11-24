@@ -72,11 +72,13 @@ export class PostChildComponent implements OnChanges {
 
 
   async save(){
+    
     const fatherPost = this.postStore.currentPost();
     const parentPost = this.post;
     const user = this.userStore.currentState();
+    console.log(parentPost);
     if(this.form.invalid || !parentPost || !user){return}
-    const newPost = {...this.form.value, parent_id: parentPost.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
+    const newPost = {...this.form.value, type_stage: parentPost.type_stage, parent_id: parentPost.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
     const {error, message} = await firstValueFrom(this.postStore.setOneApi(newPost, fatherPost?.id));
     this.#utils.showMsg(message)
     if(error){

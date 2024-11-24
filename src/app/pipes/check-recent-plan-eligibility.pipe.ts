@@ -14,7 +14,7 @@ export class CheckRecentPlanEligibilityPipe implements PipeTransform {
     const current = dayjs(); // Data atual
     const planStartDate = dayjs(plan_start); // Data de início do plano
     const diffInDays = current.diff(planStartDate, 'day');
-    return diffInDays >= 30;
+    return diffInDays >= 10;
   }
 
 }

@@ -82,7 +82,7 @@ export class StageComponent implements OnInit {
   }
 
   async getPosts(type: string, start = this.postsStage().length, limit = this.limit, order = 'recentes'){
-    await firstValueFrom(this.postStore.getAllAPI(type, start, limit));
+    await firstValueFrom(this.postStore.getAllAPI(type, start));
     this.setOrderStage(order);
   }
 

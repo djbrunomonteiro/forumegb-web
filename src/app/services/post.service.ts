@@ -15,7 +15,16 @@ export class PostService {
   #utils = inject(UtilService);
   #baseUrl = environment.apiUrl;
 
-  getAll(type: string = '', start = 1, limit = 50, order = 'recentes'){
+  getHome(){
+    return this.#http.get(`${this.#baseUrl}/posts/home`)
+    .pipe(
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
+    );
+  }
+
+
+  getAll(type: string = '', start = 1, limit = 200, order = 'recentes'){
     const params = type ? `type=${type}&start=${start}&limit=${limit}&order=${order}` : `start=${start}&limit=${limit}&order=${order}`
     return this.#http.get(`${this.#baseUrl}/posts?${params}`)
     .pipe(

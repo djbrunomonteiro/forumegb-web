@@ -18,6 +18,7 @@
 
 <div class="header">
   <h2>{{post.title}}</h2>
+  <p>testeee</p>
 </div>
 
 <app-preview [musicPreview]="musicPreview" />
@@ -46,6 +47,9 @@
         }
       </div>
       <div class="description" [innerHTML]="post.body"></div>
+      @if(post?.source_url; as url){
+        <div class="source"><a [href]="url" target="_blank" rel="noopener noreferrer">{{url}}</a></div>
+      }
       <div class="w-100 d-flex justify-content-center">
         <span class="date">postado em {{post.created_at | syncDate}}</span>
       </div>

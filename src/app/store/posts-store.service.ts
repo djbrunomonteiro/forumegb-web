@@ -1,8 +1,7 @@
-import { IUser } from './../interfaces/user';
 import { UtilService } from './../services/util.service';
 import { IPost } from './../interfaces/posts';
-import { computed, inject, Injectable, signal, Signal } from '@angular/core';
-import { catchError, firstValueFrom, mergeMap, of, tap } from 'rxjs';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { firstValueFrom, mergeMap, of, tap, map } from 'rxjs';
 import { PostService } from '../services/post.service';
 import { MetadataStoreService } from './metadata-store.service';
 import { ETypeStage } from '../enums/enums';
@@ -22,8 +21,23 @@ export class PostsStoreService {
   floorStageState = computed(() => this.#posts().filter(elem => elem.parent_id === null && elem.type_stage === ETypeStage.FLOORSTAGE));
   backStageState = computed(() => this.#posts().filter(elem => elem.parent_id === null && elem.type_stage === ETypeStage.BACKSTAGE));
   currentPost = signal<IPost | undefined>(undefined);
+  homeState = signal<any>(undefined);
+
+  getHome(){
+    this.#metadataStoreService.setLoading('post', true);
+    return this.#postServices.getHome().pipe(
+      tap(res => {
+        this.#metadataStoreService.setLoading('post', false);
+        const {results} = res
+        if(!results){return }
+        this.homeState.set(results)
+      })
+
+    )
+
+  }
  
-  getAllAPI(type = '' ,start = 1, limit = 50, order = 'recentes',){
+  getAllAPI(type = '' ,start = 1, limit = 200, order = 'recentes',){
     return this.#postServices.getRecordsTotal().pipe(
       mergeMap((res ) => {
         const countPostsParent = this.#posts().filter(elem => elem.parent_id === null).length;

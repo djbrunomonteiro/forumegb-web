@@ -114,7 +114,7 @@ export class PostComponent implements OnInit, AfterViewChecked {
     const postFather = this.postStore.currentPost();
     const user = this.userStore.currentState();
     if(this.form.invalid || !postFather || !user){return}
-    const newPost = {...this.form.value, parent_id: postFather.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
+    const newPost = {...this.form.value, type_stage: postFather.type_stage, parent_id: postFather.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
     const {error, message} = await firstValueFrom(this.postStore.setOneApi(newPost, postFather.id));
     this.#utils.showMsg(message)
     if(error){
