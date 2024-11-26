@@ -1,4 +1,4 @@
-import { EPermission } from './../../../enums/enums';
+import { EPermission, EStatusPost } from './../../../enums/enums';
 import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
@@ -80,7 +80,7 @@ export class PostEditorComponent implements OnInit {
     owner_username: [''],
     type_stage: [ETypeStage.FLOORSTAGE],
     metadata: [''],
-    status: [''],
+    status: [EStatusPost.PUBLISHED],
     parent_id: [null],
     tags:[[]]
   });

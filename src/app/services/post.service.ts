@@ -33,8 +33,8 @@ export class PostService {
     );
   }
 
-  getRecordsTotal(){
-    return this.#http.get(`${this.#baseUrl}/posts/total`)
+  getRecordsTotal(type: string){
+    return this.#http.get(`${this.#baseUrl}/posts/total?type=${type}`)
     .pipe(
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),

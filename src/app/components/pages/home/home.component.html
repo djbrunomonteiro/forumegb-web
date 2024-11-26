@@ -1,6 +1,4 @@
-@if(metadataStore.loadingPost()){
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-}@else{
+
     @for(stage of utils.stageOpts; track $index){
         <section class="card-container">
             <div class="header">
@@ -72,8 +70,12 @@
                 <button [routerLink]="'/posts/type/'+stage.value" mat-stroked-button>Ver Todos os Posts</button>
             </div>
 
+            @if(metadataStore.loadingPost()){
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            }
+
         </section>
     
     }
 
-}
+

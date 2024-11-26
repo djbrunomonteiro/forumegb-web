@@ -1,5 +1,5 @@
 import { UserStoreService } from './../../../store/user-store.service';
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnInit, signal, ViewChild } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe, DatePipe, NgStyle, TitleCasePipe } from '@angular/common';
@@ -19,6 +19,8 @@ import { CountComentPipe } from '../../../pipes/count-coment.pipe';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
+import {MatTableModule} from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -39,12 +41,16 @@ import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
     DatePipe,
     SyncDatePipe,
     NgStyle,
-    AdBannerComponent
+    AdBannerComponent,
+    MatTableModule,
+    FormsModule
   ],
   templateUrl: './stage.component.html',
   styleUrl: './stage.component.scss'
 })
 export class StageComponent implements OnInit {
+
+  @ViewChild('paginator', { static: true }) paginator: any;
 
   @Input() type: string = '';
   @Input() isHome = false;
@@ -59,7 +65,9 @@ export class StageComponent implements OnInit {
   
 
   postsStage = signal<IPost[]>([]);
-  limit = 30;
+  postsView = signal<IPost[]>([]);
+  pageStart = 0;
+  pageSize = 10;
 
 
   stageOpt = {
@@ -76,50 +84,71 @@ export class StageComponent implements OnInit {
   ngOnInit(): void {
     this.type = this.isHome ? this.type : this.activatedRoute.snapshot.paramMap.get('type') ?? ETypeStage.FLOORSTAGE;
     if(!this.type){return}
-    this.stageOpt = this.utils.stageOpts.filter(elem => elem.value === this.type)[0];
-    this.getPosts(this.stageOpt.value)
 
+    
+
+    this.stageOpt = this.utils.stageOpts.filter(elem => elem.value === this.type)[0];
+    this.postStore.getRecordTotal(this.stageOpt.value as ETypeStage);
+
+    const containInBck = this.postStore.backupState().filter(bckp => bckp.type === this.stageOpt.value);
+    let pagination = {pageIndex: 0, pageSize: this.pageSize} 
+    if(containInBck.length){
+      const last = containInBck[containInBck.length - 1];
+      this.paginator.pageIndex = last?.pageIndex ?? 0
+      pagination = {pageIndex: last?.pageIndex ?? 0, pageSize: this.pageSize} 
+    }
+
+    this.controlPage(pagination);
   }
 
-  async getPosts(type: string, start = this.postsStage().length, limit = this.limit, order = 'recentes'){
-    await firstValueFrom(this.postStore.getAllAPI(type, start));
-    this.setOrderStage(order);
+  async controlPage(pagination: any){
+    const {pageIndex, pageSize} = pagination;
+    this.pageStart = pageIndex * pageSize;
+
+    console.log(this.pageStart);
+    
+    await this.getPosts(this.stageOpt.value, this.pageStart, this.pageSize, pageIndex)
+  }
+
+  async getPosts(type: string, start = this.pageStart, limit = this.pageSize, pageIndex = 0, order = 'recentes'){
+    await firstValueFrom(this.postStore.getAllAPI(type, start, limit, pageIndex));
+    // this.setOrderStage(order);
   }
 
 
   async setOrderStage(value: string = 'recentes'){
-    if(!this.stageOpt?.value){return}
-    let currentsPosts: IPost[] = [];
-    let postsOrders: IPost[] = [];
+    // if(!this.stageOpt?.value){return}
+    // let currentsPosts: IPost[] = [];
+    // let postsOrders: IPost[] = [];
 
-    if(value === 'relevantes'){
-      const start = this.postsStage().filter(elem => elem.likes?.length).length
-      await firstValueFrom(this.postStore.getAllAPI(this.stageOpt.value, start, this.limit));
-    }
+    // if(value === 'relevantes'){
+    //   const start = this.postsStage().filter(elem => elem.likes?.length).length
+    //   await firstValueFrom(this.postStore.getAllAPI(this.stageOpt.value, start, this.limit));
+    // }
     
-    switch(this.stageOpt.value){
-      case ETypeStage.MAINSTAGE:
-        currentsPosts = this.postStore.mainStageState();
-        postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
-        this.imgUrl = 'main.jpg'
-        break;
-      case ETypeStage.FLOORSTAGE:
-        currentsPosts = this.postStore.floorStageState();
-        postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
-        this.imgUrl = 'floor.jpg'
-        break;
-      default:
-        currentsPosts = this.postStore.backStageState();
-        postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
-        this.imgUrl = 'back.jpg'
-        break;
-    }
+    // switch(this.stageOpt.value){
+    //   case ETypeStage.MAINSTAGE:
+    //     currentsPosts = this.postStore.mainStageState();
+    //     postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
+    //     this.imgUrl = 'main.jpg'
+    //     break;
+    //   case ETypeStage.FLOORSTAGE:
+    //     currentsPosts = this.postStore.floorStageState();
+    //     postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
+    //     this.imgUrl = 'floor.jpg'
+    //     break;
+    //   default:
+    //     currentsPosts = this.postStore.backStageState();
+    //     postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
+    //     this.imgUrl = 'back.jpg'
+    //     break;
+    // }
 
-    if(this.isHome){
-      postsOrders = postsOrders.filter((_, i) => i < 10)
-    }
+    // if(this.isHome){
+    //   postsOrders = postsOrders.filter((_, i) => i < 10)
+    // }
 
-    this.postsStage.set(postsOrders)
+    // this.postsStage.set(postsOrders)
   }
 
   openPost(post:IPost | undefined){

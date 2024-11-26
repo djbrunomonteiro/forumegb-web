@@ -1,15 +1,8 @@
-@if(metadata.loadingPost()){
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-}
-
-@if(!isHome){
-    <button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
-        <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
-        </mat-icon>
-        Voltar
-      </button>
-
-}
+<button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
+    <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
+    </mat-icon>
+    Voltar
+</button>
 
 <section class="card-container">
     <div class="header">
@@ -26,8 +19,9 @@
     </div>
 
     <div class="list">
-        <ol>
-            @for (post of postsStage(); track $index) {
+
+        <ol [start]="this.pageStart+1">
+            @for (post of postStore.currentState(); track $index) {
                 <li>
                     <div (click)="openPost(post)" class="item link">
                         <div class="avatar link">
@@ -66,13 +60,25 @@
         </ol>
 
     </div>
-    @if(isHome){
-        <div class="d-flex justify-content-center w-100">
-            <button [routerLink]="'/posts/type/'+stageOpt.value" mat-stroked-button>Ver Todos os Posts</button>
-        </div>
-    }
+
 
 </section>
+@if(metadata.loadingPost()){
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+
+<div class="d-flex justify-content-center m-3">
+    <mat-paginator
+    #paginator
+    [disabled]="metadata.loadingPost()"
+    (page)="controlPage($event)"
+    [length]="postStore.recordTotal()"
+    [pageSize]="pageSize"
+    [showFirstLastButtons]="true"
+    [pageSizeOptions]="[10, 20]"
+    aria-label="Select page">
+    </mat-paginator>
+</div>
 
 <!-- 
 
