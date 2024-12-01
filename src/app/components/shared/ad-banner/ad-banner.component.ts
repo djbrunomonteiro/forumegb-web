@@ -19,7 +19,5 @@ import { TitleCasePipe } from '@angular/common';
 })
 export class AdBannerComponent {
   userStore = inject(UserStoreService);
-
-  email = 'egbhub@gmail.com'
-
+  email = 'egbhub@gmail.com';
 }
