@@ -65,6 +65,8 @@ export class HomeComponent implements OnInit {
     if(!post){return}
     
     const user = this.userStore.currentState();
+
+    
     if(!user){
       const url = `posts/type/${post.type_stage}/${post.slug}`;
       console.log(url);
@@ -74,7 +76,8 @@ export class HomeComponent implements OnInit {
     }
 
     const {slug, type_stage} = post;
-    if(type_stage === ETypeStage.MAINSTAGE && user.permission !== EPermission.BASIC_DJ){
+    console.log(user);
+    if(type_stage === ETypeStage.MAINSTAGE && user?.plan?.valid){
       this.router.navigate([`/posts/type/${type_stage}/${slug}`])
       return
     }

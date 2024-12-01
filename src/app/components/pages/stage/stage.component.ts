@@ -85,8 +85,6 @@ export class StageComponent implements OnInit {
     this.type = this.isHome ? this.type : this.activatedRoute.snapshot.paramMap.get('type') ?? ETypeStage.FLOORSTAGE;
     if(!this.type){return}
 
-    
-
     this.stageOpt = this.utils.stageOpts.filter(elem => elem.value === this.type)[0];
     this.postStore.getRecordTotal(this.stageOpt.value as ETypeStage);
 
@@ -152,19 +150,19 @@ export class StageComponent implements OnInit {
   }
 
   openPost(post:IPost | undefined){
+    console.log('post post', post);
     if(!post){return}
     
     const user = this.userStore.currentState();
+
     if(!user){
       const url = `posts/type/${post.type_stage}/${post.slug}`;
-      console.log(url);
-      
       this.router.navigate(['/login-cadastro'], {state: {url}})
       return
     }
 
     const {slug, type_stage} = post;
-    if(type_stage === ETypeStage.MAINSTAGE && user.permission !== EPermission.BASIC_DJ){
+    if(type_stage === ETypeStage.MAINSTAGE && user?.plan?.valid){
       this.router.navigate([`/posts/type/${type_stage}/${slug}`])
       return
     }
