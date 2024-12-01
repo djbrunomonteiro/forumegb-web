@@ -55,11 +55,6 @@ export class HomeComponent implements OnInit {
   utils = inject(UtilService);
 
   constructor(){
-    effect(() => {
-      console.log(this.postStore.homeState());
-      
-      
-    })
   }
 
   async ngOnInit(): Promise<void> {

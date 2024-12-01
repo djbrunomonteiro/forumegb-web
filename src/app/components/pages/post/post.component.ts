@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, inject, OnInit, signal, effect } from '@angular/core';
+import { AfterViewChecked, Component, inject, OnInit, signal, effect, afterNextRender, OnDestroy, HostListener, PLATFORM_ID, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,15 +9,16 @@ import { PostChildComponent } from '../post-child/post-child.component';
 import { UserStoreService } from '../../../store/user-store.service';
 import { QuillEditorComponent } from 'ngx-quill';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { delay, firstValueFrom, interval, map, of, Subject, takeUntil, timeout } from 'rxjs';
 import { UtilService } from '../../../services/util.service';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PreviewComponent } from '../../shared/preview/preview.component';
 import { IUser } from '../../../interfaces/user';
+
 @Component({
   selector: 'app-post',
   standalone: true,
@@ -34,12 +35,12 @@ import { IUser } from '../../../interfaces/user';
     MatProgressBarModule,
     SyncDatePipe,
     MatTooltipModule,
-    PreviewComponent
+    PreviewComponent,
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
-export class PostComponent implements OnInit, AfterViewChecked {
+export class PostComponent implements OnInit, OnDestroy{
   
   #activatedRoute = inject(ActivatedRoute);
   #formBuilder = inject(FormBuilder);
@@ -68,22 +69,24 @@ export class PostComponent implements OnInit, AfterViewChecked {
 
   count = signal(0);
   musicPreview = signal('');
-  user: IUser | undefined = undefined
+  user: IUser | undefined = undefined;
+
+  unsub$ = new Subject();
+
 
   constructor(){
     effect(() => {
-      this.user = this.userStore.currentState()
-    })
-  }
+      this.user = this.userStore.currentState();
+    });
 
+    afterNextRender(() => {
+      this.listenPost();
+    })
+
+  }
 
   ngOnInit(): void {
     this.setCurrentPost();
-  }
-
-  ngAfterViewChecked(): void {
-    // const music_preview = this.postStore.currentPost()?.music_preview;
-    // this.loadPreviewLocale(music_preview);
   }
 
   async saveLike(idPost: number | undefined){
@@ -103,8 +106,18 @@ export class PostComponent implements OnInit, AfterViewChecked {
     const music_preview = this.postStore.currentPost()?.music_preview ?? '';
     const likes = this.postStore.currentPost()?.likes ?? [];
     this.setCountLikes(likes);
-    this.musicPreview.set(music_preview)
+    this.musicPreview.set(music_preview);
   }
+
+  listenPost(){
+    interval(30000).pipe(takeUntil(this.unsub$)).subscribe(async () => {
+      console.log(this.postStore.currentPost());
+      const slug = this.postStore.currentPost()?.slug;
+      if(!slug){return}
+      await firstValueFrom(this.postStore.getOneApi(slug, false));
+    });
+  }
+
 
   async setCountLikes(likes: any[]){
     this.count.set(likes.length)
@@ -123,4 +136,10 @@ export class PostComponent implements OnInit, AfterViewChecked {
     this.inEdition.set(false);
     this.form.patchValue({body:''});
   }
+  
+  ngOnDestroy(): void {
+    this.unsub$.next(true);
+    this.unsub$.complete();
+  }
+
 }

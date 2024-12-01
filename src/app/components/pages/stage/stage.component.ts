@@ -182,6 +182,8 @@ export class StageComponent implements OnInit {
     const dialogRef = this.#dialog.open(AdBannerComponent, {minWidth: '50dvw'});
     dialogRef.afterClosed().subscribe(results => {
       if(!results){return}
+      console.log(results);
+      
     });
   }
 

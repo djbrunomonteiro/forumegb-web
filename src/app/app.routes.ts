@@ -3,6 +3,8 @@ import { HomeComponent } from './components/pages/home/home.component';
 import { CadastroComponent } from './components/pages/sigin-register/cadastro.component';
 import { authGuard } from './guard/auth.guard';
 import { postEditGuard } from './guard/post-edit.guard';
+import { postGuard } from './guard/post.guard';
+import { UserResolver } from './resolvers/user';
 
 
 export const routes: Routes = [
@@ -28,6 +30,8 @@ export const routes: Routes = [
                 loadComponent: () => import('./components/pages/post-editor/post-editor.component').then(c => c.PostEditorComponent)            },
             {
                 path: 'type/:type/:slug',
+                resolve: UserResolver,
+                canActivate: [postGuard],
                 loadComponent: () => import('./components/pages/post/post.component').then(c => c.PostComponent)
             },
             {
