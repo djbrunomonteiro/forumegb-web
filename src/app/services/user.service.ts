@@ -16,12 +16,14 @@ export class UserService {
 
   isNewUser(email: any){
     return this.#http.post(`${this.#baseUrl}/users/isnew`, {email}).pipe(
+      retry(5),
       map((res) => res as IResponse)
     );
   }
 
   saveOne(user: any){
     return this.#http.post(`${this.#baseUrl}/users`, user).pipe(
+      retry(5),
       map((res) => res as IResponse)
     );
 
@@ -29,6 +31,7 @@ export class UserService {
 
   updateOne(user: any){
     return this.#http.patch(`${this.#baseUrl}/users/${user.id}`, user).pipe(
+      retry(5),
       map((res) => res as IResponse)
     );
 
@@ -37,7 +40,7 @@ export class UserService {
   getOne(email: string){
     return this.#http.get(`${this.#baseUrl}/users/search?email=${email}`)
     .pipe(
-      retry(3), // Tenta a requisição novamente até três vezes em caso de erro
+      retry(5), // Tenta a requisição novamente até três vezes em caso de erro
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );

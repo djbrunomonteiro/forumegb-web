@@ -113,8 +113,8 @@ export class PostsStoreService {
     })
   }
 
-  getOneApi(slug: string){
-    this.#metadataStoreService.setLoading('post', true);
+  getOneApi(slug: string, showLoading = true){
+    this.#metadataStoreService.setLoading('post', showLoading);
     return this.#postServices.getOne(slug).pipe(
       tap(res => {
         this.#metadataStoreService.setLoading('post', false);

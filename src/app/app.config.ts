@@ -10,10 +10,6 @@ import { environment } from '../environments/environment';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { tokenInterceptor } from './interceptors/token.interceptor';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { QuillConfig } from './customs/quill.config';
-
-// const quillConfig = QuillConfig();
-// quillConfig.register();
 
 
 export const appConfig: ApplicationConfig = {
@@ -31,8 +27,8 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAuth(() => getAuth()),
     importProvidersFrom([
-      MatSnackBarModule
-    ])
+      MatSnackBarModule,
+    ]),
     // provideQuillConfig({ modules: quillConfig.Modules }),
 
   ],

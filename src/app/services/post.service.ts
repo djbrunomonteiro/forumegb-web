@@ -2,7 +2,7 @@ import { ETypeStage } from './../enums/enums';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { catchError, delay, map } from 'rxjs';
+import { catchError, delay, map, retry } from 'rxjs';
 import { IResponse } from '../interfaces/response';
 import { UtilService } from './util.service';
 import { IPost } from '../interfaces/posts';
@@ -18,6 +18,7 @@ export class PostService {
   getHome(){
     return this.#http.get(`${this.#baseUrl}/posts/home`)
     .pipe(
+      retry(5),
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
@@ -28,6 +29,7 @@ export class PostService {
     const params = type ? `type=${type}&start=${start}&limit=${limit}&order=${order}` : `start=${start}&limit=${limit}&order=${order}`
     return this.#http.get(`${this.#baseUrl}/posts?${params}`)
     .pipe(
+      retry(5),
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
@@ -44,6 +46,7 @@ export class PostService {
   getOne(slug: string){
     return this.#http.get(`${this.#baseUrl}/posts/search?slug=${slug}`)
     .pipe(
+      retry(5),
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
@@ -52,6 +55,7 @@ export class PostService {
   createOne(post: IPost | Partial<IPost>, postFatherId?: number){
     return this.#http.post(`${this.#baseUrl}/posts?father=${postFatherId}`, post)
     .pipe(
+      retry(5),
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
@@ -60,6 +64,7 @@ export class PostService {
   editOne(post: Partial<IPost>){
     return this.#http.patch(`${this.#baseUrl}/posts/${post.id}`, post)
     .pipe(
+      retry(5),
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
@@ -68,6 +73,7 @@ export class PostService {
   saveLike(idUser: number, idPost: number){
     return this.#http.post(`${this.#baseUrl}/posts/like`, {idUser, idPost})
     .pipe(
+      retry(5),
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
@@ -76,6 +82,7 @@ export class PostService {
   isAuthor(slug: string, owner_id: number){
     return this.#http.get(`${this.#baseUrl}/posts/${slug}/author/${owner_id}`)
     .pipe(
+      retry(5),
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
