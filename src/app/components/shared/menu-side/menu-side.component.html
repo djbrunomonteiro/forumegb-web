@@ -1,0 +1,14 @@
+<div class="menu-side">
+    @for(stage of utils.stageOpts; track $index){
+        <section class="menu-container">
+            <div class="header">
+                <div class="thumbnail">
+                    <img [src]="stage.img" class="link" alt="thumbnail-section" [routerLink]="'/posts/type/'+stage.value">
+                    <span class="badge" [routerLink]="'/posts/type/'+stage.value" [ngStyle]="{'background-color': stage.color}">{{stage.title}}</span>
+                </div>
+        
+            </div>
+        </section>
+    
+    }
+</div>

@@ -1,10 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { IResponse } from '../interfaces/response';
-import { filter, map, mergeMap, of } from 'rxjs';
+import { filter, firstValueFrom, map, mergeMap, Observable, of } from 'rxjs';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ETypeStage } from '../enums/enums';
 import { HttpClient } from '@angular/common/http';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -60,15 +61,18 @@ export class UtilService {
     "Outros"
 ];
 
-  currentNavState = signal<any>(undefined)
+  navState = signal<any[]>([]);
+  navState$ =  toObservable<any[]>(this.navState);
+  currentNavState = signal<any>(undefined);
+  
 
 
   listenCurrentNavState(){
     this.#router.events
     .pipe(filter((event: any) => event instanceof NavigationEnd))
-    .subscribe((event: NavigationEnd) => {
-      const navigation = this.#router.getCurrentNavigation();
-      const url = navigation?.extras?.state?.['url'] ?? '';
+    .subscribe(async (event: NavigationEnd) => {
+      const url = event.urlAfterRedirects;
+      this.navState.update((current) => current.concat([{url}]));
       this.currentNavState.set({url})
     });
   }
@@ -233,3 +237,5 @@ export class UtilService {
   }
 
 }
+
+

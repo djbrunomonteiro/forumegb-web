@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,6 +19,10 @@ import { UserStoreService } from '../../../store/user-store.service';
 import { UtilService } from '../../../services/util.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InfoNewUserComponent } from '../../shared/info-new-user/info-new-user.component';
+import { MetadataStoreService } from '../../../store/metadata-store.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-cadastro',
@@ -30,7 +34,9 @@ import { InfoNewUserComponent } from '../../shared/info-new-user/info-new-user.c
     MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
-    InfoNewUserComponent
+    InfoNewUserComponent,
+    MatProgressBarModule,
+    CommonModule
   ],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.scss',
@@ -44,6 +50,7 @@ export class CadastroComponent implements OnInit {
   #router = inject(Router);
   #activatedRouter = inject(ActivatedRoute);
   #dialog = inject(MatDialog);
+  metadata = inject(MetadataStoreService);
 
   form = this.#formBuilder.group({
     check: [false, Validators.required],
@@ -51,10 +58,15 @@ export class CadastroComponent implements OnInit {
 
   ctrlCheck = this.form.get('check') as FormControl;
 
+  constructor() {
+    effect(() => {
+      console.log(this.metadata.loadingUser());
+      
+    })
+  }
+
   ngOnInit(): void {
 
-
-    
   }
 
   async signInGoogleProvider(){
@@ -67,8 +79,11 @@ export class CadastroComponent implements OnInit {
     
     if(error){return}
     if(results?.length){
+      
       this.#userStoreService.setState(results[0]);
-      const url = this.#utils.currentNavState()?.url ?? ''
+
+      const queryParms = await firstValueFrom(this.#activatedRouter.queryParamMap);
+      const url = queryParms.get('redirect') ?? '/perfil';
       this.#router.navigate([url]);
       return
     }

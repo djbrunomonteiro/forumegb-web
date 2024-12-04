@@ -6,5 +6,9 @@ import { AuthService } from "../services/auth.service";
 
 export const UserResolver: ResolveFn<any> = async (route, state) => {
     const auth = inject(AuthService);
-    await auth.checkAuth();
+    const userStore = inject(UserStoreService);
+    const user = userStore.currentState()
+    console.log(user);
+    
+    return user
 }

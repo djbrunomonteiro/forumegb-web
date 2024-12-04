@@ -188,11 +188,7 @@ export class PostEditorComponent implements OnInit {
   }
 
   disabledOptsStage(stage: any){
-    if(this.user?.permission === this.EPermission.BASIC_DJ && stage === ETypeStage.MAINSTAGE){
-      return true
-    }
-
-    return false
+    return (stage === ETypeStage.MAINSTAGE && !this.user?.plan?.valid)
 
   }
 

@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
       const url = `posts/type/${post.type_stage}/${post.slug}`;
       console.log(url);
       
-      this.router.navigate(['/login-cadastro'], {state: {url}})
+      this.router.navigate(['/login-cadastro'], {queryParams: {redirect:url}})
       return
     }
 

@@ -1,3 +1,4 @@
+
 @if(postStore.currentPost(); as post){
 
 <div class="d-flex justify-content-between align-items-center">
@@ -58,8 +59,6 @@
 
 </div>
 
-
-
 @if (post.children && post.children.length) {
 @for (child of post.children; track $index) {
 <app-post-child [post]="child" />
@@ -95,3 +94,4 @@
 </div>
 }
 }
+

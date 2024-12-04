@@ -14,7 +14,7 @@ export const routes: Routes = [
     },
     {
         path: 'login-cadastro',
-        component: CadastroComponent
+        loadComponent: () => import('./components/pages/sigin-register/cadastro.component').then(c => c.CadastroComponent)
     },
     {
         path: 'posts',
@@ -30,8 +30,7 @@ export const routes: Routes = [
                 loadComponent: () => import('./components/pages/post-editor/post-editor.component').then(c => c.PostEditorComponent)            },
             {
                 path: 'type/:type/:slug',
-                resolve: UserResolver,
-                canActivate: [postGuard],
+                canActivate: [authGuard],
                 loadComponent: () => import('./components/pages/post/post.component').then(c => c.PostComponent)
             },
             {

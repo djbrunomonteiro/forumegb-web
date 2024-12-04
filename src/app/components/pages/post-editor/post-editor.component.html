@@ -26,7 +26,7 @@
                 <div class="col-md-4 side">
                     <div class="d-flex flex-column my-3">
                         
-                        @if(user && user.permission === EPermission.BASIC_DJ){
+                        @if(user && !user.plan?.valid){
                             <button (click)="openADBanner()" mat-button class="btn-action my-2">Seja membro MAIN STAGE ! saiba + </button>
                         }
                         

@@ -184,5 +184,96 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
   *{
     font-size: 14px;
   }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 10px 0px;
+    padding: 20px;
+    background-color: rgba(37, 34, 34, 0.527);
+    border-radius: 10px;
+    // border: 1px solid rgb(204, 204, 204);
+    .header {
+      width: 100%;
+      min-height: 150px;
+  
+      display: flex;
+      align-items: start !important;
+      .title-container {
+        h2,
+        p {
+          padding: 0px;
+          margin: 0px;
+        }
+        p {
+          color: var(--medium);
+          font-size: 12px;
+        }
+        h2{
+          font-size: 22px;
+        }
+      }
+      .thumbnail {
+        width: 130px;
+        height: 100px;
+        margin-right: 10px;
+        border-radius: 10px;
+        .badge {
+          width: 100%;
+        }
+        img {
+          width: 130px;
+          height: 100px;
+          overflow: hidden;
+          border-radius: 10px;
+        }
+      }
+    }
+  
+    .list {
+      // border: 0.5px solid var(--medium);
+      width: 100%;
+      ol {
+        li {
+          .item{
+              padding: 0px;
+              margin: 5px 0px;
+              background-color: rgba(37, 34, 34, 0.527);
+              border-radius: 10px;
+              padding: 15px;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+      
+              .avatar{
+                  margin-right: 10px;
+                  img{
+                      width: 50px;
+                      height: 50px;
+                      border-radius: 10px;
+                  }
+                  .mat-icon{
+                      width: 100%;
+                      height: 50px;
+                      font-size: 50px;
+                      color: rgb(119, 119, 119);
+                  }
+      
+              }
+                a {
+                  text-decoration: none;
+                  color: #ffff;
+                }
+                .coment {
+                  margin-left: auto;
+                }
+  
+          }
+  
+        }
+      }
+    }
+  }
 }
 

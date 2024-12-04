@@ -5,6 +5,7 @@ import { MetadataStoreService } from './metadata-store.service';
 import { IUser } from '../interfaces/user';
 import { IResponse } from '../interfaces/response';
 import { AuthService } from '../services/auth.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +17,14 @@ export class UserStoreService {
   #user = signal<IUser | undefined>(undefined);
 
   currentState = computed(() => this.#user());
+  user$ = toObservable(this.currentState);
 
   getOne(email: string) {
+    this.#metadataStoreService.setLoading('user', true);
     return this.#userService.getOne(email).pipe(
       tap(res => {
-        console.log(res);
-        
         const { error, results, message } = res;
-
+        this.#metadataStoreService.setLoading('user', false);
         this.#metadataStoreService.setError('user', error, message);
         if (error || !results) {return};
         this.setState(results);

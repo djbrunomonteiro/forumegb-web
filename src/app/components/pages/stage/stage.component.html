@@ -1,137 +1,89 @@
-<button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
-    <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
-    </mat-icon>
-    Voltar
-</button>
-
-<section class="card-container">
-    <div class="header">
-        <div class="thumbnail">
-            <img [src]="stageOpt.img" class="link" alt="thumbnail-section" [routerLink]="'/posts/type/'+stageOpt.value">
-            <span class="badge" [routerLink]="'/posts/type/'+stageOpt.value" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span>
-        </div>
-    
-        <div class="title-container">
-            <h2 [routerLink]="'/posts/type/'+stageOpt.value" class="link">{{stageOpt.title}}</h2>
-            <p>{{stageOpt.description}}</p>
-        </div>
-
+<div class="row">
+    <div class="col-md-2">
+        <app-menu-side />
     </div>
-
-    <div class="list">
-
-        <ol [start]="this.pageStart+1">
-            @for (post of postStore.currentState(); track $index) {
-                <li>
-                    <div (click)="openPost(post)" class="item link">
-                        <div class="avatar link">
-                            @if(post?.user?.photoURL; as photo){
-                              <img [src]="photo" alt="photo url">
-                
-                            }@else{
-                              <mat-icon>
-                                account_circle
-                              </mat-icon>
-                            }
-                          </div>
-                          <div>
-  
-                              <a class="title link"  rel="noopener noreferrer">
-                                {{post.title | titlecase}}
-                            </a>
-                              <div class="w-100 d-flex justify-content-start">
-                                @for(tag of post?.tags; track $index){
-                                  <span class="tag">{{tag}}</span>
-                                }
-                              </div>
-                          </div>
-
-                        <div class="coment">
-                            {{post | countComent}}
-                            <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
-                        </div>
-
-                    </div>
-
-                </li>
-            }@empty{
-                <p class="text-center">*Sem post nesse Stage</p>
-            }
-        </ol>
-
-    </div>
-
-
-</section>
-@if(metadata.loadingPost()){
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-}
-
-<div class="d-flex justify-content-center m-3">
-    <mat-paginator
-    #paginator
-    [disabled]="metadata.loadingPost()"
-    (page)="controlPage($event)"
-    [length]="postStore.recordTotal()"
-    [pageSize]="pageSize"
-    [showFirstLastButtons]="true"
-    [pageSizeOptions]="[10, 20]"
-    aria-label="Select page">
-    </mat-paginator>
-</div>
-
-<!-- 
-
-<mat-card appearance="outlined" class="my-3">
-    <mat-card-header>
-  
-        <mat-card-title>{{stageOpt.title}} <span class="badge" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span></mat-card-title>
-        <mat-card-subtitle>{{stageOpt.description}}</mat-card-subtitle>
-
-
-    </mat-card-header>
-
-    <mat-card-content>
-        <ol>
-            <div class="d-flex justify-content-center">
-                <mat-radio-group value="recentes" (change)="setOrderStage($event.value)">
-                    <mat-radio-button value="recentes">Recentes</mat-radio-button>
-                    <mat-radio-button value="relevantes">Relevantes</mat-radio-button>
-                </mat-radio-group>
+    <div class="col-md-10">
+        <!-- <button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
+            <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
+            </mat-icon>
+            Voltar
+        </button> -->
+        
+        <section class="card-container">
+            <div class="header">
+                <div class="thumbnail">
+                    <img [src]="stageOpt.img" class="link" alt="thumbnail-section" [routerLink]="'/posts/type/'+stageOpt.value">
+                    <span class="badge" [routerLink]="'/posts/type/'+stageOpt.value" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span>
+                </div>
+            
+                <div class="title-container">
+                    <h2 [routerLink]="'/posts/type/'+stageOpt.value" class="link">{{stageOpt.title}}</h2>
+                    <p>{{stageOpt.description}}</p>
+                </div>
+        
             </div>
-            @for (post of postsStage(); track $index) {
-                <li>
-                    <div class="header">
-                        <div class="avatar">
-
-                        </div>
-                        <a class="title" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
-                        <div class="coment">
-                            {{post | countComent}}
-                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
-                        </div>
-                    </div>
-                    <div class="box">
-                        <div class="title-box">
-                            <a class="title" [routerLink]="['/posts/type/'+post.type_stage+'/'+post.slug]" rel="noopener noreferrer">{{post.title | titlecase}}</a>
-                            <p class="sub">{{post.owner_username}} . {{post.created_at | syncDate}} </p>
-                        </div>
-                        <div class="chips">
-                            <div class="custom-chip">
-                                {{post | countComent}}
-                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="chat"></mat-icon>
+        
+            <div class="list">
+        
+                <ol [start]="this.pageStart+1">
+                    @for (post of postStore.currentState(); track $index) {
+                        <li>
+                            <div (click)="openPost(post)" class="item link">
+                                <div class="avatar link">
+                                    @if(post?.user?.photoURL; as photo){
+                                      <img [src]="photo" alt="photo url">
+                        
+                                    }@else{
+                                      <mat-icon>
+                                        account_circle
+                                      </mat-icon>
+                                    }
+                                  </div>
+                                  <div>
+          
+                                      <a class="title link"  rel="noopener noreferrer">
+                                        {{post.title | titlecase}}
+                                    </a>
+                                      <div class="w-100 d-flex justify-content-start">
+                                        @for(tag of post?.tags; track $index){
+                                          <span class="tag">{{tag}}</span>
+                                        }
+                                      </div>
+                                  </div>
+        
+                                <div class="coment">
+                                    {{post | countComent}}
+                                    <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
+                                </div>
+        
                             </div>
-                        </div>
-                    </div>
-                </li>
-            }
-
-        </ol>
-
-        @if(isHome){
-            <div class="d-flex">
-                <button [routerLink]="'/posts/type/'+stageOpt.value" mat-stroked-button class="w-100">Ver Todos os Posts</button>
+        
+                        </li>
+                    }@empty{
+                        <p class="text-center">*Sem post nesse Stage</p>
+                    }
+                </ol>
+        
             </div>
+        
+        
+        </section>
+        @if(metadata.loadingPost()){
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         }
-    </mat-card-content>
-</mat-card> -->
+        
+        <div class="d-flex justify-content-center m-3">
+            <mat-paginator
+            #paginator
+            [disabled]="metadata.loadingPost()"
+            (page)="controlPage($event)"
+            [length]="postStore.recordTotal()"
+            [pageSize]="pageSize"
+            [showFirstLastButtons]="true"
+            [pageSizeOptions]="[10, 20]"
+            aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+    </div>
+</div>

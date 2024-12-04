@@ -1,8 +1,8 @@
 import { UserStoreService } from './../../../store/user-store.service';
-import { Component, inject, Input, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, effect, inject, Input, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { MatIconModule } from '@angular/material/icon';
-import { AsyncPipe, DatePipe, NgStyle, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, isPlatformBrowser, NgStyle, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -14,13 +14,14 @@ import { UtilService } from '../../../services/util.service';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import { PostsStoreService } from '../../../store/posts-store.service';
 import { EPermission, ETypeStage } from '../../../enums/enums';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { CountComentPipe } from '../../../pipes/count-coment.pipe';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 import {MatTableModule} from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
+import { MenuSideComponent } from '../../shared/menu-side/menu-side.component';
 
 
 @Component({
@@ -43,19 +44,21 @@ import { FormsModule } from '@angular/forms';
     NgStyle,
     AdBannerComponent,
     MatTableModule,
-    FormsModule
+    FormsModule,
+    MenuSideComponent
   ],
   templateUrl: './stage.component.html',
   styleUrl: './stage.component.scss'
 })
-export class StageComponent implements OnInit {
+export class StageComponent implements OnInit, OnDestroy {
 
   @ViewChild('paginator', { static: true }) paginator: any;
 
   @Input() type: string = '';
   @Input() isHome = false;
 
-  #dialog = inject(MatDialog)
+  #dialog = inject(MatDialog);
+  #platformId = inject(PLATFORM_ID);
   activatedRoute = inject(ActivatedRoute);
   postStore = inject(PostsStoreService);
   userStore = inject(UserStoreService);
@@ -81,30 +84,73 @@ export class StageComponent implements OnInit {
 
   imgUrl = '';
 
+  unsub$ = new Subject();
+
+  constructor(){
+    this.listenNavState()
+  }
+
+
+
   ngOnInit(): void {
+
+   
+  }
+
+  setViewPosts(){
+
+
+    console.log(this.paginator);
+    
     this.type = this.isHome ? this.type : this.activatedRoute.snapshot.paramMap.get('type') ?? ETypeStage.FLOORSTAGE;
-    if(!this.type){return}
+    if(!this.type){return};
+
+    let paginationData = {pageIndex: 0, pageSize: this.pageSize}
+
+    if(isPlatformBrowser(this.#platformId)){
+      const getPaginationStogare = localStorage.getItem(`mat-pagination-${this.type}`);
+      if(getPaginationStogare){
+        paginationData = JSON.parse(getPaginationStogare);
+      }
+    }
 
     this.stageOpt = this.utils.stageOpts.filter(elem => elem.value === this.type)[0];
     this.postStore.getRecordTotal(this.stageOpt.value as ETypeStage);
 
     const containInBck = this.postStore.backupState().filter(bckp => bckp.type === this.stageOpt.value);
-    let pagination = {pageIndex: 0, pageSize: this.pageSize} 
+
     if(containInBck.length){
       const last = containInBck[containInBck.length - 1];
-      this.paginator.pageIndex = last?.pageIndex ?? 0
-      pagination = {pageIndex: last?.pageIndex ?? 0, pageSize: this.pageSize} 
+      paginationData = {pageIndex: last?.pageIndex ?? 0, pageSize: this.pageSize} 
     }
 
-    this.controlPage(pagination);
+    this.controlPage(paginationData);
+  }
+
+  listenNavState(){
+    this.utils.navState$.pipe(takeUntil(this.unsub$)).subscribe((nav) => {
+      const url = this.utils.currentNavState()?.url;
+      if(!url){return}
+      this.setViewPosts()
+
+      // this.ngOnInit();
+    })
   }
 
   async controlPage(pagination: any){
+
+    
     const {pageIndex, pageSize} = pagination;
     this.pageStart = pageIndex * pageSize;
+    if(this.paginator){
+      this.paginator.pageIndex = pageIndex;
+    }
 
-    console.log(this.pageStart);
-    
+    if(isPlatformBrowser(this.#platformId)){
+      localStorage.setItem(`mat-pagination-${this.type}`, JSON.stringify({...pagination, type: this.type}))
+    }
+
+
     await this.getPosts(this.stageOpt.value, this.pageStart, this.pageSize, pageIndex)
   }
 
@@ -157,8 +203,8 @@ export class StageComponent implements OnInit {
 
     if(!user){
       const url = `posts/type/${post.type_stage}/${post.slug}`;
-      this.router.navigate(['/login-cadastro'], {state: {url}})
-      return
+      // this.router.navigate(['/login-cadastro'], {state: {url}})
+      // return
     }
 
     const {slug, type_stage} = post;
@@ -184,5 +230,11 @@ export class StageComponent implements OnInit {
       
     });
   }
+
+  ngOnDestroy(): void {
+    this.unsub$.next(true);
+    this.unsub$.complete();
+  }
+
 
 }

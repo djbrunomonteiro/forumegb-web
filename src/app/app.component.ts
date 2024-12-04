@@ -4,6 +4,9 @@ import { HeaderComponent } from './components/layout/header/header.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { AuthService } from './services/auth.service';
 import { UtilService } from './services/util.service';
+import { firstValueFrom } from 'rxjs';
+import { MetadataStoreService } from './store/metadata-store.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +14,8 @@ import { UtilService } from './services/util.service';
   imports: [
     RouterOutlet,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    MatProgressBarModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -20,12 +24,13 @@ export class AppComponent implements OnInit {
 
   auth = inject(AuthService);
   #utils = inject(UtilService);
+  metadata = inject(MetadataStoreService);
   title = 'egbhub-web';
   
-
-  ngOnInit(){
+  async ngOnInit(){
     this.#utils.listenCurrentNavState();
-    this.auth.checkAuth();
+    await firstValueFrom(this.auth.checkAuth());
+    ;
   }
 
 

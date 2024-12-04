@@ -5,8 +5,6 @@ import { ETypeStage } from '../enums/enums';
 
 export const postGuard: CanActivateFn = (route, state) => {
 
-
-
   const userStore = inject(UserStoreService);
   const user = userStore.currentState();
   const router = inject(Router);
