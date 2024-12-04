@@ -7,6 +7,7 @@ import { UtilService } from './services/util.service';
 import { firstValueFrom } from 'rxjs';
 import { MetadataStoreService } from './store/metadata-store.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { BanneHomeComponent } from './components/layout/banne-home/banne-home.component';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     RouterOutlet,
     HeaderComponent,
     FooterComponent,
-    MatProgressBarModule
+    MatProgressBarModule,
+    BanneHomeComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

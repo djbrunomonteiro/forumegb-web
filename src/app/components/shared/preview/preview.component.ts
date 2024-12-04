@@ -1,5 +1,5 @@
 import { isPlatformBrowser, NgClass } from '@angular/common';
-import { Component, effect, ElementRef, inject, Input, PLATFORM_ID, signal } from '@angular/core';
+import { Component, effect, ElementRef, inject, Input, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import WaveSurfer from 'wavesurfer.js';
 import { UploadService } from '../../../services/upload.service';
@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './preview.component.html',
   styleUrl: './preview.component.scss'
 })
-export class PreviewComponent {
+export class PreviewComponent implements OnDestroy {
 
   @Input() musicPreview = signal('');
 
@@ -35,6 +35,7 @@ export class PreviewComponent {
     })
   }
 
+
   async loadPreviewLocale() {
     if(!isPlatformBrowser(this.#platformId) || !this.musicPreview()){return}
     const blob = await firstValueFrom(this.#upload.getPreview(this.musicPreview())) as any
@@ -50,6 +51,11 @@ export class PreviewComponent {
 
     this.wavesurfer.loadBlob(blob);
     this.loadedLocale.set(true);
+  }
+
+  ngOnDestroy(): void {
+    if(!this.wavesurfer){return}
+    this.wavesurfer.destroy();
   }
 
 }

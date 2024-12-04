@@ -7,7 +7,7 @@ import { MetadataStoreService } from '../../../store/metadata-store.service';
 import { Router, RouterLink } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
-import { AsyncPipe, TitleCasePipe, DatePipe, NgStyle } from '@angular/common';
+import { AsyncPipe, TitleCasePipe, DatePipe, NgStyle, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -39,6 +39,7 @@ import { UserStoreService } from '../../../store/user-store.service';
     SyncDatePipe,
     NgStyle,
     AdBannerComponent,
+    NgClass
 
 
   ],
