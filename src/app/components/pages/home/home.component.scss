@@ -54,3 +54,53 @@
         }
     }
 }
+
+
+@media (max-width: 768px){
+    .info-01{
+        padding: 30px 20px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    
+        .texts{
+            width: 100%;
+    
+            h3{
+                font-size: 22px;
+                color: aqua;
+            }
+        }
+    
+        .container-info{
+            width: 60%;
+            border: 1px solid aqua;
+            border-radius: 15px;
+            overflow: hidden;
+            img{
+                width: 100%
+                
+            }
+        }
+    }
+
+    .action-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        min-height: 200px;
+        padding: 20px;
+        // margin: 30px;
+        border-top: 1px solid rgb(189, 188, 188);
+        
+    }
+
+    .faq{
+        padding: 20px;
+    }
+    
+}
