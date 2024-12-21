@@ -70,14 +70,11 @@ export class HomeComponent implements OnInit {
     
     if(!user){
       const url = `posts/type/${post.type_stage}/${post.slug}`;
-      console.log(url);
-      
       this.router.navigate(['/login-cadastro'], {queryParams: {redirect:url}})
       return
     }
 
     const {slug, type_stage} = post;
-    console.log(user);
     if(type_stage === ETypeStage.MAINSTAGE && user?.plan?.valid){
       this.router.navigate([`/posts/type/${type_stage}/${slug}`])
       return

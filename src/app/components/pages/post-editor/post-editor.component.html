@@ -44,6 +44,18 @@
                             }
                         </mat-radio-group>
 
+                        <label>Icone: </label>
+                        <mat-radio-group formControlName="thumbnail">
+                            @for(icon of utils.iconsOpts; track $index){
+                                <mat-radio-button [value]="icon">
+                                    <mat-icon>
+                                        {{icon}}
+                                    </mat-icon>
+                                    
+                                </mat-radio-button>
+                            }
+                        </mat-radio-group>
+
 
 
                     </div>

@@ -11,8 +11,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { filter, firstValueFrom } from 'rxjs';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IUser } from '../../../interfaces/user';
 import { UserService } from '../../../services/user.service';
 import { UserStoreService } from '../../../store/user-store.service';
@@ -41,7 +41,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.scss',
 })
-export class CadastroComponent implements OnInit {
+export class CadastroComponent{
   #formBuilder = inject(FormBuilder);
   #authService = inject(AuthService);
   #userStoreService = inject(UserStoreService);
@@ -58,25 +58,12 @@ export class CadastroComponent implements OnInit {
 
   ctrlCheck = this.form.get('check') as FormControl;
 
-  constructor() {
-    effect(() => {
-      console.log(this.metadata.loadingUser());
-      
-    })
-  }
-
-  ngOnInit(): void {
-
-  }
-
   async signInGoogleProvider(){
     const resultProvider = await this.#authService.signInWithPopup();
     const user = resultProvider.user
     const {email, photoURL, displayName, metadata} = user
     const {error, results} = await firstValueFrom(this.#userService.isNewUser(email)) ;
 
-    console.log(results);
-    
     if(error){return}
     if(results?.length){
       

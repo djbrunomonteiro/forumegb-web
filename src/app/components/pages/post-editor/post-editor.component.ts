@@ -51,7 +51,8 @@ import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
     MatCheckboxModule,
     NgClass,
     PreviewComponent,
-    AdBannerComponent
+    AdBannerComponent,
+    MatIconModule
   ],
   templateUrl: './post-editor.component.html',
   styleUrl: './post-editor.component.scss'
@@ -74,7 +75,7 @@ export class PostEditorComponent implements OnInit {
     body: ['', [Validators.required]],
     music_preview: [''],
     source_url: [''],
-    thumbnail: [''],
+    thumbnail: ['graphic_eq'],
     slug: [''],
     owner_id: [0],
     owner_username: [''],

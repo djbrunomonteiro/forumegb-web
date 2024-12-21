@@ -2,13 +2,7 @@
   <app-header />
   <app-banne-home />
   <div class="container">
-    @if(metadata.loadingUser()){
-      <div class="loading-user">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </div>
-    }@else{
-      <router-outlet />
-    }
+    <router-outlet  />
   </div>
   <app-footer />
 </div>

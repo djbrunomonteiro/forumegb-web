@@ -8,6 +8,7 @@ import { firstValueFrom } from 'rxjs';
 import { MetadataStoreService } from './store/metadata-store.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BanneHomeComponent } from './components/layout/banne-home/banne-home.component';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ import { BanneHomeComponent } from './components/layout/banne-home/banne-home.co
     HeaderComponent,
     FooterComponent,
     MatProgressBarModule,
-    BanneHomeComponent
+    BanneHomeComponent,
+    NgClass
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

@@ -24,7 +24,8 @@ export class UserService {
   saveOne(user: any){
     return this.#http.post(`${this.#baseUrl}/users`, user).pipe(
       retry(5),
-      map((res) => res as IResponse)
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
 
   }
@@ -32,7 +33,8 @@ export class UserService {
   updateOne(user: any){
     return this.#http.patch(`${this.#baseUrl}/users/${user.id}`, user).pipe(
       retry(5),
-      map((res) => res as IResponse)
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
     );
 
   }

@@ -36,7 +36,7 @@
       }
           }
   
-  
+
           <input #file type="file" (change)="fileChangeEvent($event)" style="display: none;" accept="image/*"/>
         </div>
       </div>
@@ -58,14 +58,28 @@
               }
             </mat-select>
           </mat-form-field>
+          <div class="w-100">
+            <button
+            type="submit"
+            class="btn-save"
+            [ngClass]="{'disabled': form.invalid || !form.touched}"
+            mat-flat-button
+            [disabled]="form.invalid || !form.touched"
+          >
+            Salvar
+          </button>
+
+          </div>
         </div>
       </div>
   
       @if(metadataStore.loadingUser()){
+        <div class="w-100 my-3">
           <p class="text-center">Aguarde estamos processando. Não feche até finalizar!</p>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
       }@else{
-        <div class="w-100 d-flex justify-content-end my-2">
+        <!-- <div class="w-100 d-flex justify-content-end my-2">
           <button routerLInk="'/'" type="button" mat-button>Cancelar</button>
           <button
             type="submit"
@@ -75,20 +89,13 @@
           >
             Salvar
           </button>
-        </div>
+        </div> -->
       }
   
   
     </div>
   </form>
 
-  <!-- <div class="row">
-    <div class="col-12">
-      <button (click)="checkout(EPlantypes.TRIMESTRAL)" type="button" mat-button>TRIMESTRAL</button>
-      <button (click)="checkout(EPlantypes.SEMESTRAL)" type="button" mat-button>SEMESTRAL</button>
-      <button (click)="checkout(EPlantypes.ANUAL)" type="button" mat-button>ANUAL</button>
-    </div>
-  </div> -->
 
   <div class="row my-3 box-body">
     <div class="col-12">

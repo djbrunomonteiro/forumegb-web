@@ -111,7 +111,6 @@ export class PostComponent implements OnInit, OnDestroy{
 
   listenPost(){
     interval(30000).pipe(takeUntil(this.unsub$)).subscribe(async () => {
-      console.log(this.postStore.currentPost());
       const slug = this.postStore.currentPost()?.slug;
       if(!slug){return}
       await firstValueFrom(this.postStore.getOneApi(slug, false));

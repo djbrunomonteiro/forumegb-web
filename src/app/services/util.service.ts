@@ -59,49 +59,53 @@ export class UtilService {
     "Sugestão e Melhorias",
     "Vendas e Aluguel",
     "Outros"
-];
+  ];
+
+  iconsOpts = [
+    'headphones', 'graphic_eq', 'music_note', 'help', 'person_raised_hand', 'info', 'blur_on', 'edit_note', 'repeat_on', 'shopping_cart'
+  ]
 
   navState = signal<any[]>([]);
-  navState$ =  toObservable<any[]>(this.navState);
+  navState$ = toObservable<any[]>(this.navState);
   currentNavState = signal<any>(undefined);
-  
 
 
-  listenCurrentNavState(){
+
+  listenCurrentNavState() {
     this.#router.events
-    .pipe(filter((event: any) => event instanceof NavigationEnd))
-    .subscribe(async (event: NavigationEnd) => {
-      const url = event.urlAfterRedirects;
-      this.navState.update((current) => current.concat([{url}]));
-      this.currentNavState.set({url})
-    });
+      .pipe(filter((event: any) => event instanceof NavigationEnd))
+      .subscribe(async (event: NavigationEnd) => {
+        const url = event.urlAfterRedirects;
+        this.navState.update((current) => current.concat([{ url }]));
+        this.currentNavState.set({ url })
+      });
   }
 
-  
 
-  successExtract(res: any){
+
+  successExtract(res: any) {
     const results = this.paramsJsonParse(res.results);
-    const response: IResponse = {error: false, results, message: res?.message}
+    const response: IResponse = { error: false, results, message: res?.message }
     return response;
     ;
   }
 
-  errorExtract(res: any){
+  errorExtract(res: any) {
     const message = String(res?.message).includes('failure') ? 'Desculpe, o servidor não está acessível no momento ou sua conexão falhou.' : res?.message
-    const response: IResponse = {error: true, results: res?.results ?? undefined, message}
+    const response: IResponse = { error: true, results: res?.results ?? undefined, message }
     return of(response);
   }
 
-  showMsg(msg: string = '', action= 'X', config: MatSnackBarConfig = {duration: 4000, panelClass: 'default-snackbar'}){
+  showMsg(msg: string = '', action = 'X', config: MatSnackBarConfig = { duration: 4000, panelClass: 'default-snackbar' }) {
     this.#snackBar.open(msg, action, config)
   }
 
   sortArrayByKey<T>(array: T[] = [], key: keyof T, order: 'asc' | 'desc' = 'asc'): T[] {
-    if(!array ||  typeof(array) !== 'object'){return []}
+    if (!array || typeof (array) !== 'object') { return [] }
     return array.sort((a, b) => {
       const valueA = a[key];
       const valueB = b[key];
-  
+
       if (valueA < valueB) {
         return order === 'asc' ? -1 : 1;
       }
@@ -156,7 +160,7 @@ export class UtilService {
 
     // Ordena os objetos com base no número de likes
     const sorted = withLikesCount.sort((a, b) => b.likesCount - a.likesCount);
-  
+
     // Remove a propriedade likesCount antes de retornar
     return sorted.map(({ likesCount, ...rest }) => rest);
   }
@@ -174,15 +178,15 @@ export class UtilService {
     // Remove o prefixo 'data:[<mimeType>];base64,' da string base64
     const byteCharacters = atob(base64.split(',')[1]);
     const byteNumbers = new Array(byteCharacters.length);
-    
+
     // Converte cada caractere em seu valor correspondente em byte
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-  
+
     // Converte os bytes em uma unidade de armazenamento do tipo Uint8Array
     const byteArray = new Uint8Array(byteNumbers);
-  
+
     // Cria o Blob a partir dos dados binários e do mime type especificado
     return new Blob([byteArray], { type: 'audio/mp3' });
   }
@@ -192,10 +196,10 @@ export class UtilService {
       // Cria um elemento de imagem
       const img = new Image();
       img.crossOrigin = 'anonymous'; // Isso ajuda a contornar problemas de CORS em alguns casos
-  
+
       // Define a URL da imagem
       img.src = url;
-  
+
       // Quando a imagem é carregada, converte-a para base64 usando canvas
       img.onload = () => {
         const canvas = document.createElement('canvas');
@@ -210,14 +214,14 @@ export class UtilService {
           reject('Erro ao obter o contexto do canvas.');
         }
       };
-  
+
       // Em caso de erro de carregamento, rejeita a Promise
       img.onerror = () => reject('Erro ao carregar a imagem.');
     });
   }
 
-  getImageAsBase64(url:  any){
-    if(!url){return of('')}
+  getImageAsBase64(url: any) {
+    if (!url) { return of('') }
     return this.#http.get(url, { responseType: 'blob' }).pipe(
       mergeMap((blob) => {
         const reader = new FileReader();

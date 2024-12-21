@@ -47,12 +47,12 @@ export class UserStoreService {
     return request$.pipe(
       tap((res) => {
         const {error, results, message} = res;
-        console.log(results);
         this.#metadataStoreService.setLoading('user', false);
         this.#metadataStoreService.setError('user', error, message);
         if(error){
           return 
         }
+
         this.setState(results);
     }),
   )

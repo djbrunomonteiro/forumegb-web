@@ -142,7 +142,6 @@ export class PerfilComponent {
       if(this.userStore.currentState()){
         this.setForm(this.userStore.currentState());
         this.setAmountFistPlan();
-
       }
     })
 
@@ -175,9 +174,6 @@ export class PerfilComponent {
   }
 
   async save(){
-    if(this.isEditImg()){
-      this.saveImg();
-    }
 
     let metadata = this.form.value.metadata as any;
     metadata = {...metadata, updated_at: dayjs().toISOString()}
@@ -193,11 +189,11 @@ export class PerfilComponent {
 
   saveImg(){
     this.ctrlPhotoUrl.setValue(this.croppedImage);
+    this.save()
     this.cancelImg();
   }
 
   fileChangeEvent(event: Event): void {
-    console.log(event);
     if(!event){return}
     this.isEditImg.set(true);
     this.imageChangedEvent = event;
@@ -213,7 +209,6 @@ export class PerfilComponent {
     const form = {plan_type, user_id: id, user_email: email };
 
     const {error, results, message } = await firstValueFrom(this.#paymentService.getPref(form));
-    console.log(error, results, message);
     if(error){return}
 
     const preference_id = results?.preference_id;

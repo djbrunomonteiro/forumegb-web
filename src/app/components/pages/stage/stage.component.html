@@ -30,20 +30,17 @@
                         <li>
                             <div (click)="openPost(post)" class="item link">
                                 <div class="avatar link">
-                                    @if(post?.user?.photoURL; as photo){
-                                      <img [src]="photo" alt="photo url">
-                        
-                                    }@else{
-                                      <mat-icon>
-                                        account_circle
-                                      </mat-icon>
-                                    }
+                                    <mat-icon>
+                                        {{post.thumbnail}}
+                                    </mat-icon>
                                   </div>
                                   <div>
           
-                                      <a class="title link"  rel="noopener noreferrer">
+                                    <a class="title link"  rel="noopener noreferrer">
                                         {{post.title | titlecase}}
                                     </a>
+                                    <p class="author">por: {{post?.user?.displayName}}</p>
+
                                       <div class="w-100 d-flex justify-content-start">
                                         @for(tag of post?.tags; track $index){
                                           <span class="tag">{{tag}}</span>

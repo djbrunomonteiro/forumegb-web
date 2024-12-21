@@ -44,10 +44,6 @@ export class PostsStoreService {
     const {error, results} = await firstValueFrom(this.#postServices.getRecordsTotal(type));
     if(error){return}
     this.recordTotal.set(results?.recordsTotal ?? 0)
-    console.log(this.recordTotal());
-    
-
-
   }
  
   getAllAPI(type = '' ,start = 1, limit = 200, pageIndex = 0, order = 'recentes',){
@@ -60,7 +56,6 @@ export class PostsStoreService {
     if(containInBck){
       const response: IResponse = {error: false, results: containInBck?.results}
       const posts = response.results as IPost[]
-      console.log(posts);
       return of(response).pipe(
         delay(500),
         tap(() => {

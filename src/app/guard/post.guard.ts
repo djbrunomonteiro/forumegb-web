@@ -11,8 +11,7 @@ export const postGuard: CanActivateFn = (route, state) => {
   const type = route.params['type'];
   let habilited = true;
   if(type !== ETypeStage.MAINSTAGE){return habilited}
-  console.log(user);
-  
+
   if(!user){
     router.navigate(['/login-cadastro']);
     habilited = false;

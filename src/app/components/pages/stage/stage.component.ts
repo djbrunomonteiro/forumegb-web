@@ -1,5 +1,5 @@
 import { UserStoreService } from './../../../store/user-store.service';
-import { Component, effect, inject, Input, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe, DatePipe, isPlatformBrowser, NgStyle, TitleCasePipe } from '@angular/common';
@@ -13,7 +13,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { UtilService } from '../../../services/util.service';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import { PostsStoreService } from '../../../store/posts-store.service';
-import { EPermission, ETypeStage } from '../../../enums/enums';
+import { ETypeStage } from '../../../enums/enums';
 import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { CountComentPipe } from '../../../pipes/count-coment.pipe';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
@@ -50,7 +50,7 @@ import { MenuSideComponent } from '../../shared/menu-side/menu-side.component';
   templateUrl: './stage.component.html',
   styleUrl: './stage.component.scss'
 })
-export class StageComponent implements OnInit, OnDestroy {
+export class StageComponent implements OnDestroy {
 
   @ViewChild('paginator', { static: true }) paginator: any;
 
@@ -66,12 +66,10 @@ export class StageComponent implements OnInit, OnDestroy {
   metadata = inject(MetadataStoreService);
   utils = inject(UtilService);
   
-
   postsStage = signal<IPost[]>([]);
   postsView = signal<IPost[]>([]);
   pageStart = 0;
   pageSize = 10;
-
 
   stageOpt = {
     value: '',
@@ -90,18 +88,7 @@ export class StageComponent implements OnInit, OnDestroy {
     this.listenNavState()
   }
 
-
-
-  ngOnInit(): void {
-
-   
-  }
-
   setViewPosts(){
-
-
-    console.log(this.paginator);
-    
     this.type = this.isHome ? this.type : this.activatedRoute.snapshot.paramMap.get('type') ?? ETypeStage.FLOORSTAGE;
     if(!this.type){return};
 
@@ -156,55 +143,17 @@ export class StageComponent implements OnInit, OnDestroy {
 
   async getPosts(type: string, start = this.pageStart, limit = this.pageSize, pageIndex = 0, order = 'recentes'){
     await firstValueFrom(this.postStore.getAllAPI(type, start, limit, pageIndex));
-    // this.setOrderStage(order);
   }
 
-
-  async setOrderStage(value: string = 'recentes'){
-    // if(!this.stageOpt?.value){return}
-    // let currentsPosts: IPost[] = [];
-    // let postsOrders: IPost[] = [];
-
-    // if(value === 'relevantes'){
-    //   const start = this.postsStage().filter(elem => elem.likes?.length).length
-    //   await firstValueFrom(this.postStore.getAllAPI(this.stageOpt.value, start, this.limit));
-    // }
-    
-    // switch(this.stageOpt.value){
-    //   case ETypeStage.MAINSTAGE:
-    //     currentsPosts = this.postStore.mainStageState();
-    //     postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
-    //     this.imgUrl = 'main.jpg'
-    //     break;
-    //   case ETypeStage.FLOORSTAGE:
-    //     currentsPosts = this.postStore.floorStageState();
-    //     postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
-    //     this.imgUrl = 'floor.jpg'
-    //     break;
-    //   default:
-    //     currentsPosts = this.postStore.backStageState();
-    //     postsOrders = value === 'relevantes' ? this.utils.sortByLikes(currentsPosts) : this.utils.sortArrayByKey(currentsPosts, 'id', 'desc');
-    //     this.imgUrl = 'back.jpg'
-    //     break;
-    // }
-
-    // if(this.isHome){
-    //   postsOrders = postsOrders.filter((_, i) => i < 10)
-    // }
-
-    // this.postsStage.set(postsOrders)
-  }
 
   openPost(post:IPost | undefined){
-    console.log('post post', post);
     if(!post){return}
-    
-    const user = this.userStore.currentState();
 
+    const user = this.userStore.currentState();
     if(!user){
       const url = `posts/type/${post.type_stage}/${post.slug}`;
-      // this.router.navigate(['/login-cadastro'], {state: {url}})
-      // return
+      this.router.navigate(['/login-cadastro'], {queryParams: {redirect:url}})
+      return
     }
 
     const {slug, type_stage} = post;
@@ -226,8 +175,6 @@ export class StageComponent implements OnInit, OnDestroy {
     const dialogRef = this.#dialog.open(AdBannerComponent, {minWidth: '50dvw'});
     dialogRef.afterClosed().subscribe(results => {
       if(!results){return}
-      console.log(results);
-      
     });
   }
 
