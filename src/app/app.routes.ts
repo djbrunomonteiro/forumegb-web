@@ -5,12 +5,17 @@ import { authGuard } from './guard/auth.guard';
 import { postEditGuard } from './guard/post-edit.guard';
 import { postGuard } from './guard/post.guard';
 import { UserResolver } from './resolvers/user';
+import { PoliticaComponent } from './components/pages/politica/politica.component';
 
 
 export const routes: Routes = [
     {
         path: '',
         component: HomeComponent 
+    },
+    {
+        path: 'politica-de-privacidade-e-termos-de-uso',
+        component: PoliticaComponent 
     },
     {
         path: 'login-cadastro',

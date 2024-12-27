@@ -56,10 +56,12 @@
     }
     .source{
         padding: 20px;
+        word-wrap: break-word;
+        word-break: break-all;
     }
     .date{
         margin-top: 5px;
-        border-top: 1px dashed #384d4d;
+        border-top: 1px dashed rgb(56, 77, 77);
         text-align: center;
         min-width: 60%;
         font-size: 12px;

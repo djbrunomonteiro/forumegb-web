@@ -3,9 +3,13 @@ mat-toolbar{
 }
 
 .logo{
-    max-width: 30%;
+    width: 130px;
     display: flex;
     flex-wrap: wrap;
+    border-bottom: 5px solid var(--primary);
+    img{
+        width: 100%;
+    }
     p{
         line-height: 1;
         text-wrap: wrap;
@@ -14,6 +18,10 @@ mat-toolbar{
         font-size: 16px;
     }
 
+}
+
+.logo :hover{
+    cursor: pointer;
 }
 
 @media (max-width: 768px){
