@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IUser } from '../../../interfaces/user';
 import { UserService } from '../../../services/user.service';
 import { UserStoreService } from '../../../store/user-store.service';
@@ -36,7 +36,8 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     InfoNewUserComponent,
     MatProgressBarModule,
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './cadastro.component.html',
   styleUrl: './cadastro.component.scss',
