@@ -224,12 +224,16 @@ export class UtilService {
           const dataURL = canvas.toDataURL('image/png');
           resolve(dataURL);
         } else {
-          reject('Erro ao obter o contexto do canvas.');
+          console.log('Erro ao obter o contexto do canvas.');
+          resolve('');
         }
       };
 
       // Em caso de erro de carregamento, rejeita a Promise
-      img.onerror = () => reject('Erro ao carregar a imagem.');
+      img.onerror = () => {
+        console.log('Erro ao obter o contexto do canvas.');
+        resolve('');
+      };
     });
   }
 

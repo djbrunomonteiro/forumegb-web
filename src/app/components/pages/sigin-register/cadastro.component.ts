@@ -62,8 +62,14 @@ export class CadastroComponent{
   async signInGoogleProvider(){
     const resultProvider = await this.#authService.signInWithPopup();
     const user = resultProvider.user
-    const {email, photoURL, displayName, metadata} = user
+    const {email, photoURL, displayName, metadata} = user;
+
+    console.log('user login', user);
+    
     const {error, results} = await firstValueFrom(this.#userService.isNewUser(email)) ;
+
+    console.log('houve error ao consultar?: ', error, results);
+    
 
     if(error){return}
     if(results?.length){
