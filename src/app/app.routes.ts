@@ -6,6 +6,7 @@ import { postEditGuard } from './guard/post-edit.guard';
 import { postGuard } from './guard/post.guard';
 import { UserResolver } from './resolvers/user';
 import { PoliticaComponent } from './components/pages/politica/politica.component';
+import { NotFoundComponent } from './components/pages/not-found/not-found.component';
 
 
 export const routes: Routes = [
@@ -53,4 +54,10 @@ export const routes: Routes = [
             },
         ]
     },
+    {
+        path: 'checkout/:status',
+        redirectTo: 'perfil',
+        pathMatch: 'full'
+    },
+    { path: '**', component: NotFoundComponent }
 ];
