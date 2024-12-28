@@ -22,6 +22,7 @@ import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 import {MatTableModule} from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { MenuSideComponent } from '../../shared/menu-side/menu-side.component';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 
 @Component({
@@ -65,6 +66,7 @@ export class StageComponent implements OnDestroy {
   router = inject(Router);
   metadata = inject(MetadataStoreService);
   utils = inject(UtilService);
+  analytics = inject(AnalyticsService);
   
   postsStage = signal<IPost[]>([]);
   postsView = signal<IPost[]>([]);
@@ -95,6 +97,7 @@ export class StageComponent implements OnDestroy {
     const title = `EGB HUB - Seção ${this.type} `;
     const description = `Lista de postagens com Músicas, Remixes, Sets, Djs de Eletrônica Cristã | Gospel`;
     this.utils.setTitleDesc(title, description);
+    this.analytics.setLog('view_page', {name: this.type});
     
     let paginationData = {pageIndex: 0, pageSize: this.pageSize}
 
@@ -122,8 +125,7 @@ export class StageComponent implements OnDestroy {
     this.utils.navState$.pipe(takeUntil(this.unsub$)).subscribe((nav) => {
       const url = this.utils.currentNavState()?.url;
       if(!url){return}
-      console.log(url);
-      
+
       this.setViewPosts()
 
       // this.ngOnInit();

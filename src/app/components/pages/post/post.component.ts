@@ -18,6 +18,7 @@ import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PreviewComponent } from '../../shared/preview/preview.component';
 import { IUser } from '../../../interfaces/user';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 @Component({
   selector: 'app-post',
@@ -53,6 +54,7 @@ export class PostComponent implements OnInit, OnDestroy{
   userStore = inject(UserStoreService);
   postStore = inject(PostsStoreService);
   metadataStore = inject(MetadataStoreService);
+  analytics = inject(AnalyticsService);
 
   form = this.#formBuilder.group({
     id: [''],
@@ -113,6 +115,7 @@ export class PostComponent implements OnInit, OnDestroy{
     const title = `EGB HUB - Post: ${this.postStore.currentPost()?.title} `;
     const description = `Postagem de ${this.postStore.currentPost()?.owner_username} em ${this.datePipe.transform(this.postStore.currentPost()?.created_at, 'short') } no Fórum EGB HUB`;
     this.#utils.setTitleDesc(title, description);
+    this.analytics.setLog('view_page', {name: this.postStore.currentPost()?.slug});
 
     const music_preview = this.postStore.currentPost()?.music_preview ?? '';
     const likes = this.postStore.currentPost()?.likes ?? [];

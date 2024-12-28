@@ -19,6 +19,7 @@ import { ETypeStage, EPermission } from '../../../enums/enums';
 import { IPost } from '../../../interfaces/posts';
 import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 import { UserStoreService } from '../../../store/user-store.service';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 @Component({
   selector: 'app-home',
@@ -49,6 +50,7 @@ import { UserStoreService } from '../../../store/user-store.service';
 export class HomeComponent implements OnInit {
 
   #dialog = inject(MatDialog);
+  analytics = inject(AnalyticsService);
   router = inject(Router);
   postStore = inject(PostsStoreService);
   userStore = inject(UserStoreService);
@@ -72,7 +74,8 @@ export class HomeComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await firstValueFrom(this.postStore.getHome())
+    await firstValueFrom(this.postStore.getHome());
+    this.analytics.setLog('view_page', {name: 'home'});
   }
 
   openPost(post:IPost | undefined){

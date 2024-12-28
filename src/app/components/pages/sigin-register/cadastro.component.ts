@@ -22,6 +22,7 @@ import { InfoNewUserComponent } from '../../shared/info-new-user/info-new-user.c
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class CadastroComponent{
   #activatedRouter = inject(ActivatedRoute);
   #dialog = inject(MatDialog);
   metadata = inject(MetadataStoreService);
+  analytics = inject(AnalyticsService);
 
   form = this.#formBuilder.group({
     check: [false, Validators.required],
@@ -64,12 +66,8 @@ export class CadastroComponent{
     const user = resultProvider.user
     const {email, photoURL, displayName, metadata} = user;
 
-    console.log('user login', user);
-    
     const {error, results} = await firstValueFrom(this.#userService.isNewUser(email)) ;
 
-    console.log('houve error ao consultar?: ', error, results);
-    
 
     if(error){return}
     if(results?.length){
@@ -78,6 +76,7 @@ export class CadastroComponent{
 
       const queryParms = await firstValueFrom(this.#activatedRouter.queryParamMap);
       const url = queryParms.get('redirect') ?? '/perfil';
+      this.analytics.setLog('login', {email: results?.email});
       this.#router.navigate([url]);
       return
     }
@@ -92,6 +91,7 @@ export class CadastroComponent{
   async saveInApi(user: IUser | Partial<IUser>){
     const {error, results} = await firstValueFrom(this.#userStoreService.saveOne(user));
     if(error){return}
+    this.analytics.setLog('sign_up', {email: results?.email})
     this.#router.navigate(['/perfil']);
     this.openDialog();
   }

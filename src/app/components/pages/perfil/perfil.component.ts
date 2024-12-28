@@ -19,6 +19,7 @@ import { PaymentService } from '../../../services/payment.service';
 import { EPlanTypes } from '../../../enums/enums';
 import {MatCardModule} from '@angular/material/card';
 import { CheckRecentPlanEligibilityPipe } from '../../../pipes/check-recent-plan-eligibility.pipe';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 @Component({
   selector: 'app-perfil',
@@ -51,6 +52,7 @@ export class PerfilComponent {
   metadataStore = inject(MetadataStoreService);
   platformId = inject(PLATFORM_ID);
   isPlatformBrowser = isPlatformBrowser;
+  analytics = inject(AnalyticsService);
 
 
 
@@ -211,8 +213,11 @@ export class PerfilComponent {
     const {error, results, message } = await firstValueFrom(this.#paymentService.getPref(form));
     if(error){return}
 
+    this.analytics.setLog('checkout_in', {plan_type, user_id: id});
+
     const preference_id = results?.preference_id;
     this.#paymentService.initCheckout(preference_id)
+
     
 
   }
