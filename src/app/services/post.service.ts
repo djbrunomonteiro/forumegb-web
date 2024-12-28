@@ -2,7 +2,7 @@ import { ETypeStage } from './../enums/enums';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { catchError, delay, map, retry } from 'rxjs';
+import { catchError, delay, firstValueFrom, map, retry } from 'rxjs';
 import { IResponse } from '../interfaces/response';
 import { UtilService } from './util.service';
 import { IPost } from '../interfaces/posts';
@@ -14,6 +14,7 @@ export class PostService {
   #http = inject(HttpClient);
   #utils = inject(UtilService);
   #baseUrl = environment.apiUrl;
+
 
   getHome(){
     return this.#http.get(`${this.#baseUrl}/posts/home`)
@@ -87,5 +88,4 @@ export class PostService {
       catchError((err) => this.#utils.errorExtract(err)),
     );
   }
-  
 }

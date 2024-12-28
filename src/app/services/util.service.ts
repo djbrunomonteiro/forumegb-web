@@ -229,7 +229,6 @@ export class UtilService {
         }
       };
 
-      // Em caso de erro de carregamento, rejeita a Promise
       img.onerror = () => {
         console.log('Erro ao obter o contexto do canvas.');
         resolve('');
