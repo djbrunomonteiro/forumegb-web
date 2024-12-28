@@ -92,6 +92,10 @@ export class StageComponent implements OnDestroy {
     this.type = this.isHome ? this.type : this.activatedRoute.snapshot.paramMap.get('type') ?? ETypeStage.FLOORSTAGE;
     if(!this.type){return};
 
+    const title = `EGB HUB - Seção ${this.type} `;
+    const description = `Lista de postagens com Músicas, Remixes, Sets, Djs de Eletrônica Cristã | Gospel`;
+    this.utils.setTitleDesc(title, description);
+    
     let paginationData = {pageIndex: 0, pageSize: this.pageSize}
 
     if(isPlatformBrowser(this.#platformId)){
@@ -118,6 +122,8 @@ export class StageComponent implements OnDestroy {
     this.utils.navState$.pipe(takeUntil(this.unsub$)).subscribe((nav) => {
       const url = this.utils.currentNavState()?.url;
       if(!url){return}
+      console.log(url);
+      
       this.setViewPosts()
 
       // this.ngOnInit();

@@ -6,6 +6,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import {getAnalytics, provideAnalytics } from '@angular/fire/analytics';
 import { environment } from '../environments/environment';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { tokenInterceptor } from './interceptors/token.interceptor';
@@ -26,8 +27,10 @@ export const appConfig: ApplicationConfig = {
       initializeApp(environment.firebaseConfig)
     ),
     provideAuth(() => getAuth()),
+    provideAnalytics(() => getAnalytics()),
     importProvidersFrom([
       MatSnackBarModule,
+      
     ]),
     // provideQuillConfig({ modules: quillConfig.Modules }),
 

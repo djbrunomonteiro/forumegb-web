@@ -6,6 +6,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { ETypeStage } from '../enums/enums';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,8 @@ export class UtilService {
   #snackBar = inject(MatSnackBar);
   #router = inject(Router);
   #http = inject(HttpClient);
+  #meta = inject(Meta);
+  #title = inject(Title);
 
   stageOpts = [
     {
@@ -68,6 +71,16 @@ export class UtilService {
   navState = signal<any[]>([]);
   navState$ = toObservable<any[]>(this.navState);
   currentNavState = signal<any>(undefined);
+
+
+  setTitleDesc(title: string, description: string){
+    this.#title.setTitle(title);
+    this.#meta.updateTag({ name: 'description', content: description });
+  }
+
+  setTags( tags: any[]){
+    this.#meta.addTags(tags)
+  }
 
 
 

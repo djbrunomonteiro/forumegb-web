@@ -13,7 +13,7 @@ import { delay, firstValueFrom, interval, map, of, Subject, takeUntil, timeout }
 import { UtilService } from '../../../services/util.service';
 import { MetadataStoreService } from '../../../store/metadata-store.service';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PreviewComponent } from '../../shared/preview/preview.component';
@@ -37,6 +37,10 @@ import { IUser } from '../../../interfaces/user';
     MatTooltipModule,
     PreviewComponent,
   ],
+  providers: [
+    DatePipe
+
+  ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
@@ -45,9 +49,10 @@ export class PostComponent implements OnInit, OnDestroy{
   #activatedRoute = inject(ActivatedRoute);
   #formBuilder = inject(FormBuilder);
   #utils = inject(UtilService);
+  datePipe = inject(DatePipe);
   userStore = inject(UserStoreService);
   postStore = inject(PostsStoreService);
-  metadataStore = inject(MetadataStoreService)
+  metadataStore = inject(MetadataStoreService);
 
   form = this.#formBuilder.group({
     id: [''],
@@ -103,6 +108,12 @@ export class PostComponent implements OnInit, OnDestroy{
   async setCurrentPost(){
     const slug = this.#activatedRoute.snapshot.paramMap.get('slug') ?? undefined;
     await this.postStore.setCurrentPost(slug);
+
+
+    const title = `EGB HUB - Post: ${this.postStore.currentPost()?.title} `;
+    const description = `Postagem de ${this.postStore.currentPost()?.owner_username} em ${this.datePipe.transform(this.postStore.currentPost()?.created_at, 'short') } no Fórum EGB HUB`;
+    this.#utils.setTitleDesc(title, description);
+
     const music_preview = this.postStore.currentPost()?.music_preview ?? '';
     const likes = this.postStore.currentPost()?.likes ?? [];
     this.setCountLikes(likes);

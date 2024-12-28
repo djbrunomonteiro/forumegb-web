@@ -56,6 +56,19 @@ export class HomeComponent implements OnInit {
   utils = inject(UtilService);
 
   constructor(){
+    const title = 'EGB HUB - Fórum de Música Eletrônica Cristã | Gospel Remixes';
+    const description = 'Fórum EGBhuB - Conecte-se com uma comunidade apaixonada por música eletrônica cristã! Compartilhe tracks, colabore com artistas e descubra beats inspiradores cheios de fé.';
+    this.utils.setTitleDesc(title, description);
+    this.utils.setTags([
+      { name: 'description', content: 'Fórum EGBhuB - Conecte-se com uma comunidade apaixonada por música eletrônica cristã! Compartilhe tracks, colabore com artistas e descubra beats inspiradores cheios de fé.' },
+      { name: 'keywords', content: 'música eletrônica cristã, EGBHUB, beats cristãos, fórum de música cristã, DJ gospel, remixes cristãos, comunidade de música eletrônica, música gospel eletrônica, tracks cristãs, produção musical gospel, colaboração musical cristã, eventos de música eletrônica cristã, setlists gospel, música e fé' },
+      { name: 'author', content: 'EGBhuB' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
+      { property: 'og:title', content: 'EGBhuB - Página Inicial' },
+      { property: 'og:description', content: 'Uma descrição otimizada para redes sociais usando Angular.' },
+      { property: 'og:image', content: 'https://egbhub.com.br/info-egbhub-home.jpg' },
+      { property: 'og:url', content: 'https://egbhub.com.br' }
+    ])
   }
 
   async ngOnInit(): Promise<void> {
