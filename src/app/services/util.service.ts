@@ -50,6 +50,7 @@ export class UtilService {
 
 
   tagsPosts = [
+    "Dance Comercial",
     "Remixes e Mashups",
     "Faixas Originais",
     "Mixagens e Sets",

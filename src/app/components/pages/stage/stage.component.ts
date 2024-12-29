@@ -23,6 +23,8 @@ import {MatTableModule} from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { MenuSideComponent } from '../../shared/menu-side/menu-side.component';
 import { AnalyticsService } from '../../../services/analytics.service';
+import { ConvertSignalPipe } from '../../../pipes/convert-signal.pipe';
+import { PreviewComponent } from '../../shared/preview/preview.component';
 
 
 @Component({
@@ -46,7 +48,9 @@ import { AnalyticsService } from '../../../services/analytics.service';
     AdBannerComponent,
     MatTableModule,
     FormsModule,
-    MenuSideComponent
+    MenuSideComponent,
+    PreviewComponent,
+    ConvertSignalPipe
   ],
   templateUrl: './stage.component.html',
   styleUrl: './stage.component.scss'

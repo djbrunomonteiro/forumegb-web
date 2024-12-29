@@ -35,6 +35,8 @@ export class PostsStoreService {
         const {results} = res
         if(!results){return }
         this.homeState.set(results)
+        console.log(results);
+        
       })
 
     )

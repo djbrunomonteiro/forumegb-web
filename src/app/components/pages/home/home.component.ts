@@ -20,6 +20,8 @@ import { IPost } from '../../../interfaces/posts';
 import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 import { UserStoreService } from '../../../store/user-store.service';
 import { AnalyticsService } from '../../../services/analytics.service';
+import { PreviewComponent } from '../../shared/preview/preview.component';
+import { ConvertSignalPipe } from '../../../pipes/convert-signal.pipe';
 
 @Component({
   selector: 'app-home',
@@ -40,9 +42,9 @@ import { AnalyticsService } from '../../../services/analytics.service';
     SyncDatePipe,
     NgStyle,
     AdBannerComponent,
-    NgClass
-
-
+    NgClass,
+    PreviewComponent,
+    ConvertSignalPipe
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -111,5 +113,7 @@ export class HomeComponent implements OnInit {
       if(!results){return}
     });
   }
+
+  
 
 }

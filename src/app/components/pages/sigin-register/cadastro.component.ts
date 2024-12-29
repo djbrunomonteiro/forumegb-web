@@ -76,7 +76,7 @@ export class CadastroComponent{
 
       const queryParms = await firstValueFrom(this.#activatedRouter.queryParamMap);
       const url = queryParms.get('redirect') ?? '/perfil';
-      this.analytics.setLog('login', {email: results?.email});
+      this.analytics.setLog('login', {name: results?.email});
       this.#router.navigate([url]);
       return
     }
@@ -91,7 +91,7 @@ export class CadastroComponent{
   async saveInApi(user: IUser | Partial<IUser>){
     const {error, results} = await firstValueFrom(this.#userStoreService.saveOne(user));
     if(error){return}
-    this.analytics.setLog('sign_up', {email: results?.email})
+    this.analytics.setLog('sign_up', {name: results?.email})
     this.#router.navigate(['/perfil']);
     this.openDialog();
   }

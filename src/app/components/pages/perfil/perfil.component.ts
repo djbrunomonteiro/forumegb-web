@@ -213,7 +213,7 @@ export class PerfilComponent {
     const {error, results, message } = await firstValueFrom(this.#paymentService.getPref(form));
     if(error){return}
 
-    this.analytics.setLog('checkout_in', {plan_type, user_id: id});
+    this.analytics.setLog('purchase', {name: 'checkout_in'});
 
     const preference_id = results?.preference_id;
     this.#paymentService.initCheckout(preference_id)

@@ -20,6 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class PreviewComponent implements OnDestroy {
 
   @Input() musicPreview = signal('');
+  @Input() width: any = undefined;
+  @Input() height: any = undefined;
 
   #platformId = inject(PLATFORM_ID);
   #upload = inject(UploadService);
@@ -47,6 +49,8 @@ export class PreviewComponent implements OnDestroy {
       waveColor: '#35e001',
       progressColor: '#383351',
       backend: 'WebAudio',
+      width: this.width ? this.width : "100%",
+      height: this.height ? this.height : "auto"
     });
 
     this.wavesurfer.loadBlob(blob);

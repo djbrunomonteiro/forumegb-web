@@ -22,32 +22,41 @@
                                 <ol>
                                     @for (post of resume?.posts; track $index) {
                                         <li>
-                                            <div (click)="openPost(post)" class="item link">
-                                                <div class="avatar link">
-                                                    <mat-icon>
-                                                        {{post.thumbnail}}
-                                                    </mat-icon>
-                                                  </div>
-                                                  <div>
-                                                      <a class="title link"  rel="noopener noreferrer">
-                                                        {{post.title | titlecase}}
-                                                        </a>
-                                                        <p class="author">por: {{post?.user?.displayName}}</p>
-                                                    @if(post?.tags !== '[]'){
-                                                        <div class="w-100 d-flex justify-content-start">
-                                                          @for(tag of post?.tags; track $index){
-                                                            <span class="tag">{{tag}}</span>
-                                                            
-                                                          }
-                                                        </div>
-        
-                                                    }
-                                                  </div>
-                        
-                                                <div class="coment">
-                                                    {{post | countComent}}
-                                                    <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
+                                            <div  class="item link">
+                                                <div (click)="openPost(post)" class="block-info">
+                                                    <div class="avatar link">
+                                                        <mat-icon>
+                                                            {{post.thumbnail}}
+                                                        </mat-icon>
+                                                      </div>
+                                                      <div>
+                                                          <a class="title link"  rel="noopener noreferrer">
+                                                            {{post.title | titlecase}}
+                                                            </a>
+                                                            <p class="author">por: {{post?.user?.displayName}}</p>
+    
+                                                        @if(post?.tags !== '[]'){
+                                                            <div class="w-100 d-flex justify-content-start">
+                                                              @for(tag of post?.tags; track $index){
+                                                                <span class="tag">{{tag}}</span>
+                                                                
+                                                              }
+                                                            </div>
+            
+                                                        }
+                                                    </div>
+                            
+                                                    <div class="coment">
+                                                        {{post | countComent}}
+                                                        <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
+                                                    </div>
                                                 </div>
+
+                                                @if(post.music_preview){
+                                                    <div class="block-preview">
+                                                        <app-preview [musicPreview]="post.music_preview | convertSignal" [height]="20"/>
+                                                    </div>
+                                                }
                         
                                             </div>
                         
