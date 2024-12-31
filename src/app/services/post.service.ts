@@ -25,6 +25,15 @@ export class PostService {
     );
   }
 
+  search(type: string = '', term: string){
+    return this.#http.get(`${this.#baseUrl}/posts/query?type=${type}&term=${term}`)
+    .pipe(
+      retry(5),
+      map((res) => this.#utils.successExtract(res)),
+      catchError((err) => this.#utils.errorExtract(err)),
+    );
+  }
+
 
   getAll(type: string = '', start = 1, limit = 200, order = 'recentes'){
     const params = type ? `type=${type}&start=${start}&limit=${limit}&order=${order}` : `start=${start}&limit=${limit}&order=${order}`

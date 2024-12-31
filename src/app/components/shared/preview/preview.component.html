@@ -3,7 +3,7 @@
 </div>
 
 @if(loadedLocale() && wavesurfer){
-    <button  (click)="wavesurfer.playPause()" mat-mini-fab aria-label="player button" class="playPause" style="background: #383351">
+    <button (click)="wavesurfer.playPause()" mat-mini-fab aria-label="player button" class="playPause" style="background: #383351">
         <mat-icon>
             @if(wavesurfer.isPlaying()){
                 stop_circle

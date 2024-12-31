@@ -8,6 +8,8 @@
             </mat-icon>
             Voltar
         </button> -->
+
+
         
         <section class="card-container">
             <div class="header">
@@ -20,15 +22,35 @@
                     <h2 [routerLink]="'/posts/type/'+stageOpt.value" class="link">{{stageOpt.title}}</h2>
                     <p>{{stageOpt.description}}</p>
                 </div>
-        
+
+                
             </div>
+            <app-search (search)="search($event)" class="w-100"/>
+
+            @if(isSearch){
+                @if(searchLoading){
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                }
+                <h5 class="w-100">Resultado da pesquisa:</h5> <br>
+                <ul>
+                    @for (post of searchItens(); track $index) {
+                        <li class="my-2">
+                            <a (click)="openPost(post)" src="#"  class="title link"  rel="noopener noreferrer">
+                                {{post.title | titlecase}}
+                            </a>
         
-            <div class="list">
-        
+                        </li>
+                    }@empty{
+                        <p class="text-center">*Sem post nesse pesquisa!</p>
+                    }
+                </ul>
+
+            }
+            <div class="list" [ngClass]="{'d-none': isSearch}" >
                 <ol [start]="this.pageStart+1">
                     @for (post of postStore.currentState(); track $index) {
                         <li>
-                            <div  class="item link">
+                            <div  class="item link" [ngClass]="{'minH': post?.music_preview}">
                                 <div (click)="openPost(post)" class="block-info">
                                     <div class="avatar link">
                                         <mat-icon>
@@ -72,23 +94,28 @@
             </div>
         
         
+        
         </section>
         @if(metadata.loadingPost()){
             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         }
+
+        @if(!isSearch){
+            <div class="d-flex justify-content-center m-3">
+                <mat-paginator
+                #paginator
+                [disabled]="metadata.loadingPost()"
+                (page)="controlPage($event)"
+                [length]="postStore.recordTotal()"
+                [pageSize]="pageSize"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="[10, 20]"
+                aria-label="Select page">
+                </mat-paginator>
+            </div>
+
+        }
         
-        <div class="d-flex justify-content-center m-3">
-            <mat-paginator
-            #paginator
-            [disabled]="metadata.loadingPost()"
-            (page)="controlPage($event)"
-            [length]="postStore.recordTotal()"
-            [pageSize]="pageSize"
-            [showFirstLastButtons]="true"
-            [pageSizeOptions]="[10, 20]"
-            aria-label="Select page">
-            </mat-paginator>
-        </div>
 
     </div>
 </div>

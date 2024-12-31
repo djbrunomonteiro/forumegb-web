@@ -114,6 +114,8 @@ export class PostsStoreService {
     this.#metadataStoreService.setLoading('post', showLoading);
     return this.#postServices.getOne(slug).pipe(
       tap(res => {
+        console.log(res);
+        
         this.#metadataStoreService.setLoading('post', false);
         const {results} = res
         if(!results){return }
@@ -153,7 +155,8 @@ export class PostsStoreService {
     if(!slug){return}
     const post = this.currentState().filter(post => post.id && post.slug === slug)[0] ?? undefined;
     this.currentPost.set(post);
-    if(ignoreLoad){return}
+    console.log(this.currentPost());
+    
     await firstValueFrom(this.getOneApi(slug));
   }
 

@@ -1,0 +1,24 @@
+<form class="d-flex mt-3">
+    <mat-form-field class="search" appearance="outline">
+      <mat-label>Pesquisar</mat-label>
+      <input type="text"
+             placeholder="Ex: DJ BRUNO MONTEIRO"
+             aria-label="Number"
+             matInput
+             [formControl]="myControl"
+             [matAutocomplete]="auto">
+             <button
+             (click)="clear()"
+             mat-icon-button
+             matSuffix
+           >
+             <mat-icon>{{'clear'}}</mat-icon>
+           </button>
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (option of filteredOptions | async; track option) {
+          <mat-option [value]="option">{{option}}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+

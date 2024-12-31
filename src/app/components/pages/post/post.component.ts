@@ -109,6 +109,8 @@ export class PostComponent implements OnInit, OnDestroy{
 
   async setCurrentPost(){
     const slug = this.#activatedRoute.snapshot.paramMap.get('slug') ?? undefined;
+    console.log(slug);
+    
     await this.postStore.setCurrentPost(slug);
 
 

@@ -68,8 +68,8 @@ export class HomeComponent implements OnInit {
       { name: 'keywords', content: 'música eletrônica cristã, EGBHUB, beats cristãos, fórum de música cristã, DJ gospel, remixes cristãos, comunidade de música eletrônica, música gospel eletrônica, tracks cristãs, produção musical gospel, colaboração musical cristã, eventos de música eletrônica cristã, setlists gospel, música e fé' },
       { name: 'author', content: 'EGBhuB' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
-      { property: 'og:title', content: 'EGBhuB - Página Inicial' },
-      { property: 'og:description', content: 'Uma descrição otimizada para redes sociais usando Angular.' },
+      { property: 'og:title', content: 'EGB huB- Fórum de Música Eletrônica Cristã' },
+      { property: 'og:description', content: 'Conecte-se com uma comunidade apaixonada por música eletrônica cristã!' },
       { property: 'og:image', content: 'https://egbhub.com.br/info-egbhub-home.jpg' },
       { property: 'og:url', content: 'https://egbhub.com.br' }
     ])

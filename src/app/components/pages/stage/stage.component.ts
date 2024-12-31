@@ -2,7 +2,7 @@ import { UserStoreService } from './../../../store/user-store.service';
 import { Component, inject, Input, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { MatIconModule } from '@angular/material/icon';
-import { AsyncPipe, DatePipe, isPlatformBrowser, NgStyle, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, isPlatformBrowser, NgClass, NgStyle, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -25,6 +25,8 @@ import { MenuSideComponent } from '../../shared/menu-side/menu-side.component';
 import { AnalyticsService } from '../../../services/analytics.service';
 import { ConvertSignalPipe } from '../../../pipes/convert-signal.pipe';
 import { PreviewComponent } from '../../shared/preview/preview.component';
+import { SearchComponent } from '../../shared/search/search.component';
+import { PostService } from '../../../services/post.service';
 
 
 @Component({
@@ -50,7 +52,9 @@ import { PreviewComponent } from '../../shared/preview/preview.component';
     FormsModule,
     MenuSideComponent,
     PreviewComponent,
-    ConvertSignalPipe
+    ConvertSignalPipe,
+    SearchComponent,
+    NgClass
   ],
   templateUrl: './stage.component.html',
   styleUrl: './stage.component.scss'
@@ -71,6 +75,7 @@ export class StageComponent implements OnDestroy {
   metadata = inject(MetadataStoreService);
   utils = inject(UtilService);
   analytics = inject(AnalyticsService);
+  postService = inject(PostService);
   
   postsStage = signal<IPost[]>([]);
   postsView = signal<IPost[]>([]);
@@ -88,10 +93,31 @@ export class StageComponent implements OnDestroy {
 
   imgUrl = '';
 
+  isSearch = false;
+  searchItens = signal<any[]>([]);
+  searchLoading = false;
+
   unsub$ = new Subject();
 
   constructor(){
     this.listenNavState()
+  }
+
+  async search(term: string){
+    if(!term){
+      this.isSearch = false;
+      return
+    }
+
+    this.isSearch = true;
+    this.searchLoading = true;
+    const {results} = await firstValueFrom(this.postService.search(this.type, String(term).toLowerCase()));
+    this.searchItens.set(results);
+    this.searchLoading = false;
+    console.log(this.searchItens());
+    
+
+
   }
 
   setViewPosts(){
