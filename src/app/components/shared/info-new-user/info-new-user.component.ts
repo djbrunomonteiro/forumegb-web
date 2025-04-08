@@ -5,15 +5,14 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-info-new-user',
-  standalone: true,
-  imports: [
-    RouterLink,
-    MatDialogModule,
-    MatButtonModule
-  ],
-  templateUrl: './info-new-user.component.html',
-  styleUrl: './info-new-user.component.scss'
+    selector: 'app-info-new-user',
+    imports: [
+        RouterLink,
+        MatDialogModule,
+        MatButtonModule
+    ],
+    templateUrl: './info-new-user.component.html',
+    styleUrl: './info-new-user.component.scss'
 })
 export class InfoNewUserComponent {
   userStore = inject(UserStoreService);

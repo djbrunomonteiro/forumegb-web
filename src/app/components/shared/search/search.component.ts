@@ -10,20 +10,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-search',
-  standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AsyncPipe,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule
-  ],
-  templateUrl: './search.component.html',
-  styleUrl: './search.component.scss'
+    selector: 'app-search',
+    imports: [
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        FormsModule,
+        ReactiveFormsModule,
+        AsyncPipe,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule
+    ],
+    templateUrl: './search.component.html',
+    styleUrl: './search.component.scss'
 })
 export class SearchComponent implements OnInit {
 

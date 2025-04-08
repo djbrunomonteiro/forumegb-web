@@ -4,14 +4,13 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { NgStyle } from '@angular/common';
 
 @Component({
-  selector: 'app-menu-side',
-  standalone: true,
-  imports: [
-    RouterModule,
-    NgStyle
-  ],
-  templateUrl: './menu-side.component.html',
-  styleUrl: './menu-side.component.scss'
+    selector: 'app-menu-side',
+    imports: [
+        RouterModule,
+        NgStyle
+    ],
+    templateUrl: './menu-side.component.html',
+    styleUrl: './menu-side.component.scss'
 })
 export class MenuSideComponent {
 

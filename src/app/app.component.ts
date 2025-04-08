@@ -11,18 +11,17 @@ import { BanneHomeComponent } from './components/layout/banne-home/banne-home.co
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    MatProgressBarModule,
-    BanneHomeComponent,
-    NgClass
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        HeaderComponent,
+        FooterComponent,
+        MatProgressBarModule,
+        BanneHomeComponent,
+        NgClass
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
 

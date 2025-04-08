@@ -6,16 +6,15 @@ import { UserStoreService } from '../../../store/user-store.service';
 import { TitleCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-ad-banner',
-  standalone: true,
-  imports: [
-    RouterLink,
-    MatDialogModule,
-    MatButtonModule,
-    TitleCasePipe
-  ],
-  templateUrl: './ad-banner.component.html',
-  styleUrl: './ad-banner.component.scss'
+    selector: 'app-ad-banner',
+    imports: [
+        RouterLink,
+        MatDialogModule,
+        MatButtonModule,
+        TitleCasePipe
+    ],
+    templateUrl: './ad-banner.component.html',
+    styleUrl: './ad-banner.component.scss'
 })
 export class AdBannerComponent {
   userStore = inject(UserStoreService);

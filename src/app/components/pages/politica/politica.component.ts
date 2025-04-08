@@ -2,11 +2,10 @@ import { Component, inject } from '@angular/core';
 import { UtilService } from '../../../services/util.service';
 
 @Component({
-  selector: 'app-politica',
-  standalone: true,
-  imports: [],
-  templateUrl: './politica.component.html',
-  styleUrl: './politica.component.scss'
+    selector: 'app-politica',
+    imports: [],
+    templateUrl: './politica.component.html',
+    styleUrl: './politica.component.scss'
 })
 export class PoliticaComponent {
 

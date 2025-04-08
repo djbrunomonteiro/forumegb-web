@@ -30,32 +30,31 @@ import { IUser } from '../../../interfaces/user';
 import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 
 @Component({
-  selector: 'app-post-editor',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatChipsModule,
-    MatIconModule,
-    MatFormFieldModule, 
-    MatInputModule,
-    QuillEditorComponent,
-    MatButtonModule,
-    RouterModule,
-    MatDialogModule,
-    MatRadioModule,
-    MatTooltipModule,
-    MatProgressBarModule,
-    MatExpansionModule,
-    MatDividerModule,
-    MatCheckboxModule,
-    NgClass,
-    PreviewComponent,
-    AdBannerComponent,
-    MatIconModule
-  ],
-  templateUrl: './post-editor.component.html',
-  styleUrl: './post-editor.component.scss'
+    selector: 'app-post-editor',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatChipsModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        QuillEditorComponent,
+        MatButtonModule,
+        RouterModule,
+        MatDialogModule,
+        MatRadioModule,
+        MatTooltipModule,
+        MatProgressBarModule,
+        MatExpansionModule,
+        MatDividerModule,
+        MatCheckboxModule,
+        NgClass,
+        PreviewComponent,
+        AdBannerComponent,
+        MatIconModule
+    ],
+    templateUrl: './post-editor.component.html',
+    styleUrl: './post-editor.component.scss'
 })
 export class PostEditorComponent implements OnInit {
 

@@ -30,34 +30,33 @@ import { PostService } from '../../../services/post.service';
 
 
 @Component({
-  selector: 'app-stage',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    TitleCasePipe,
-    MatProgressBarModule,
-    MatChipsModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterLink,
-    MatCardModule,
-    MatPaginatorModule,
-    MatRadioModule,
-    CountComentPipe,
-    DatePipe,
-    SyncDatePipe,
-    NgStyle,
-    AdBannerComponent,
-    MatTableModule,
-    FormsModule,
-    MenuSideComponent,
-    PreviewComponent,
-    ConvertSignalPipe,
-    SearchComponent,
-    NgClass
-  ],
-  templateUrl: './stage.component.html',
-  styleUrl: './stage.component.scss'
+    selector: 'app-stage',
+    imports: [
+        AsyncPipe,
+        TitleCasePipe,
+        MatProgressBarModule,
+        MatChipsModule,
+        MatIconModule,
+        MatButtonModule,
+        RouterLink,
+        MatCardModule,
+        MatPaginatorModule,
+        MatRadioModule,
+        CountComentPipe,
+        DatePipe,
+        SyncDatePipe,
+        NgStyle,
+        AdBannerComponent,
+        MatTableModule,
+        FormsModule,
+        MenuSideComponent,
+        PreviewComponent,
+        ConvertSignalPipe,
+        SearchComponent,
+        NgClass
+    ],
+    templateUrl: './stage.component.html',
+    styleUrl: './stage.component.scss'
 })
 export class StageComponent implements OnDestroy {
 

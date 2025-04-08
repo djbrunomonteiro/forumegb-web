@@ -29,22 +29,21 @@ import { UtilService } from '../../../services/util.service';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @Component({
-  selector: 'app-preview-editor',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    DropzoneCdkModule,
-    DropzoneMaterialModule,
-    MatDialogModule,
-    MatButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatProgressBarModule
-  ],
-  templateUrl: './preview-editor.component.html',
-  styleUrl: './preview-editor.component.scss',
+    selector: 'app-preview-editor',
+    imports: [
+        CommonModule,
+        MatFormFieldModule,
+        DropzoneCdkModule,
+        DropzoneMaterialModule,
+        MatDialogModule,
+        MatButtonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatProgressBarModule
+    ],
+    templateUrl: './preview-editor.component.html',
+    styleUrl: './preview-editor.component.scss'
 })
 export class PreviewEditorComponent implements OnInit, AfterViewInit {
   @ViewChild('waveform', { static: false }) waveform!: ElementRef;

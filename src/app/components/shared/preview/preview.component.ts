@@ -7,15 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-preview',
-  standalone: true,
-  imports: [
-    NgClass,
-    MatButtonModule,
-    MatIconModule
-  ],
-  templateUrl: './preview.component.html',
-  styleUrl: './preview.component.scss'
+    selector: 'app-preview',
+    imports: [
+        NgClass,
+        MatButtonModule,
+        MatIconModule
+    ],
+    templateUrl: './preview.component.html',
+    styleUrl: './preview.component.scss'
 })
 export class PreviewComponent implements OnDestroy {
 

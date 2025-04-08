@@ -3,11 +3,10 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Component({
-  selector: 'app-banne-home',
-  standalone: true,
-  imports: [RouterModule],
-  templateUrl: './banne-home.component.html',
-  styleUrl: './banne-home.component.scss'
+    selector: 'app-banne-home',
+    imports: [RouterModule],
+    templateUrl: './banne-home.component.html',
+    styleUrl: './banne-home.component.scss'
 })
 export class BanneHomeComponent implements OnInit {
 

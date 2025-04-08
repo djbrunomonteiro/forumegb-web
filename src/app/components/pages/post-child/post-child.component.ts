@@ -16,22 +16,21 @@ import { firstValueFrom } from 'rxjs';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 
 @Component({
-  selector: 'app-post-child',
-  standalone: true,
-  imports: [
-    TitleCasePipe,
-    MatChipsModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterModule,
-    QuillEditorComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    MatProgressBarModule,
-    SyncDatePipe
-  ],
-  templateUrl: './post-child.component.html',
-  styleUrl: './post-child.component.scss'
+    selector: 'app-post-child',
+    imports: [
+        TitleCasePipe,
+        MatChipsModule,
+        MatIconModule,
+        MatButtonModule,
+        RouterModule,
+        QuillEditorComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        MatProgressBarModule,
+        SyncDatePipe
+    ],
+    templateUrl: './post-child.component.html',
+    styleUrl: './post-child.component.scss'
 })
 export class PostChildComponent implements OnChanges {
 

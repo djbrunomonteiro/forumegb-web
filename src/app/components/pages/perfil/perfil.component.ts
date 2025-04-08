@@ -22,27 +22,26 @@ import { CheckRecentPlanEligibilityPipe } from '../../../pipes/check-recent-plan
 import { AnalyticsService } from '../../../services/analytics.service';
 
 @Component({
-  selector: 'app-perfil',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    RouterModule,
-    MatSelectModule,
-    MatIconModule,
-    ImageCropperComponent,
-    MatProgressBarModule,
-    DatePipe,
-    CurrencyPipe,
-    MatCardModule,
-    CheckRecentPlanEligibilityPipe,
-    NgClass
-  ],
-  templateUrl: './perfil.component.html',
-  styleUrl: './perfil.component.scss'
+    selector: 'app-perfil',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        RouterModule,
+        MatSelectModule,
+        MatIconModule,
+        ImageCropperComponent,
+        MatProgressBarModule,
+        DatePipe,
+        CurrencyPipe,
+        MatCardModule,
+        CheckRecentPlanEligibilityPipe,
+        NgClass
+    ],
+    templateUrl: './perfil.component.html',
+    styleUrl: './perfil.component.scss'
 })
 export class PerfilComponent {
   #formBuilder = inject(FormBuilder);

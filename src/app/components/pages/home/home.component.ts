@@ -24,30 +24,29 @@ import { PreviewComponent } from '../../shared/preview/preview.component';
 import { ConvertSignalPipe } from '../../../pipes/convert-signal.pipe';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    TitleCasePipe,
-    MatProgressBarModule,
-    MatChipsModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterLink,
-    MatCardModule,
-    MatPaginatorModule,
-    MatRadioModule,
-    CountComentPipe,
-    DatePipe,
-    SyncDatePipe,
-    NgStyle,
-    AdBannerComponent,
-    NgClass,
-    PreviewComponent,
-    ConvertSignalPipe
-  ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+    selector: 'app-home',
+    imports: [
+        AsyncPipe,
+        TitleCasePipe,
+        MatProgressBarModule,
+        MatChipsModule,
+        MatIconModule,
+        MatButtonModule,
+        RouterLink,
+        MatCardModule,
+        MatPaginatorModule,
+        MatRadioModule,
+        CountComentPipe,
+        DatePipe,
+        SyncDatePipe,
+        NgStyle,
+        AdBannerComponent,
+        NgClass,
+        PreviewComponent,
+        ConvertSignalPipe
+    ],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
 

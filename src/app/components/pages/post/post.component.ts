@@ -21,29 +21,27 @@ import { IUser } from '../../../interfaces/user';
 import { AnalyticsService } from '../../../services/analytics.service';
 
 @Component({
-  selector: 'app-post',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatChipsModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterModule,
-    PostChildComponent,
-    QuillEditorComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    MatProgressBarModule,
-    SyncDatePipe,
-    MatTooltipModule,
-    PreviewComponent,
-  ],
-  providers: [
-    DatePipe
-
-  ],
-  templateUrl: './post.component.html',
-  styleUrl: './post.component.scss'
+    selector: 'app-post',
+    imports: [
+        CommonModule,
+        MatChipsModule,
+        MatIconModule,
+        MatButtonModule,
+        RouterModule,
+        PostChildComponent,
+        QuillEditorComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        MatProgressBarModule,
+        SyncDatePipe,
+        MatTooltipModule,
+        PreviewComponent,
+    ],
+    providers: [
+        DatePipe
+    ],
+    templateUrl: './post.component.html',
+    styleUrl: './post.component.scss'
 })
 export class PostComponent implements OnInit, OnDestroy{
   

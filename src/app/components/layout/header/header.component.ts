@@ -8,18 +8,17 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatChipsModule} from '@angular/material/chips';
 import { AuthService } from '../../../services/auth.service';
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterLink,
-    MatMenuModule,
-    MatChipsModule
-  ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+    selector: 'app-header',
+    imports: [
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        RouterLink,
+        MatMenuModule,
+        MatChipsModule
+    ],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
   userStore = inject(UserStoreService);

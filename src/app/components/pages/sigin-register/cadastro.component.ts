@@ -26,22 +26,21 @@ import { AnalyticsService } from '../../../services/analytics.service';
 
 
 @Component({
-  selector: 'app-cadastro',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    FormsModule,
-    ReactiveFormsModule,
-    InfoNewUserComponent,
-    MatProgressBarModule,
-    CommonModule,
-    RouterLink
-  ],
-  templateUrl: './cadastro.component.html',
-  styleUrl: './cadastro.component.scss',
+    selector: 'app-cadastro',
+    imports: [
+        MatCardModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        FormsModule,
+        ReactiveFormsModule,
+        InfoNewUserComponent,
+        MatProgressBarModule,
+        CommonModule,
+        RouterLink
+    ],
+    templateUrl: './cadastro.component.html',
+    styleUrl: './cadastro.component.scss'
 })
 export class CadastroComponent{
   #formBuilder = inject(FormBuilder);
