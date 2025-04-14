@@ -1,7 +1,3 @@
-<div class="preview">
-    <div id="waveform" class="w-100 wave" [ngClass]="{'preview-none': !musicPreview()}"></div>
-</div>
-
 @if(loadedLocale() && wavesurfer){
     <button (click)="wavesurfer.playPause()" mat-mini-fab aria-label="player button" class="playPause" style="background: #383351">
         <mat-icon>
@@ -13,3 +9,5 @@
         </mat-icon>
       </button>
   }
+<div id="waveform" class="wave" [ngClass]="{'preview-none': !musicPreview()}"></div>
+

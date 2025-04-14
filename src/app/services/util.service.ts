@@ -37,14 +37,14 @@ export class UtilService {
       color: '#064c6d',
     },
 
-    {
-      value: ETypeStage.BACKSTAGE,
-      access: 'PÚBLICO',
-      title: 'Back Stage',
-      img: 'back.jpg',
-      description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores.',
-      color: '#263028',
-    },
+    // {
+    //   value: ETypeStage.BACKSTAGE,
+    //   access: 'PÚBLICO',
+    //   title: 'Back Stage',
+    //   img: 'back.jpg',
+    //   description: 'Visível para todos, perfeito para discussões informais, troca de experiências sobre os bastidores.',
+    //   color: '#263028',
+    // },
   ];
 
 

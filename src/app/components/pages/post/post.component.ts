@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, inject, OnInit, signal, effect, afterNextRender, OnDestroy, HostListener, PLATFORM_ID, computed } from '@angular/core';
+import { AfterViewChecked, Component, inject, OnInit, signal, effect, afterNextRender, OnDestroy, HostListener, PLATFORM_ID, computed, input, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -89,10 +89,11 @@ export class PostComponent implements OnInit, OnDestroy{
     })
 
   }
-
   ngOnInit(): void {
     this.setCurrentPost();
   }
+
+
 
   async saveLike(idPost: number | undefined){
     const idUser = this.userStore.currentState()?.id;
@@ -106,9 +107,9 @@ export class PostComponent implements OnInit, OnDestroy{
 
 
   async setCurrentPost(){
-    const slug = this.#activatedRoute.snapshot.paramMap.get('slug') ?? undefined;
-    console.log(slug);
-    
+
+    const slug = this.#activatedRoute.snapshot.paramMap.get('slug') ?? ''
+
     await this.postStore.setCurrentPost(slug);
 
 

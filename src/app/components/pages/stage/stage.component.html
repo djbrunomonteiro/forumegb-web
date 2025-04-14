@@ -1,121 +1,115 @@
-<div class="row">
-    <div class="col-md-2">
-        <app-menu-side />
-    </div>
-    <div class="col-md-10">
-        <!-- <button [routerLink]="['/']" class="btn-send mt-2" mat-stroked-button>
-            <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
-            </mat-icon>
-            Voltar
-        </button> -->
+<section>
+  <!-- <app-search (search)="search($event)" class="w-100"/> -->
+  <!-- @if(isSearch){
+      @if(searchLoading){
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+      <h5 class="w-100">Resultado da pesquisa:</h5> <br>
+      <ul>
+          @for (post of searchItens(); track $index) {
+              <li class="my-2">
+                  <a (click)="openPost(post)" src="#"  class="title link"  rel="noopener noreferrer">
+                      {{post.title | titlecase}}
+                  </a>
+              </li>
+          }@empty{
+              <p class="text-center">*Sem post nesse pesquisa!</p>
+          }
+      </ul>
+  } -->
 
-
-        
-        <section class="card-container">
-            <div class="header">
-                <div class="thumbnail">
-                    <img [src]="stageOpt.img" class="link" alt="thumbnail-section" [routerLink]="'/posts/type/'+stageOpt.value">
-                    <span class="badge" [routerLink]="'/posts/type/'+stageOpt.value" [ngStyle]="{'background-color': stageOpt.color}">{{stageOpt.access}}</span>
-                </div>
-            
-                <div class="title-container">
-                    <h2 [routerLink]="'/posts/type/'+stageOpt.value" class="link">{{stageOpt.title}}</h2>
-                    <p>{{stageOpt.description}}</p>
-                </div>
-
-                
-            </div>
-            <app-search (search)="search($event)" class="w-100"/>
-
-            @if(isSearch){
-                @if(searchLoading){
-                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                }
-                <h5 class="w-100">Resultado da pesquisa:</h5> <br>
-                <ul>
-                    @for (post of searchItens(); track $index) {
-                        <li class="my-2">
-                            <a (click)="openPost(post)" src="#"  class="title link"  rel="noopener noreferrer">
-                                {{post.title | titlecase}}
-                            </a>
-        
-                        </li>
-                    }@empty{
-                        <p class="text-center">*Sem post nesse pesquisa!</p>
-                    }
-                </ul>
-
-            }
-            <div class="list" [ngClass]="{'d-none': isSearch}" >
-                <ol [start]="this.pageStart+1">
-                    @for (post of postStore.currentState(); track $index) {
-                        <li>
-                            <div  class="item link" [ngClass]="{'minH': post?.music_preview}">
-                                <div (click)="openPost(post)" class="block-info">
-                                    <div class="avatar link">
-                                        <mat-icon>
-                                            {{post.thumbnail}}
-                                        </mat-icon>
-                                      </div>
-                                      <div>
-              
-                                        <a class="title link"  rel="noopener noreferrer">
-                                            {{post.title | titlecase}}
-                                        </a>
-                                        <p class="author">por: {{post?.user?.displayName}}</p>
-    
-                                          <div class="w-100 d-flex justify-content-start">
-                                            @for(tag of post?.tags; track $index){
+  <div class="box-default">
+      <div class="posts">
+          <div class="list" [ngClass]="{'d-none': isSearch}" >
+              <ol [start]="this.pageStart+1">
+                  @for (post of postStore.currentState(); track $index) {
+                      <li>
+                          <div class="item link" [ngClass]="{'minH': post?.music_preview}">
+                              <div (click)="openPost(post)" class="block-info">
+                                  <div class="avatar link">
+                                      <mat-icon>
+                                          {{post.thumbnail}}
+                                      </mat-icon>
+                                  </div>
+                                  <div>
+                                      <a class="title link" rel="noopener noreferrer">
+                                          {{post.title | titlecase}}
+                                      </a>
+                                      <p class="author">por: {{post?.user?.displayName}}</p>
+                                      <div class="w-100 d-flex justify-content-start">
+                                          @for(tag of post?.tags; track $index){
                                               <span class="tag">{{tag}}</span>
-                                            }
-                                          </div>
+                                          }
                                       </div>
-            
-                                    <div class="coment">
-                                        {{post | countComent}}
-                                        <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
-                                    </div>
-
-                                </div>
-                                @if(post?.music_preview; as preview){
-                                    <div class="block-preview">
-                                        <app-preview [musicPreview]="preview | convertSignal" [height]="20"/>
-                                    </div>
-                                }
-        
-                            </div>
-        
-                        </li>
-                    }@empty{
-                        <p class="text-center">*Sem post nesse Stage</p>
-                    }
-                </ol>
-        
-            </div>
-        
-        
-        
-        </section>
-        @if(metadata.loadingPost()){
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        }
-
-        @if(!isSearch){
+                                  </div>
+                                  <div class="coment">
+                                      {{post | countComent}}
+                                      <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
+                                  </div>
+                              </div>
+                          </div>
+                      </li>
+                  }@empty{
+                      <p class="text-center">*Sem post nesse Stage</p>
+                  }
+              </ol>
+          </div>
+          @if(!isSearch){
             <div class="d-flex justify-content-center m-3">
                 <mat-paginator
-                #paginator
-                [disabled]="metadata.loadingPost()"
-                (page)="controlPage($event)"
-                [length]="postStore.recordTotal()"
-                [pageSize]="pageSize"
-                [showFirstLastButtons]="true"
-                [pageSizeOptions]="[10, 20]"
-                aria-label="Select page">
+                    #paginator
+                    [disabled]="metadata.loadingPost()"
+                    (page)="controlPage($event)"
+                    [length]="postStore.recordTotal()"
+                    [pageSize]="pageSize"
+                    [showFirstLastButtons]="true"
+                    [pageSizeOptions]="[10, 20]"
+                    aria-label="Select page">
                 </mat-paginator>
             </div>
-
         }
-        
+      </div>
+      <div class="feed">
 
-    </div>
-</div>
+
+        @if(postStore.currentPost(); as post){
+          <h2>{{post.title}}</h2>
+          @if(musicPreview()){
+              <app-preview [musicPreview]="musicPreview" />
+          }
+          @for(tag of post?.tags; track $index){
+              <span class="tag">{{tag}}</span>
+          }
+          <div class="description" [innerHTML]="post.body"></div>
+          <div class="chat-container">
+              @if (post.children && post.children.length) {
+                  @for (child of post.children; track $index) {
+                      <div class="message-wrapper" >
+                          <div class="box left">
+                              <div class="user-info">
+                                  @if(post.user?.photoURL; as photo){
+                                      <img [src]="child?.user?.photoURL" alt="photo url">
+
+                                  }@else{
+                                      <mat-icon>
+                                      account_circle
+                                      </mat-icon>
+                                  }
+                                  <span>{{child?.owner_username}}</span>
+                              </div>
+                              <div class="body" [innerHTML]="child?.body"></div>
+
+                          </div>
+                      </div>
+                  }
+              }
+          </div>
+
+          <app-comment-editor [post]="post" />
+      }
+      </div>
+  </div>
+  @if(metadata.loadingPost()){
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+</section>

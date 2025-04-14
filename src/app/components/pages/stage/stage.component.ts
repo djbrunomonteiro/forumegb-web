@@ -19,7 +19,7 @@ import { CountComentPipe } from '../../../pipes/count-coment.pipe';
 import { SyncDatePipe } from '../../../pipes/sync-date.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { MenuSideComponent } from '../../shared/menu-side/menu-side.component';
 import { AnalyticsService } from '../../../services/analytics.service';
@@ -27,6 +27,8 @@ import { ConvertSignalPipe } from '../../../pipes/convert-signal.pipe';
 import { PreviewComponent } from '../../shared/preview/preview.component';
 import { SearchComponent } from '../../shared/search/search.component';
 import { PostService } from '../../../services/post.service';
+import { PostComponent } from '../post/post.component';
+import { CommentEditorComponent } from '../../shared/comment-editor/comment-editor.component';
 
 
 @Component({
@@ -53,7 +55,9 @@ import { PostService } from '../../../services/post.service';
         PreviewComponent,
         ConvertSignalPipe,
         SearchComponent,
-        NgClass
+        NgClass,
+        PostComponent,
+        CommentEditorComponent
     ],
     templateUrl: './stage.component.html',
     styleUrl: './stage.component.scss'
@@ -75,11 +79,18 @@ export class StageComponent implements OnDestroy {
   utils = inject(UtilService);
   analytics = inject(AnalyticsService);
   postService = inject(PostService);
-  
+
+
   postsStage = signal<IPost[]>([]);
   postsView = signal<IPost[]>([]);
   pageStart = 0;
   pageSize = 10;
+  postSelected = signal<IPost | undefined>(undefined);
+  musicPreview = signal('');
+
+
+  displayedColumns: string[] = ['post'];
+  dataSource = new MatTableDataSource([]);
 
   stageOpt = {
     value: '',
@@ -114,7 +125,7 @@ export class StageComponent implements OnDestroy {
     this.searchItens.set(results);
     this.searchLoading = false;
     console.log(this.searchItens());
-    
+
 
 
   }
@@ -127,7 +138,7 @@ export class StageComponent implements OnDestroy {
     const description = `Lista de postagens com Músicas, Remixes, Sets, Djs de Eletrônica Cristã | Gospel`;
     this.utils.setTitleDesc(title, description);
     this.analytics.setLog('view_page', {name: this.type});
-    
+
     let paginationData = {pageIndex: 0, pageSize: this.pageSize}
 
     if(isPlatformBrowser(this.#platformId)){
@@ -144,7 +155,7 @@ export class StageComponent implements OnDestroy {
 
     if(containInBck.length){
       const last = containInBck[containInBck.length - 1];
-      paginationData = {pageIndex: last?.pageIndex ?? 0, pageSize: this.pageSize} 
+      paginationData = {pageIndex: last?.pageIndex ?? 0, pageSize: this.pageSize}
     }
 
     this.controlPage(paginationData);
@@ -163,7 +174,7 @@ export class StageComponent implements OnDestroy {
 
   async controlPage(pagination: any){
 
-    
+
     const {pageIndex, pageSize} = pagination;
     this.pageStart = pageIndex * pageSize;
     if(this.paginator){
@@ -183,28 +194,45 @@ export class StageComponent implements OnDestroy {
   }
 
 
-  openPost(post:IPost | undefined){
+  async openPost(post:IPost | undefined){
     if(!post){return}
 
-    const user = this.userStore.currentState();
-    if(!user){
-      const url = `posts/type/${post.type_stage}/${post.slug}`;
-      this.router.navigate(['/login-cadastro'], {queryParams: {redirect:url}})
-      return
-    }
+    await this.postStore.setCurrentPost(post.slug);
+    this.router.navigate([`/posts/type/${post.type_stage}/feed/${post.slug}`])
 
-    const {slug, type_stage} = post;
-    if(type_stage === ETypeStage.MAINSTAGE && user?.plan?.valid){
-      this.router.navigate([`/posts/type/${type_stage}/${slug}`])
-      return
-    }
+    console.log(this.postStore.currentPost())
 
-    if(type_stage !== ETypeStage.MAINSTAGE){
-      this.router.navigate([`/posts/type/${type_stage}/${slug}`])
-      return
-    }
 
-    this.openADBanner()
+    this.musicPreview.set('');
+    setTimeout(() => {
+      this.musicPreview.update(() => this.postStore.currentPost()?.music_preview ?? '');
+    },1000)
+
+
+
+    console.log(post)
+
+    return
+
+    // const user = this.userStore.currentState();
+    // if(!user){
+    //   const url = `posts/type/${post.type_stage}/${post.slug}`;
+    //   this.router.navigate(['/login-cadastro'], {queryParams: {redirect:url}})
+    //   return
+    // }
+
+    // const {slug, type_stage} = post;
+    // if(type_stage === ETypeStage.MAINSTAGE && user?.plan?.valid){
+    //   this.router.navigate([`/posts/type/${type_stage}/${slug}`])
+    //   return
+    // }
+
+    // if(type_stage !== ETypeStage.MAINSTAGE){
+    //   this.router.navigate([`/posts/type/${type_stage}/${slug}`])
+    //   return
+    // }
+
+    // this.openADBanner()
 
   }
 

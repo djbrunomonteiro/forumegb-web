@@ -12,11 +12,11 @@ import { NotFoundComponent } from './components/pages/not-found/not-found.compon
 export const routes: Routes = [
     {
         path: '',
-        component: HomeComponent 
+        component: HomeComponent
     },
     {
         path: 'politica-de-privacidade-e-termos-de-uso',
-        component: PoliticaComponent 
+        component: PoliticaComponent
     },
     {
         path: 'login-cadastro',
@@ -41,6 +41,9 @@ export const routes: Routes = [
             },
             {
                 path: 'type/:type',
+                loadComponent: () => import('./components/pages/stage/stage.component').then(c => c.StageComponent)
+            },            {
+                path: 'type/:type/feed/:slug',
                 loadComponent: () => import('./components/pages/stage/stage.component').then(c => c.StageComponent)
             },
         ]

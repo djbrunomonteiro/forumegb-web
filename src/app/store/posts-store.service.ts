@@ -23,6 +23,7 @@ export class PostsStoreService {
   recordTotal = signal<number>(0);
   currentPosts = signal<IPost[]>([])
   currentPost = signal<IPost | undefined>(undefined);
+  
 
 
   homeState = signal<any>(undefined);

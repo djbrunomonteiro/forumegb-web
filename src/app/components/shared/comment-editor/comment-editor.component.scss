@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+
+:host{
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid rgba(202, 202, 202, 0.089);
+  margin: 10px 0px;
+  border-radius: 5px;
+
+  padding: 20px;
+
+  @include mat.button-overrides((
+    filled-container-color: orange,
+    filled-container-shape: 5px,
+
+  ));
+
+  button{
+    margin-top: 10px;
+    width: 100%;
+  }
+}

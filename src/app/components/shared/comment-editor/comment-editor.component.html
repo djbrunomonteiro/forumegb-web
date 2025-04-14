@@ -1,0 +1,5 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+  <quill-editor [theme]="'snow'" formControlName="body"
+    [styles]="{ minHeight: '100px', background: '#0a0a0a', color: '#ffff'}" />
+  <button type="submit" mat-flat-button [disabled]="form.invalid">Publicar</button>
+</form>
