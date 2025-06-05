@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
     provideAnalytics(() => getAnalytics()),
     importProvidersFrom([
       MatSnackBarModule,
-      
+
     ]),
     // provideQuillConfig({ modules: quillConfig.Modules }),
 

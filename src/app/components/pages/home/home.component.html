@@ -1,199 +1,79 @@
 
-    
-  
-  <div class="row">
-      @for(stage of utils.stageOpts; track $index){
-          <div class="col-md-6">
-              @for(resume of this.postStore.homeState(); track $index){
-                  @if(resume.type_stage === stage.value){
-                          <div class="box-default">
-                              <div class="posts">
-                                  <div class="list">
-                                      <ol>
-                                          @for (post of resume?.posts; track $index) {
-                                              <li>
-                                                  <div  class="item link">
-                                                      <div (click)="openPost(post)" class="block-info">
-                                                          <div class="avatar link">
-                                                              <mat-icon>
-                                                                  {{post.thumbnail}}
-                                                              </mat-icon>
-                                                              </div>
-                                                              <div>
-                                                                  <a class="title link"  rel="noopener noreferrer">
-                                                                  {{post.title | titlecase}}
-                                                                  </a>
-                                                                  <p class="author">por: {{post?.user?.displayName}}</p>
-                  
-                                                              @if(post?.tags !== '[]'){
-                                                                  <div class="w-100 d-flex justify-content-start">
-                                                                      @for(tag of post?.tags; track $index){
-                                                                      <span class="tag">{{tag}}</span>
-                                                                      
-                                                                      }
-                                                                  </div>
-                  
-                                                              }
-                                                          </div>
-                                  
-                                                          <div class="coment">
-                                                              {{post | countComent}}
-                                                              <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                              
-                                              </li>
-                                          }@empty{
-                                              <p class="text-center">*Sem post nesse Stage</p>
-                                          }
-                                      </ol>
-                              
-                                  </div>
-                  
-                              </div>
-                              <div class="feed">
-                                  <p>OKOKOKOK</p>
-                  
-                              </div>
-                          </div>
-                  
-                          
-                      }
-                      
-                  }
-          </div>
-      
-      }
-          
 
+<section>
+  <div class="list-box">
+    <div class="controls">
+      <app-search />
+      <mat-paginator
+        [length]="postStore.select.recordTotal()"
+        [pageSize]="25"
+        [showFirstLastButtons]="false"
+        (page)="handlePageEvent($event)"
+        >
+      </mat-paginator>
+
+    </div>
+
+    @for(post of posts; track $index){
+    <div class="item">
+      <div class="thumbnail">
+
+        <mat-icon>
+          forum
+        </mat-icon>
+        {{post?.metadata?.child_count || 0}}
+      </div>
+      <div class="label">
+        <a
+          (click)="selectPost(post); "
+          href="javascript:void(0)"
+          class="title"
+          rel="noopener noreferrer"
+        >
+          {{ post.title | titlecase }}
+        </a>
+        <div>
+          <span class="autor">{{ post?.owner_username }} </span>
+          <!-- <a class="type" href="">{{ post?.type_stage }}</a> -->
+        </div>
+      </div>
+    </div>
+
+    }
   </div>
-    
-    
-    
-    <!-- <div class="row">
-        @for(stage of utils.stageOpts; track $index){
-            <div class="col-md-6 p-3"  [ngClass]="{'col-md-12': $index === 2}" >
-                <section class="card-container">
-                    <div class="header">
-                        <div class="thumbnail">
-                            <img [src]="stage.img" class="link" alt="thumbnail-section" [routerLink]="'/posts/type/'+stage.value">
-                            <span class="badge" [routerLink]="'/posts/type/'+stage.value" [ngStyle]="{'background-color': stage.color}">{{stage.access}}</span>
-                        </div>
-                    
-                        <div class="title-container">
-                            <h2 [routerLink]="'/posts/type/'+stage.value" class="link">{{stage.title}}</h2>
-                            <p>{{stage.description}}</p>
-                        </div>
-                
-                    </div>
-        
-                    @for(resume of this.postStore.homeState(); track $index){
-                        @if(resume.type_stage === stage.value){
+  <!-- <div class="post-box">
+    @if(postStore.select.current(); as post){
+    <h2>{{ post.title }}</h2>
+    @if(musicPreview()){
+    <app-preview [musicPreview]="musicPreview" />
+    }
+    @for(tag of post?.tags; track $index){
+    <span class="tag">{{ tag }}</span>
+    }
+    <div class="description" [innerHTML]="post.body"></div>
 
-                            <div class="box">
-                                <div class="side">
-                                    <div class="list">
-                                        <ol>
-                                            @for (post of resume?.posts; track $index) {
-                                                <li>
-                                                    <div  class="item link">
-                                                        <div (click)="openPost(post)" class="block-info">
-                                                            <div class="avatar link">
-                                                                <mat-icon>
-                                                                    {{post.thumbnail}}
-                                                                </mat-icon>
-                                                              </div>
-                                                              <div>
-                                                                  <a class="title link"  rel="noopener noreferrer">
-                                                                    {{post.title | titlecase}}
-                                                                    </a>
-                                                                    <p class="author">por: {{post?.user?.displayName}}</p>
-            
-                                                                @if(post?.tags !== '[]'){
-                                                                    <div class="w-100 d-flex justify-content-start">
-                                                                      @for(tag of post?.tags; track $index){
-                                                                        <span class="tag">{{tag}}</span>
-                                                                        
-                                                                      }
-                                                                    </div>
-                    
-                                                                }
-                                                            </div>
-                                    
-                                                            <div class="coment">
-                                                                {{post | countComent}}
-                                                                <mat-icon aria-hidden="false" aria-label="icon chat" fontIcon="chat"></mat-icon>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                
-                                                </li>
-                                            }@empty{
-                                                <p class="text-center">*Sem post nesse Stage</p>
-                                            }
-                                        </ol>
-                                
-                                    </div>
+    <div class="chat-container">
+      @if (post.children && post.children.length) { @for (child of
+      post.children; track $index) {
+      <div class="message-wrapper">
+        <div class="box left">
+          <div class="user-info">
+            @if(post.user?.photoURL; as photo){
+            <img [src]="child?.user?.photoURL" alt="photo url" />
 
-                                </div>
-                                <div class="body">
-                                    <p>OKOKOKOK</p>
-
-                                </div>
-                            </div>
-
-                        }
-        
-                    }
-                
-        
-                    <div class="d-flex justify-content-center w-100">
-                        <button [routerLink]="'/posts/type/'+stage.value" mat-stroked-button>Ver Todos os Posts</button>
-                    </div>
-        
-                    @if(metadataStore.loadingPost()){
-                        <mat-progress-bar mode="indeterminate" class="my-3"></mat-progress-bar>
-                    }
-        
-                </section>
-            </div>
-        
-        }
-
-    </div> -->
-    
-
-    <!-- <section class="info-01">
-        <div class="texts">
-            <h3>Um novo fórum dedicado à música eletrônica cristã</h3>
-            <p>A plataforma permite que djs, fãs e entusiastas contribuam para a construção de um acervo colaborativo, promovendo a valorização e a divulgação da música eletrônica com mensagem cristã.</p>
-
+            }@else{
+            <mat-icon> account_circle </mat-icon>
+            }
+            <span>{{ child?.owner_username }}</span>
+          </div>
+          <div class="body" [innerHTML]="child?.body"></div>
         </div>
-        <div class="container-info">
-            <img src="info-egbhub-home.jpg" alt="">
-        </div>
-    </section>
+      </div>
+      } }
+    </div>
 
-    <section class="action-container">
-        <h3>Torne-se membro agora e faça história conosco!</h3>
-        <button routerLink="/perfil"  mat-stroked-button>Acessar gratuitamente</button>
-    </section>
-
-    <section class="faq">
-        <h6>FAQ - Perguntas Frequentes</h6>
-        <ul>
-            <li>O que é o fórum EGB HUB? 
-            </li>
-            <li style="color: #c4c4c0;">R: Um espaço para catalogar e compartilhar música eletrônica cristã.</li>
-            <li>Quem pode participar?</li>
-            <li style="color: #c4c4c0;">R:  Qualquer pessoa interessada no gênero!</li>
-            <li>É gratuito?  </li>
-            <li style="color: #c4c4c0;">R:  Sim, ser membro é totalmente gratuito! Apenas para acessar a seção MAIN STAGE, pedimos uma pequena contribuição para ajudar a cobrir os custos do fórum.</li>
-            <li>Como contribuir?</li>
-            <li style="color: #c4c4c0;">R: Você pode enviar músicas, criar tópicos e interagir com a comunidade.</li>
-        </ul>
-    </section> -->
-
-
+    <app-comment-editor [post]="post" />
+    }
+  </div> -->
+</section>
 

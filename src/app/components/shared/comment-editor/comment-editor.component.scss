@@ -1,13 +1,16 @@
 @use '@angular/material' as mat;
 
 :host{
+  display: flex;
   width: 100%;
   min-height: 50px;
   border: 1px solid rgba(202, 202, 202, 0.089);
   margin: 10px 0px;
   border-radius: 5px;
-
   padding: 20px;
+  form{
+    width: 100%;
+  }
 
   @include mat.button-overrides((
     filled-container-color: orange,
@@ -17,6 +20,10 @@
 
   button{
     margin-top: 10px;
+    width: 100%;
+  }
+
+  quill-editor{
     width: 100%;
   }
 }

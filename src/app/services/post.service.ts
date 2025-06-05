@@ -16,8 +16,8 @@ export class PostService {
   #baseUrl = environment.apiUrl;
 
 
-  getHome(){
-    return this.#http.get(`${this.#baseUrl}/posts/home`)
+  getHome(start = 0, limit = 25){
+    return this.#http.get(`${this.#baseUrl}/posts/home?start=${start}&limit=${limit}`)
     .pipe(
       retry(5),
       map((res) => this.#utils.successExtract(res)),
@@ -45,16 +45,17 @@ export class PostService {
     );
   }
 
-  getRecordsTotal(type: string){
-    return this.#http.get(`${this.#baseUrl}/posts/total?type=${type}`)
+  getRecordsTotal(){
+    return this.#http.get(`${this.#baseUrl}/posts/total`)
     .pipe(
       map((res) => this.#utils.successExtract(res)),
       catchError((err) => this.#utils.errorExtract(err)),
     );
   }
 
-  getOne(slug: string){
-    return this.#http.get(`${this.#baseUrl}/posts/search?slug=${slug}`)
+  getOne(slug: string, type: 'summary' | 'full' = 'full'){
+    let url = (type === 'full') ? `${this.#baseUrl}/posts/search?slug=${slug}` : `${this.#baseUrl}/posts/summary?slug=${slug}`
+    return this.#http.get(url)
     .pipe(
       retry(5),
       map((res) => this.#utils.successExtract(res)),

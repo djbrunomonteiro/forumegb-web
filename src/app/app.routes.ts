@@ -40,6 +40,12 @@ export const routes: Routes = [
                 loadComponent: () => import('./components/pages/post/post.component').then(c => c.PostComponent)
             },
             {
+                path: 'remixes-gospel/:slug',
+                // canActivate: [authGuard],
+                resolve: [UserResolver],
+                loadComponent: () => import('./components/pages/post/post.component').then(c => c.PostComponent)
+            },
+            {
                 path: 'type/:type',
                 loadComponent: () => import('./components/pages/stage/stage.component').then(c => c.StageComponent)
             },            {

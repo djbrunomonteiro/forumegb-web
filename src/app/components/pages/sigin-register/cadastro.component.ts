@@ -23,6 +23,7 @@ import { MetadataStoreService } from '../../../store/metadata-store.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { AnalyticsService } from '../../../services/analytics.service';
+import { PostsStoreService } from '../../../store/posts-store.service';
 
 
 @Component({
@@ -51,11 +52,12 @@ export class CadastroComponent{
   #router = inject(Router);
   #activatedRouter = inject(ActivatedRoute);
   #dialog = inject(MatDialog);
+  #postStore = inject(PostsStoreService);
   metadata = inject(MetadataStoreService);
   analytics = inject(AnalyticsService);
 
   form = this.#formBuilder.group({
-    check: [false, Validators.required],
+    check: [true, Validators.required],
   });
 
   ctrlCheck = this.form.get('check') as FormControl;
@@ -70,13 +72,8 @@ export class CadastroComponent{
 
     if(error){return}
     if(results?.length){
-      
       this.#userStoreService.setState(results[0]);
-
-      const queryParms = await firstValueFrom(this.#activatedRouter.queryParamMap);
-      const url = queryParms.get('redirect') ?? '/perfil';
-      this.analytics.setLog('login', {name: results?.email});
-      this.#router.navigate([url]);
+      this.getCurrentPost();
       return
     }
 
@@ -90,12 +87,21 @@ export class CadastroComponent{
   async saveInApi(user: IUser | Partial<IUser>){
     const {error, results} = await firstValueFrom(this.#userStoreService.saveOne(user));
     if(error){return}
-    this.analytics.setLog('sign_up', {name: results?.email})
-    this.#router.navigate(['/perfil']);
-    this.openDialog();
+    this.analytics.setLog('sign_up', {name: results?.email});
+    this.getCurrentPost()
+
+    // this.#router.navigate(['/perfil']);
+    // this.openDialog();
   }
 
   openDialog() {
     this.#dialog.open(InfoNewUserComponent, {minWidth: '400px'});
+  };
+
+  getCurrentPost(){
+    const slug = this.#postStore.select.current()?.slug;
+    if(!slug){return}
+
+    this.#postStore.actionLoadOne(slug)
   }
 }

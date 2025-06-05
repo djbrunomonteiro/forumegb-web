@@ -29,6 +29,7 @@ import { SearchComponent } from '../../shared/search/search.component';
 import { PostService } from '../../../services/post.service';
 import { PostComponent } from '../post/post.component';
 import { CommentEditorComponent } from '../../shared/comment-editor/comment-editor.component';
+import { BanneHomeComponent } from '../../layout/banne-home/banne-home.component';
 
 
 @Component({
@@ -57,7 +58,8 @@ import { CommentEditorComponent } from '../../shared/comment-editor/comment-edit
         SearchComponent,
         NgClass,
         PostComponent,
-        CommentEditorComponent
+        CommentEditorComponent,
+        BanneHomeComponent
     ],
     templateUrl: './stage.component.html',
     styleUrl: './stage.component.scss'
@@ -124,10 +126,6 @@ export class StageComponent implements OnDestroy {
     const {results} = await firstValueFrom(this.postService.search(this.type, String(term).toLowerCase()));
     this.searchItens.set(results);
     this.searchLoading = false;
-    console.log(this.searchItens());
-
-
-
   }
 
   setViewPosts(){
@@ -149,7 +147,6 @@ export class StageComponent implements OnDestroy {
     }
 
     this.stageOpt = this.utils.stageOpts.filter(elem => elem.value === this.type)[0];
-    this.postStore.getRecordTotal(this.stageOpt.value as ETypeStage);
 
     const containInBck = this.postStore.backupState().filter(bckp => bckp.type === this.stageOpt.value);
 
@@ -165,7 +162,6 @@ export class StageComponent implements OnDestroy {
     this.utils.navState$.pipe(takeUntil(this.unsub$)).subscribe((nav) => {
       const url = this.utils.currentNavState()?.url;
       if(!url){return}
-
       this.setViewPosts()
 
       // this.ngOnInit();
@@ -190,7 +186,7 @@ export class StageComponent implements OnDestroy {
   }
 
   async getPosts(type: string, start = this.pageStart, limit = this.pageSize, pageIndex = 0, order = 'recentes'){
-    await firstValueFrom(this.postStore.getAllAPI(type, start, limit, pageIndex));
+    await firstValueFrom(this.postStore.actionLoadAll(type, start, limit, pageIndex));
   }
 
 
@@ -200,17 +196,10 @@ export class StageComponent implements OnDestroy {
     await this.postStore.setCurrentPost(post.slug);
     this.router.navigate([`/posts/type/${post.type_stage}/feed/${post.slug}`])
 
-    console.log(this.postStore.currentPost())
-
-
     this.musicPreview.set('');
     setTimeout(() => {
-      this.musicPreview.update(() => this.postStore.currentPost()?.music_preview ?? '');
+      this.musicPreview.update(() => this.postStore.select.current()?.music_preview ?? '');
     },1000)
-
-
-
-    console.log(post)
 
     return
 

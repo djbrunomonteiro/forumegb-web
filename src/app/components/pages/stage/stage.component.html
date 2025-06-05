@@ -1,28 +1,10 @@
-<section>
-  <!-- <app-search (search)="search($event)" class="w-100"/> -->
-  <!-- @if(isSearch){
-      @if(searchLoading){
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      }
-      <h5 class="w-100">Resultado da pesquisa:</h5> <br>
-      <ul>
-          @for (post of searchItens(); track $index) {
-              <li class="my-2">
-                  <a (click)="openPost(post)" src="#"  class="title link"  rel="noopener noreferrer">
-                      {{post.title | titlecase}}
-                  </a>
-              </li>
-          }@empty{
-              <p class="text-center">*Sem post nesse pesquisa!</p>
-          }
-      </ul>
-  } -->
 
+<section>
   <div class="box-default">
       <div class="posts">
           <div class="list" [ngClass]="{'d-none': isSearch}" >
               <ol [start]="this.pageStart+1">
-                  @for (post of postStore.currentState(); track $index) {
+                  @for (post of postStore.select.resume()(); track $index) {
                       <li>
                           <div class="item link" [ngClass]="{'minH': post?.music_preview}">
                               <div (click)="openPost(post)" class="block-info">
@@ -72,7 +54,7 @@
       <div class="feed">
 
 
-        @if(postStore.currentPost(); as post){
+        @if(postStore.select.current(); as post){
           <h2>{{post.title}}</h2>
           @if(musicPreview()){
               <app-preview [musicPreview]="musicPreview" />

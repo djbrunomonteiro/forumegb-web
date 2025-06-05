@@ -1,97 +1,134 @@
 
-@if(postStore.currentPost(); as post){
+@if(postStore.select.current(); as post){
 
-<div class="d-flex justify-content-between align-items-center">
-  <button [routerLink]="['../']" class="btn-send mt-2" mat-stroked-button>
-    <mat-icon class="m-0 p-0" aria-hidden="false" aria-label="up" fontIcon="arrow_back">
-    </mat-icon>
-    Voltar
-  </button>
-  @if(user && user.id === post.owner_id){
-  <button [routerLink]="['/posts/publicar/'+post.slug]" mat-icon-button aria-label="edit-post" matTooltip="Editar post"
-    class="btn-edit">
-    <mat-icon>edit_note</mat-icon>
-  </button>
-  }
+  <div class="d-flex justify-content-between align-items-center">
+    <button (click)="location.back()" class="btn-send mt-2" mat-stroked-button>
+      <mat-icon
+        class="m-0 p-0"
+        aria-hidden="false"
+        aria-label="up"
+        fontIcon="arrow_back"
+      >
+      </mat-icon>
+      Voltar
+    </button>
+    @if(user && user.id === post.owner_id){
+    <button
+      [routerLink]="['/posts/publicar/' + post.slug]"
+      mat-icon-button
+      aria-label="edit-post"
+      matTooltip="Editar post"
+      class="btn-edit"
+    >
+      <mat-icon>edit_note</mat-icon>
+    </button>
+    }
+  </div>
 
-</div>
+  <div class="header">
+    <h2>{{ post?.title }}</h2>
+  </div>
 
-<div class="header">
-  <h2>{{post.title}}</h2>
-</div>
+  <app-preview [musicPreview]="musicPreview" />
 
-<app-preview [musicPreview]="musicPreview" />
+  <div class="box-body">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="user">
+          <div class="avatar">
+            @if(post?.user?.photoURL; as photo){
+            <img [src]="photo" alt="photo url" />
 
-<div class="box-body">
-  <div class="row">
-    <div class="col-md-3">
-      <div class="user">
-        <div class="avatar">
-          @if(post?.user?.photoURL; as photo){
-          <img [src]="photo" alt="photo url">
-
-          }@else{
-          <mat-icon>
-            account_circle
-          </mat-icon>
+            }@else{
+            <mat-icon> account_circle </mat-icon>
+            }
+          </div>
+          <span>{{ post.user?.displayName | titlecase }}</span>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="w-100 d-flex justify-content-end">
+          @for(tag of post?.tags; track $index){
+          <span class="tag">{{ tag }}</span>
           }
         </div>
-        <span>{{post.user?.displayName | titlecase}}</span>
-      </div>
-    </div>
-    <div class="col-md-9">
-      <div class="w-100 d-flex justify-content-end">
-        @for(tag of post?.tags; track $index){
-        <span class="tag">{{tag}}</span>
-        }
-      </div>
-      <div class="description" [innerHTML]="post.body"></div>
-      @if(post?.source_url; as url){
-        <div class="source"><a [href]="url" target="_blank" rel="noopener noreferrer">{{url}}</a></div>
-      }
-      <div class="w-100 d-flex justify-content-center">
-        <span class="date">postado em {{post.created_at | syncDate}}</span>
-      </div>
+        <div class="description" [innerHTML]="post.body"></div>
 
-
-    </div>
-  </div>
-
-</div>
-
-@if (post.children && post.children.length) {
-@for (child of post.children; track $index) {
-<app-post-child [post]="child" />
-}
-}
-
-
-@if(inEdition()){
-<div class="box-body">
-  <div class="row ">
-    <div class="col-md-3">
-
-    </div>
-    <div class="col-md-9">
-      <form [formGroup]="form" (ngSubmit)="save()">
-        @if(metadataStore.loadingPost()){
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        }@else {
-        <quill-editor [theme]="'snow'" formControlName="body"
-          [styles]="{ minHeight: '200px', background: '#0a0a0a', color: '#ffff'}" />
-        <div class="w-100 d-flex justify-content-end my-2">
-          <button (click)="inEdition.set(false)" mat-button>Cancelar</button>
-          <button type="submit" class="btn-save" mat-flat-button [disabled]="form.invalid">Publicar</button>
+        @if(userStore.currentState()){ @if(post?.source_url; as url){
+        <div class="source">
+          <span>Download: </span>
+          <a [href]="url" target="_blank" rel="noopener noreferrer">{{ url }}</a>
+        </div>
+        } }@else{
+        <div class="source source-blur">
+          <span>Download: </span>
+          <p>
+            Por favor faça login, é de graça !!! Por favor faça login, é de graça
+            !!!
+          </p>
         </div>
         }
-      </form>
+
+        <div class="w-100 d-flex justify-content-center">
+          <span class="date">postado em {{ post.created_at | syncDate }}</span>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-}@else {
-<div class="button-reply">
-  <button (click)="inEdition.set(true)" class="btn-send w-100" mat-stroked-button>Responder</button>
-</div>
-}
-}
 
+  @if(!userStore.currentState()){
+    <app-cadastro />
+  }@else{
+
+    @for (child of post.children;track $index) {
+      <app-post-child [post]="child" />
+    }@empty{
+      *sem comentários, seja o primeiro.
+    }
+
+    @if(postStore.select.isLoading()){
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+
+    <app-comment-editor [post]="post" />
+
+
+    <!-- @if(inEdition()){
+
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-9">
+            <form [formGroup]="form" (ngSubmit)="save()">
+              @if(metadataStore.loadingPost()){
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              }@else {
+              <quill-editor
+                [theme]="'snow'"
+                formControlName="body"
+                [styles]="{
+                  minHeight: '200px',
+                  background: '#0a0a0a',
+                  color: '#ffff'
+                }"
+              />
+              <div class="w-100 d-flex justify-content-end my-2">
+                <button (click)="inEdition.set(false)" mat-button>Cancelar</button>
+                <button
+                  type="submit"
+                  class="btn-save"
+                  mat-flat-button
+                  [disabled]="form.invalid"
+                >
+                  Publicar
+                </button>
+              </div>
+              }
+            </form>
+          </div>
+        </div>
+      </div>
+      }
+    } -->
+  }
+}

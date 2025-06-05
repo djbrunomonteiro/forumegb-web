@@ -11,17 +11,23 @@ import { AsyncPipe, TitleCasePipe, DatePipe, NgStyle, NgClass } from '@angular/c
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { CountComentPipe } from '../../../pipes/count-coment.pipe';
-import { MatDialog } from '@angular/material/dialog';
-import { ETypeStage, EPermission } from '../../../enums/enums';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { IPost } from '../../../interfaces/posts';
 import { AdBannerComponent } from '../../shared/ad-banner/ad-banner.component';
 import { UserStoreService } from '../../../store/user-store.service';
 import { AnalyticsService } from '../../../services/analytics.service';
 import { PreviewComponent } from '../../shared/preview/preview.component';
 import { ConvertSignalPipe } from '../../../pipes/convert-signal.pipe';
+import { StageComponent } from '../stage/stage.component';
+import { CommentEditorComponent } from '../../shared/comment-editor/comment-editor.component';
+import { SearchComponent } from '../../shared/search/search.component';
+import { PostComponent } from '../post/post.component';
+import { PostModalComponent } from '../../shared/post-modal/post-modal.component';
+import { CadastroComponent } from '../sigin-register/cadastro.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-home',
@@ -43,8 +49,18 @@ import { ConvertSignalPipe } from '../../../pipes/convert-signal.pipe';
         AdBannerComponent,
         NgClass,
         PreviewComponent,
-        ConvertSignalPipe
+        ConvertSignalPipe,
+        StageComponent,
+        CommentEditorComponent,
+        PreviewComponent,
+        SearchComponent,
+        PostComponent,
+        MatDialogModule,
+
     ],
+    providers: [
+      DatePipe
+  ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
@@ -55,8 +71,14 @@ export class HomeComponent implements OnInit {
   router = inject(Router);
   postStore = inject(PostsStoreService);
   userStore = inject(UserStoreService);
-  metadataStore = inject(MetadataStoreService)
+  metadataStore = inject(MetadataStoreService);
+  dialog = inject(MatDialog);
   utils = inject(UtilService);
+  datePipe = inject(DatePipe);
+
+  posts: IPost[] = [];
+  start = 0;
+  limit = 25;
 
   constructor(){
     const title = 'EGB HUB - Fórum de Música Eletrônica Cristã | Gospel Remixes';
@@ -71,48 +93,46 @@ export class HomeComponent implements OnInit {
       { property: 'og:description', content: 'Conecte-se com uma comunidade apaixonada por música eletrônica cristã!' },
       { property: 'og:image', content: 'https://egbhub.com.br/info-egbhub-home.jpg' },
       { property: 'og:url', content: 'https://egbhub.com.br' }
-    ])
+    ]);
+
+    effect(() => {
+      if(this.postStore.select.state()){
+        this.posts = this.postStore.select.resume(this.start, this.limit)() as IPost[]
+      }
+    })
   }
 
   async ngOnInit(): Promise<void> {
-    await firstValueFrom(this.postStore.getHome());
-    this.analytics.setLog('view_page', {name: 'home'});
-  }
-
-  openPost(post:IPost | undefined){
-    if(!post){return}
-    
-    const user = this.userStore.currentState();
-
-    
-    if(!user){
-      const url = `posts/type/${post.type_stage}/${post.slug}`;
-      this.router.navigate(['/login-cadastro'], {queryParams: {redirect:url}})
-      return
-    }
-
-    const {slug, type_stage} = post;
-    if(type_stage === ETypeStage.MAINSTAGE && user?.plan?.valid){
-      this.router.navigate([`/posts/type/${type_stage}/${slug}`])
-      return
-    }
-
-    if(type_stage !== ETypeStage.MAINSTAGE){
-      this.router.navigate([`/posts/type/${type_stage}/${slug}`])
-      return
-    }
-
-    this.openADBanner()
+    await this.postStore.getRecordTotal();
+    await this.postStore.actionLoadHome();
 
   }
 
-  openADBanner(){
-    const dialogRef = this.#dialog.open(AdBannerComponent, {minWidth: '50dvw'});
-    dialogRef.afterClosed().subscribe(results => {
-      if(!results){return}
-    });
+  async selectPost(post:IPost){
+    this.postStore.setCurrentPost(post.slug);
+    const title = `EGB HUB - Post: ${this.postStore.select.current()?.title} `;
+    const description = `Postagem de ${this.postStore.select.current()?.owner_username} em ${this.datePipe.transform(this.postStore.select.current()?.created_at, 'short') } no Fórum EGB HUB`;
+    this.utils.setTitleDesc(title, description);
+    this.analytics.setLog('view_page', {name: this.postStore.select.current()?.slug});
+
+    this.openDialog()
   }
 
-  
+  openDialog() {
+    const dialogRef = this.dialog.open(
+      PostModalComponent,{
+        width: '100vw',
+        height: '100vh',
+      }
+    );
+  }
+
+  async handlePageEvent(e: PageEvent) {
+    this.start = e.pageIndex * 25;
+    await this.postStore.actionLoadHome(this.start, this.limit);
+    this.posts = this.postStore.select.resume(this.start, this.limit)() as IPost[];
+
+  }
+
 
 }

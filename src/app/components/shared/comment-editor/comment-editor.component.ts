@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, Signal, signal } from '@angular/core';
+import { afterRender, Component, effect, inject, Input, OnInit, PLATFORM_ID, Signal, signal } from '@angular/core';
 import { IPost } from '../../../interfaces/posts';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UtilService } from '../../../services/util.service';
@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserStoreService } from '../../../store/user-store.service';
 import { firstValueFrom } from 'rxjs';
 import { PostsStoreService } from '../../../store/posts-store.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-comment-editor',
@@ -23,7 +24,7 @@ import { PostsStoreService } from '../../../store/posts-store.service';
   templateUrl: './comment-editor.component.html',
   styleUrl: './comment-editor.component.scss'
 })
-export class CommentEditorComponent {
+export class CommentEditorComponent implements OnInit {
 
   @Input() post!: IPost;
 
@@ -32,6 +33,10 @@ export class CommentEditorComponent {
   metadataStore = inject(MetadataStoreService);
   userStore = inject(UserStoreService);
   postStore = inject(PostsStoreService);
+  platformId = inject(PLATFORM_ID);
+
+  isBrowser = false;
+  showQuill = false;
 
 
   form = this.formBuilder.group({
@@ -50,11 +55,24 @@ export class CommentEditorComponent {
   });
 
 
+  editor: any;
 
+  customQuillModules = {
+    toolbar: [
+      ['link', 'image'],         // Botões de link e imagem
+    ],
+    resizeImage: {}
+  };
+
+  constructor(){
+
+  }
+  ngOnInit(): void {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   async save(){
     const user = this.userStore.currentState();
-    console.log(user, this.post)
     if(!user || !this.post){return}
 
     this.form.patchValue({
@@ -64,16 +82,13 @@ export class CommentEditorComponent {
     });
 
     const comment = this.form.value as Partial<IPost>
-
-    const {error, message} = await firstValueFrom(this.postStore.setOneApi(comment, this.post.id));
+    this.form.patchValue({body: ''})
+    const {error, message} = await this.postStore.actionSaveOne(comment, this.post.id)
     if(error){
+      this.form.patchValue({body: comment.body})
       this.utils.showMsg(message)
       return
     }
-
-    this.form.patchValue({body: ''})
-    console.log(this.form.value)
-
   }
 
 

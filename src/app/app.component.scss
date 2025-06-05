@@ -1,9 +1,61 @@
 
+@use '@angular/material' as mat;
 
-// .box-outlet{
-//   width: 100%;
-//   display: flex;
-//   justify-content: center;
-//   margin: 0;
-//   padding: 20px;
-// }
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.dialog-overrides((
+    container-color: orange,
+    subhead-color: red,
+  ));
+}
+
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 100vh;
+  background-color: #333333;
+  color: #fff;
+  padding: 20px;
+}
+
+.side-nav h2 {
+  margin-bottom: 20px;
+}
+
+.side-nav ul {
+  list-style: none;
+}
+
+.side-nav ul li {
+  margin: 10px 0;
+}
+
+.side-nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.side-nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.content {
+  margin-left: 180px; /* mesma largura do side nav */
+  padding: 20px;
+  width: calc(100% - 180px);
+}
+
+
+@media (max-width: 768px){
+.side-nav{
+  display: none;
+}
+
+.content {
+  margin-left: 0px;
+  width: 100%;
+}
+
+}

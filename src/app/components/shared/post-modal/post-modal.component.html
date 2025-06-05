@@ -1,0 +1,81 @@
+@if(postStore.select.current(); as post){
+  <div class="opts-buttons">
+    <button (click)="openFull(post.slug)" mat-icon-button aria-label="open full post">
+      <mat-icon>open_in_new</mat-icon>
+    </button>
+
+    <button mat-icon-button mat-dialog-close aria-label="close">
+      <mat-icon>close</mat-icon>
+    </button>
+
+
+  </div>
+  <h2 mat-dialog-title>{{post.title}}</h2>
+  <mat-dialog-content>
+
+    <div class="post-box">
+          @if(musicPreview()){
+            <app-preview [musicPreview]="musicPreview" />
+            }
+          <span>por {{post.owner_username}}</span>
+          <span class="tag">
+            em {{post.updated_at | date: 'dd/MM/YY'}} |
+            @for(tag of post?.tags; track $index){
+            <span class="tag">{{ tag }}</span>
+            }
+          </span>
+
+
+          @if(userStore.currentState()){
+            <div class="description" [innerHTML]="post.body">
+            </div>
+            @if(post.source_url; as url){
+              <div class="source">
+                <span>Download: </span>
+                <a [href]="url" target="_blank" rel="noopener noreferrer">{{post.source_url}}</a>
+              </div>
+            }
+            <div class="chat-container">
+              @if (post.children && post.children.length) { @for (child of
+              post.children; track $index) {
+              <div class="message-wrapper">
+                <div class="box left">
+                  <div class="user-info">
+                    @if(post.user?.photoURL; as photo){
+                    <img [src]="child?.user?.photoURL" alt="photo url" />
+
+                    }@else{
+                    <mat-icon> account_circle </mat-icon>
+                    }
+                    <span>{{ child?.owner_username }}</span>
+                  </div>
+                  <div class="body" [innerHTML]="child?.body"></div>
+                </div>
+              </div>
+              } }
+            </div>
+          }@else{
+            <div class="description" [innerHTML]="post.body">
+            </div>
+
+            <div class="source source-blur">
+              <span>Download: </span>
+              <p>Por favor faça login, é de graça !!! Por favor faça login, é de graça !!!</p>
+            </div>
+
+            <app-cadastro />
+          }
+
+          @if(postStore.select.isLoading()){
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          }
+    </div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    @if(userStore.currentState()){
+      <app-comment-editor [post]="post" />
+    }
+  </mat-dialog-actions>
+
+}

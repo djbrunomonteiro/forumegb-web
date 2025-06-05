@@ -108,8 +108,8 @@ export class PostEditorComponent implements OnInit {
   async getPost(){
     const slug = this.#activatedRoute.snapshot.paramMap.get('slug');
     if(!slug){return}
-    await firstValueFrom(this.#postStore.getOneApi(slug));
-    const currentPost = this.#postStore.currentPost() as any;
+    await this.#postStore.actionLoadOne(slug)
+    const currentPost = this.#postStore.select.current() as any;
     if(!currentPost){return}
     this.form.patchValue({...currentPost});
     this.musicPreview.set(this.ctrlMusicPreview.value);
@@ -132,24 +132,24 @@ export class PostEditorComponent implements OnInit {
 
 
   async save(){
-    if(!this.form.value.title){return}
-    const slug = this.createSlug(this.form.value.title)
-    const tags = JSON.stringify(this.ctrlTags.value)
-    const post = {...this.form.value, slug, tags} as Partial<IPost>;
-    let request$: Observable<IResponse>;
-    if(post.id){
-      request$ = this.#postStore.editOneApi(post);
-    }else{
-      request$ = this.#postStore.setOneApi(post);
-    }
+    // if(!this.form.value.title){return}
+    // const slug = this.createSlug(this.form.value.title)
+    // const tags = JSON.stringify(this.ctrlTags.value)
+    // const post = {...this.form.value, slug, tags} as Partial<IPost>;
+    // let request$: Observable<IResponse>;
+    // if(post.id){
+    //   request$ = this.#postStore.editOneApi(post);
+    // }else{
+    //   request$ = this.#postStore.setOneApi(post);
+    // }
 
-    const {error, results, message} = await firstValueFrom(request$);
-    this.utils.showMsg(message)
-    if(error){
-      return
-    }
+    // const {error, results, message} = await firstValueFrom(request$);
+    // this.utils.showMsg(message)
+    // if(error){
+    //   return
+    // }
 
-    this.#router.navigate([`/posts/type/${post.type_stage}/${slug}`])
+    // this.#router.navigate([`/posts/type/${post.type_stage}/${slug}`])
   }
 
   addTag(tag: any){

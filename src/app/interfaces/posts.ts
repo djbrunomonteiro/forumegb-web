@@ -10,7 +10,7 @@ export interface IPost {
     slug?: string;
     owner_id: number;
     owner_username: string;
-    metadata?: string;
+    metadata?: any;
     status?: string;
     parent_id?: number | null;
     type_stage?: string | null | undefined;

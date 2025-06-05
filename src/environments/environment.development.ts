@@ -1,6 +1,6 @@
 export const environment = {
-    apiUrl: 'https://api.egbhub.com.br',
-    // apiUrl: 'http://localhost:3070',
+    // apiUrl: 'https://api.egbhub.com.br',
+    apiUrl: 'http://localhost:3070',
     firebaseConfig: {
         apiKey: "AIzaSyDCAHVvknELd3FIi9bKUICEx1p93PW1r50",
         authDomain: "egbhub-prod.firebaseapp.com",

@@ -18,125 +18,87 @@ export class PostsStoreService {
   #utils = inject(UtilService);
   #posts = signal<IPost[]>([]);
 
+  #state = signal<any[]>([]);
+  #loading = signal<boolean>(false);
+  #currentPost = signal<IPost | undefined>(undefined);
   currentState = computed(() => this.#posts());
   backupState = signal<any[]>([]);
   recordTotal = signal<number>(0);
   currentPosts = signal<IPost[]>([])
-  currentPost = signal<IPost | undefined>(undefined);
-  
-
-
   homeState = signal<any>(undefined);
 
-  getHome(){
+  select = {
+    state: computed(() => this.#state()),
+    isLoading: computed(() => this.#loading()),
+    resume: (start: number = 0, limit: number = 25)  => this.#extractByQtd(start, limit),
+    current: computed(() => this.#currentPost()),
+    recordTotal: this.recordTotal
+  }
+
+
+
+  async actionLoadHome(start = 0, limit=25){
+    this.#loading.set(true);
     this.#metadataStoreService.setLoading('post', true);
-    return this.#postServices.getHome().pipe(
+    const res$ = this.#postServices.getHome(start, limit).pipe(
       tap(res => {
-        this.#metadataStoreService.setLoading('post', false);
-        const {results} = res
-        if(!results){return }
-        this.homeState.set(results)
-        console.log(results);
-        
+        this.#loading.set(false)
+        this.setInState(res)
+
       })
 
-    )
+    );
+    return await firstValueFrom(res$)
   }
 
-  async getRecordTotal(type: ETypeStage){
-    const {error, results} = await firstValueFrom(this.#postServices.getRecordsTotal(type));
-    if(error){return}
-    this.recordTotal.set(results?.recordsTotal ?? 0)
-  }
- 
-  getAllAPI(type = '' ,start = 1, limit = 200, pageIndex = 0, order = 'recentes',){
+  actionLoadAll(type = '' ,start = 1, limit = 20, pageIndex = 0, order = 'recentes',){
     this.#metadataStoreService.setLoading('post', true);
-    const containInBck = this.backupState().find(bckp => {
-      const diffTime = dayjs(bckp.time).diff(dayjs());
-      return  bckp?.type === type && bckp?.start === start && bckp?.limit === limit && diffTime <= 1;
-    })
-
-    if(containInBck){
-      const response: IResponse = {error: false, results: containInBck?.results}
-      const posts = response.results as IPost[]
-      return of(response).pipe(
-        delay(500),
-        tap(() => {
-          this.#posts.set(posts);
-          this.#metadataStoreService.setLoading('post', false);
-        })
-      )
-    }
-
     return this.#postServices.getAll(type, start, limit, order).pipe(
       tap(res => {
         this.#metadataStoreService.setLoading('post', false);
-        const {results} = res
-        if(!results){return }
-        this.#posts.set(results);
-        this.backupState.update((bckp) => bckp.concat([{type, start, limit, results, pageIndex, time: dayjs().toISOString()}]))
+        this.setInState(res)
       })
     )
-
-    // return this.#postServices.getRecordsTotal().pipe(
-    //   mergeMap((res ) => {
-    //     const countPostsParent = this.#posts().filter(elem => elem.parent_id === null).length;
-    //     const {error, results} = res;
-    //     if(!error && countPostsParent !== 0 && countPostsParent  === results.recordsTotal){
-    //       return of({error: false, results: this.#utils.sortArrayByKey(this.#posts(), 'id', 'desc') }) 
-    //     }
-
-    //     this.#metadataStoreService.setLoading('post', true)
-    //     return this.#postServices.getAll(type, start, limit, order).pipe(
-    //       tap(res => {
-    //         this.#metadataStoreService.setLoading('post', false);
-    //         const {results} = res
-    //         if(!results){return }
-    //         this.setMany(results);
-    //       })
-    //     )
-
-    //   })
-
-    // )
-
   }
 
-  setMany(newPosts: IPost[]){
-    if(!newPosts.length){return}
-    this.#posts.update(currentState => {
-      let newState = [...currentState, ...newPosts]; //merge
-      newState = Array.from(new Map(newState.map(item => [item['id'], item])).values()); //remove duplicados
-      return newState
-    })
+  async getRecordTotal(){
+    const {error, results} = await firstValueFrom(this.#postServices.getRecordsTotal());
+    if(error){return}
+    this.recordTotal.set(results?.recordsTotal ?? 0)
   }
 
-  getOneApi(slug: string, showLoading = true){
-    this.#metadataStoreService.setLoading('post', showLoading);
-    return this.#postServices.getOne(slug).pipe(
+
+
+  // setMany(newPosts: IPost[]){
+  //   if(!newPosts.length){return}
+  //   this.#posts.update(currentState => {
+  //     let newState = [...currentState, ...newPosts]; //merge
+  //     newState = Array.from(new Map(newState.map(item => [item['id'], item])).values()); //remove duplicados
+  //     return newState
+  //   })
+  // }
+
+  async actionLoadOne(slug: string, type: 'summary' | 'full' = 'full'){
+    this.#loading.set(true);
+    const res$ = this.#postServices.getOne(slug, type).pipe(
       tap(res => {
-        console.log(res);
-        
-        this.#metadataStoreService.setLoading('post', false);
-        const {results} = res
-        if(!results){return }
-        this.setMany([results]);
-        this.currentPost.set(results);
+        this.#loading.set(false);
+        this.setInState(res);
       })
     )
+
+    return await firstValueFrom(res$)
   }
 
-  setOneApi(post: IPost | Partial<IPost>, postFatherId?: number){
-    this.#metadataStoreService.setLoading('post', true);
-    return this.#postServices.createOne(post, postFatherId).pipe(
+  async actionSaveOne(post: IPost | Partial<IPost>, postFatherId?: number){
+    this.#loading.set(true);
+    const res$ = this.#postServices.createOne(post, postFatherId).pipe(
       tap(res => {
-        this.#metadataStoreService.setLoading('post', false);
-        const {results} = res
-        if(!results){return }
-        this.setMany([results]);
-        this.setCurrentPost(results?.slug);
+        this.#loading.set(false);
+        this.setInState(res);
       })
-    )
+    );
+    return await firstValueFrom(res$)
   }
 
   editOneApi(post: Partial<IPost>){
@@ -144,32 +106,63 @@ export class PostsStoreService {
     return this.#postServices.editOne(post).pipe(
       tap(res => {
         this.#metadataStoreService.setLoading('post', false);
-        const {results} = res
-        if(!results){return }
-        this.setMany([results]);
+        this.setInState(res);
       })
     )
+  }
+
+  #extractByQtd(start: number = 0, limit = 25){
+    const length = start+limit;
+    return computed(() => this.select.state().filter((_, i) => {
+      if(this.select.state().length < length){
+        return i >=  (this.select.state().length - 25)
+      }
+      const matchIndex = i >= start && i<= length;
+      return matchIndex
+
+    }))
   }
 
 
   async setCurrentPost(slug: string | undefined, ignoreLoad = false){
     if(!slug){return}
-    const post = this.currentState().filter(post => post.id && post.slug === slug)[0] ?? undefined;
-    this.currentPost.set(post);
-    console.log(this.currentPost());
-    
-    await firstValueFrom(this.getOneApi(slug));
+    const post = this.#state().filter(post => post.id && post.slug === slug)[0] ?? undefined;
+    this.#currentPost.set(post);
+
   }
 
   async setCurrentPosts(slug: string | undefined, start = 0, limit = 20){
     if(!slug){return}
     const posts = this.currentState().filter((post, i) => post.slug === slug && i <= limit);
     this.currentPosts.set(posts);
-    await firstValueFrom(this.getOneApi(slug));
+    return await this.actionLoadOne(slug)
   }
 
   setLike(idUser: number, idPost: number){
     return this.#postServices.saveLike(idUser, idPost)
+  }
+
+  setInState(res: IResponse, replaceAll = false) {
+    const { error, results } = res;
+    if (error) { return }
+    const entity = Array.isArray(results) ? results : [results];
+    this.#state.update((current) => {
+      if (replaceAll) {
+        return entity.map(elem => this.#utils.paramsJsonParse(elem));
+
+      } else {
+        // Evita duplicações baseadas no ID
+        const entityMap = new Map(entity.map(item => [item.id, item]));
+        // Atualiza os itens existentes e adiciona os novos
+        const updatedList = (current ?? []).map(item => entityMap.get(item.id) || item);
+        const existingIds = new Set(updatedList.map(item => item.id));
+        const newItems = entity.filter(item => !existingIds.has(item.id));
+        const res = [...updatedList, ...newItems].map(elem => this.#utils.paramsJsonParse(elem));
+        return res;
+      }
+    });
+
+    this.#currentPost.update((current) =>  entity.length === 1 ? entity[0] : current);
   }
 
 

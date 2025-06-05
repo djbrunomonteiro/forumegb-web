@@ -1,15 +1,20 @@
 
 <div  class="row m-0 justify-content-center">
-  <div class="col-sm-8">
-      <p>Junte-se à comunidade EGB HUB, o ponto de encontro para todos os apaixonados por música eletrônica cristã! Conecte-se, compartilhe e celebre o som que eleva. 🎶✝️</p>
-      <mat-card appearance="outlined" [formGroup]="form"> 
+  <div class="col-sm-10">
+      <mat-card appearance="outlined" [formGroup]="form">
           <mat-card-header>
-            <mat-card-title> Cadastro / Login</mat-card-title>
-            <mat-card-subtitle>*Por motivo de segurança, utilize sua conta google para prosseguir.</mat-card-subtitle>
+            <mat-card-title>Bem vindo, a comunidade EGBHUB</mat-card-title>
           </mat-card-header>
           <mat-card-content class="d-flex flex-column justify-content-center">
+
+            <p>Faça login ou registre-se</p>
+
+
             <mat-checkbox formControlName="check" class="w-100 text-center mt-3">Li e estou de acordo com a <a color="accent" href="#" routerLink="/politica-de-privacidade-e-termos-de-uso" mat-button>Politica de Privacidade e Termos de Uso</a> </mat-checkbox>
-              <button (click)="signInGoogleProvider()" [disabled]="form.invalid || !ctrlCheck.value" class="w-100 my-5" mat-flat-button>PROSSEGUIR COM EMAIL DO GOOGLE</button>
+              <button (click)="signInGoogleProvider()" [disabled]="form.invalid || !ctrlCheck.value" class="w-100 my-5" mat-flat-button>
+                <img src="google-logo.png" alt="">
+                ENTRAR COM GOOGLE
+              </button>
           </mat-card-content>
         </mat-card>
 

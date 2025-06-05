@@ -1,3 +1,7 @@
+app-cadastro{
+  padding: 120px;
+}
+
 .header{
     margin: 5px 0px;
     background-color: #1a2b2b;
@@ -55,9 +59,19 @@
         padding: 20px;
     }
     .source{
-        padding: 20px;
-        word-wrap: break-word;
-        word-break: break-all;
+      background-color: #a53c0017;
+      margin: 10px 0px;
+      padding: 20px;
+      border-radius: 15px;
+      position: relative;
+
+    }
+
+    .source-blur{
+      backdrop-filter: blur(8px);
+      p{
+        filter: blur(5px);
+      }
     }
     .date{
         margin-top: 5px;

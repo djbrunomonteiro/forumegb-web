@@ -56,7 +56,7 @@ export class PostChildComponent implements OnChanges {
     status: [''],
     parent_id: [null],
   });
-  
+
 
   inEdition = signal(false);
   loading = signal(false);
@@ -71,13 +71,13 @@ export class PostChildComponent implements OnChanges {
 
 
   async save(){
-    
-    const fatherPost = this.postStore.currentPost();
+
+    const fatherPost = this.postStore.select.current();
     const parentPost = this.post;
     const user = this.userStore.currentState();
     if(this.form.invalid || !parentPost || !user){return}
     const newPost = {...this.form.value, type_stage: parentPost.type_stage, parent_id: parentPost.id, owner_id: user.id, owner_username: user.displayName} as Partial<IPost>
-    const {error, message} = await firstValueFrom(this.postStore.setOneApi(newPost, fatherPost?.id));
+    const {error, message} = await this.postStore.actionSaveOne(newPost, fatherPost?.id);
     this.#utils.showMsg(message)
     if(error){
       return
