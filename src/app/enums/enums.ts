@@ -9,7 +9,7 @@ export enum EPermission {
     ARCHIVED = 'ARCHIVED',
     DELETED = 'DELETED'
   }
-  
+
   export enum ETypeStage{
     MAINSTAGE  = 'MAINSTAGE',
     FLOORSTAGE = 'FLOORSTAGE',
@@ -18,11 +18,11 @@ export enum EPermission {
   }
 
   export enum EPlanTypes {
-    TRIMESTRAL  = 'TRIMESTRAL',
-    SEMESTRAL = 'SEMESTRAL',
-    ANUAL = 'ANUAL',
+    OUVINTE  = 'OUVINTE',
+    DJ = 'DJ',
+    PROMOTER = 'PROMOTER',
   }
-  
+
   export enum EPlanStatus {
     Pending  = 'Pending',
     Approved = 'Approved',

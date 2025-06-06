@@ -6,7 +6,7 @@
           @if(isEditImg()){
             @if(isPlatformBrowser(this.platformId)){
               <div class="d-flex flex-column">
-                <image-cropper 
+                <image-cropper
                   class="w-100"
                   [imageChangedEvent]="imageChangedEvent"
                   [maintainAspectRatio]="true"
@@ -21,10 +21,6 @@
                 <button (click)="cancelImg()" class="w-100 my-2" type="button" mat-button>Cancelar</button>
                 <button (click)="saveImg()" class="w-100" type="button" mat-stroked-button color="primary">Salvar</button>
               </div>
-  
-  
-              <!-- <img [src]="croppedImage" /> -->
-  
             }
           }@else{
             @if(ctrlPhotoUrl.value; as photo){
@@ -35,7 +31,7 @@
               </mat-icon>
       }
           }
-  
+
 
           <input #file type="file" (change)="fileChangeEvent($event)" style="display: none;" accept="image/*"/>
         </div>
@@ -49,7 +45,7 @@
             <mat-hint>*Requerido min. de 5 caracteres</mat-hint>
           </mat-form-field>
           <br />
-  
+
           <mat-form-field appearance="outline">
             <mat-label>Estado(UF)</mat-label>
             <mat-select formControlName="end_uf">
@@ -72,27 +68,13 @@
           </div>
         </div>
       </div>
-  
+
       @if(metadataStore.loadingUser()){
         <div class="w-100 my-3">
           <p class="text-center">Aguarde estamos processando. Não feche até finalizar!</p>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
-      }@else{
-        <!-- <div class="w-100 d-flex justify-content-end my-2">
-          <button routerLInk="'/'" type="button" mat-button>Cancelar</button>
-          <button
-            type="submit"
-            class="btn-save"
-            mat-flat-button
-            [disabled]="form.invalid"
-          >
-            Salvar
-          </button>
-        </div> -->
       }
-  
-  
     </div>
   </form>
 
@@ -100,13 +82,8 @@
   <div class="row my-3 box-body">
     <div class="col-12">
 
-      @if(user?.plan?.valid){
-        <h5>Você tem acesso ao MAIN STAGE</h5>
-        <p>Plano atual: {{user?.plan?.plan_type}} ({{user?.plan?.plan_start | date: 'dd/MM/YY HH:mm'}} até {{user?.plan?.plan_end | date: 'dd/MM/YY HH:mm'}})</p>
-      }@else{
-        <h5>Você ainda não tem acesso ao MAIN STAGE :(</h5>
-        <p>Ajude adiquirindo um dos planos a seguir e tenha seu acesso liberado. </p>
-      }
+      <h5>Este projeto é gratuito, mas sua continuidade depende do apoio de pessoas como você. </h5>
+      <p>Faça uma doação e nos ajude a manter este trabalho vivo e acessível a todos!</p>
 
 
 
@@ -119,13 +96,7 @@
                 <mat-card-title-group>
                   <mat-card-title>{{plan.title}}</mat-card-title>
                   <mat-card-subtitle >
-                    @if(!user?.plan?.is_first && !user?.plan?.is_first && $index === 0){
-                      <em style="font-size: 12px;">No seu primeiro plano</em>
-                      <p class="first-plan">De <b>{{plan.amount | currency: 'BRL' : 'symbol'}}</b>  por</p>
-                    }
-                    <p class="amount">{{(plan.amount * plan.desconto) | currency: 'BRL' : 'symbol'}}</p>
-
-                    
+                    <p class="amount">{{(plan.amount) | currency: 'BRL' : 'symbol'}}</p>
                   </mat-card-subtitle>
                   <!-- <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" > -->
                 </mat-card-title-group>
@@ -134,15 +105,10 @@
                 <p class="description">{{plan.description}}</p>
               </mat-card-content>
 
-              @if(user | checkRecentPlanEligibility){
-                <mat-card-actions>
-                  <button (click)="checkout(plan.type)"  mat-flat-button color="accent" class="w-100 my-3" >Selecionar esse plano</button>
-                </mat-card-actions>
-              }
-
+              <mat-card-actions>
+                <button (click)="checkout(plan.type)"  mat-flat-button color="accent" class="w-100 my-3" >Selecionar essa doação</button>
+              </mat-card-actions>
             </mat-card>
-
-            
           </div>
         }
 
@@ -150,21 +116,12 @@
       </div>
     </div>
   </div>
-  @if(!(user | checkRecentPlanEligibility)){
-    <div class="row box-body">
-      <div class="col-12 text-center ">
-        <p  class="m-3" style="color: rgb(250, 138, 138);">Você só pode renovar ou adquirir um novo plano após 30 dias da sua última contratação.</p>
-
-      </div>
-    </div>
-  }
-
 
   <div class="row box-body">
     <div class="col-12 text-center ">
-      <p><em>*O pagamento  é realizado no modelo pré-pago. Todas as transações são processadas com segurança pela plataforma Mercado Pago.</em></p>
+      <p><em>*A doação é realizado no modelo pré-pago. Todas as transações são processadas com segurança pela plataforma Mercado Pago.</em></p>
       <p><em>Saiba mais sobre o motivo da contribuição acessando nossa</em> <a mat-button href="#" routerLink="/politica-de-privacidade-e-termos-de-uso">Politica de privacidade e Termos de Serviço.</a> </p>
-      
+
     </div>
   </div>
 }@else{

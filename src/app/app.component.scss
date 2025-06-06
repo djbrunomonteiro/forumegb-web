@@ -18,28 +18,19 @@
   background-color: #333333;
   color: #fff;
   padding: 20px;
+  img{
+    width: 100%;
+  }
+  h2 {
+    margin-left: 15px;
+  }
+
 }
 
-.side-nav h2 {
-  margin-bottom: 20px;
-}
 
-.side-nav ul {
-  list-style: none;
-}
 
-.side-nav ul li {
-  margin: 10px 0;
-}
 
-.side-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
 
-.side-nav ul li a:hover {
-  text-decoration: underline;
-}
 
 .content {
   margin-left: 180px; /* mesma largura do side nav */

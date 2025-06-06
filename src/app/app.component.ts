@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, PLATFORM_ID} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { AuthService } from './services/auth.service';
@@ -10,6 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BanneHomeComponent } from './components/layout/banne-home/banne-home.component';
 import { isPlatformBrowser, NgClass } from '@angular/common';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
@@ -21,7 +22,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
         MatProgressBarModule,
         BanneHomeComponent,
         NgClass,
-        MatSidenavModule
+        MatSidenavModule,
+        RouterLink,
+        MatButtonModule
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'

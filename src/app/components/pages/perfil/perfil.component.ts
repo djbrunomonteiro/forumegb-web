@@ -108,30 +108,30 @@ export class PerfilComponent {
 
   pricesPlans = [
     {
-      title: `ACESSO ${EPlanTypes.TRIMESTRAL}`,
-      type: EPlanTypes.TRIMESTRAL,
+      title: `DOAÇÃO OUVINTE`,
+      type: EPlanTypes.OUVINTE,
       amount: 30,
       desconto: 1,
       img: 'main.jpg',
-      description: 'Acesso exclusivo durante o periodo de 3 meses!',
+      description: 'Pra quem ouve, curte e compartilha a vibe.',
       color: 'red',
     },
     {
-      title: `ACESSO ${EPlanTypes.SEMESTRAL}`,
-      type: EPlanTypes.SEMESTRAL,
+      title: `DOAÇÃO DJ`,
+      type: EPlanTypes.DJ,
       amount: 60,
       desconto: 1,
       img: 'main.jpg',
-      description: 'Acesso exclusivo durante o periodo de 6 meses!',
+      description: 'Pra quem ouve, curte, mixa e compartilha a vibe.',
       color: 'red',
     },
     {
-      title: `ACESSO ${EPlanTypes.ANUAL}`,
-      type: EPlanTypes.ANUAL,
+      title: `DOAÇÃO PROMOTER`,
+      type: EPlanTypes.PROMOTER,
       amount: 120,
       desconto: 1,
       img: 'main.jpg',
-      description: 'Acesso exclusivo durante o periodo de 1 ano!',
+      description: 'Pra quem promove e organiza a cena.',
       color: 'red',
     },
 
@@ -205,7 +205,7 @@ export class PerfilComponent {
   }
 
 
-  async checkout(plan_type: string = EPlanTypes.TRIMESTRAL){
+  async checkout(plan_type: string = EPlanTypes.OUVINTE){
     const {id, email} = this.form.value
     const form = {plan_type, user_id: id, user_email: email };
 
@@ -216,8 +216,6 @@ export class PerfilComponent {
 
     const preference_id = results?.preference_id;
     this.#paymentService.initCheckout(preference_id)
-
-    
 
   }
 
